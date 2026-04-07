@@ -1,5 +1,5 @@
 {
-  "name": "ghosttrees-web",
+  "name": "ghosttrees",
   "private": true,
   "version": "0.0.0",
   "license": "MIT",
@@ -27,8 +27,12 @@
     "endOfLine": "lf"
   },
   "dependencies": {
+    "@turf/turf": "^7.3.4",
+    "deck.gl": "^9.2.11",
+    "maplibre-gl": "^5.22.0",
     "react": "^19.2.4",
     "react-dom": "^19.2.4",
+    "react-map-gl": "^8.1.0",
     "zustand": "^5.0.8"
   },
   "devDependencies": {
