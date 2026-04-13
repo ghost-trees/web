@@ -8,16 +8,16 @@
 
 1. Clone the repository:
 
-    ```bash
-    git clone https://github.com/ghost-trees/web.git
-    cd web
-    ```
+   ```bash
+   git clone https://github.com/ghost-trees/web.git
+   cd web
+   ```
 
 2. Install dependencies:
 
-    ```bash
-    npm install
-    ```
+   ```bash
+   npm install
+   ```
 
 ## Development
 

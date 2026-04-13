@@ -7,6 +7,7 @@ Visualize a time-series map and supporting chart(s) exploring illegal tree morta
 ## Features
 
 The application should...
+
 - Performantly present a map of Atlanta with tens of thousands of nodes representing locations where illegal activity occured
 - Have map interactivity: zoom in/out, home button/location, pan/drag, scale
 - Have filters for determining data points shown in the map and companion chart(s) features (e.g., tree types)
