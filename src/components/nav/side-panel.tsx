@@ -1,0 +1,56 @@
+import { SidePanelButton } from './side-panel-button';
+import { useMapSelectionStore } from '../../state/selection-store';
+
+const panelActions = [
+  { label: 'Map', icon: 'map', isActive: true },
+  { label: 'Filters', icon: 'filter_alt', isActive: false },
+] as const;
+
+export function SidePanel() {
+  const selectedCount = useMapSelectionStore((state) => state.selectedIds.size);
+  const hoveredId = useMapSelectionStore((state) => state.hoveredId);
+  const clearSelection = useMapSelectionStore((state) => state.clearSelection);
+
+  return (
+    <div className="flex h-full flex-col gap-6">
+      <header>
+        <h1 className="text-lg font-semibold tracking-[var(--tracking-display-tight)] text-[var(--color-primary)]">
+          Ghost Trees
+        </h1>
+      </header>
+
+      <nav aria-label="Primary">
+        <ul className="space-y-[var(--spacing-list-item-gap)]">
+          {panelActions.map((action) => (
+            <li key={action.label}>
+              <SidePanelButton label={action.label} icon={action.icon} isActive={action.isActive} />
+            </li>
+          ))}
+        </ul>
+      </nav>
+
+      <section
+        aria-label="Map Selection"
+        className="rounded-[var(--radius-round-four)] border border-[var(--color-nav-border)] bg-[var(--color-surface-container)] p-4"
+      >
+        <p className="text-sm font-medium text-[var(--color-nav-fg)]">
+          Selected points: {selectedCount}
+        </p>
+        <p className="mt-2 text-xs text-[var(--color-nav-fg)]/75">
+          Hovered record: {hoveredId ?? 'None'}
+        </p>
+        <p className="mt-2 text-xs text-[var(--color-nav-fg)]/75">
+          Brush: right-click + drag, hold Shift to add.
+        </p>
+        <button
+          type="button"
+          onClick={clearSelection}
+          disabled={selectedCount === 0}
+          className="mt-3 inline-flex rounded-[var(--radius-round-four)] border border-[var(--color-nav-border)] px-3 py-2 text-xs font-semibold text-[var(--color-nav-fg)] transition hover:bg-[var(--color-nav-hover-bg)] disabled:cursor-not-allowed disabled:opacity-50"
+        >
+          Clear selection
+        </button>
+      </section>
+    </div>
+  );
+}
