@@ -1,0 +1,21 @@
+.material-symbols-outlined {
+  font-family: 'Material Symbols Outlined';
+  font-style: normal;
+  font-weight: 400;
+  font-size: 1.25rem;
+  line-height: 1;
+  display: inline-block;
+  white-space: nowrap;
+  direction: ltr;
+  font-feature-settings: 'liga';
+  -webkit-font-feature-settings: 'liga';
+  -webkit-font-smoothing: antialiased;
+}
+
+@layer base {
+  /*
+   * Design guidance:
+   * - No-line rule: prefer tonal surface changes over hard borders.
+   * - Anti-divider rule: use spacing (`my-list-item-gap`) and hover tonal shifts.
+   */
+}

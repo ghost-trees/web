@@ -1,0 +1,38 @@
+@import 'tailwindcss';
+
+@theme {
+  /* Color roles from docs/design.md */
+  --color-surface: #121411;
+  --color-surface-container-lowest: #0d0f0c;
+  --color-surface-container-low: #1a1c19;
+  --color-surface-container-high: #292b27;
+  --color-surface-container-highest: #333532;
+  --color-outline-variant: #424841;
+  --color-on-surface: #e2e8df;
+  --color-on-surface-variant: #c2c8bf;
+  --color-primary: #a4d393;
+  --color-primary-container: #254d1c;
+  --color-secondary-container: #5a4530;
+  --color-nav-fg: var(--color-on-surface-variant);
+  --color-nav-hover-fg: var(--color-primary);
+  --color-nav-hover-bg: var(--color-surface-container-highest);
+  --color-nav-active-fg: var(--color-primary);
+  --color-nav-active-bg: color-mix(in oklab, var(--color-primary) 15%, transparent);
+  --color-nav-active-bg-hover: color-mix(in oklab, var(--color-primary) 20%, transparent);
+
+  /* Sizing and typography primitives */
+  --radius-round-four: 1rem;
+  --spacing-list-item-gap: 4px;
+  --tracking-display-tight: -0.02em;
+  --tracking-label-meta: 0.05em;
+
+  /* Depth, effects, and compositional tokens */
+  --blur-glass: 20px;
+  --blur-overlay-sm: 0.5rem;
+  --opacity-glass-surface-variant: 0.6;
+  --opacity-map-overlay: 0.8;
+  --opacity-ghost-border: 0.15;
+  --shadow-ambient: 0 0 32px -4px rgb(0 0 0 / 40%);
+  --shadow-focus-ring-primary: 0 0 0 2px #a4d393;
+  --background-image-button-primary: linear-gradient(135deg, #a4d393, #254d1c);
+}
