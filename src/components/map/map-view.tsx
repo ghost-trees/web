@@ -8,6 +8,7 @@ import { MapTooltip } from './map-tooltip';
 const DEFAULT_STADIA_STYLE_URL = 'https://tiles.stadiamaps.com/styles/alidade_smooth_dark.json';
 const POINT_LAYER_ID = 'tree-points-layer';
 const BRUSH_MIN_PIXELS = 4;
+const DATA_GEOJSON_PATH = 'data.geojson';
 
 type PointFeatureProperties = {
   record_number?: string;
@@ -229,9 +230,12 @@ export function MapView() {
     map.on('load', () => {
       void (async () => {
         try {
-          const response = await fetch('/data.geojson');
+          const dataGeoJsonUrl = `${import.meta.env.BASE_URL}${DATA_GEOJSON_PATH}`;
+          const response = await fetch(dataGeoJsonUrl);
           if (!response.ok) {
-            throw new Error(`Unable to load /data.geojson: ${response.status}`);
+            throw new Error(
+              `Unable to load ${dataGeoJsonUrl}: ${response.status} ${response.statusText}`,
+            );
           }
 
           const data = (await response.json()) as DataGeoJson;
