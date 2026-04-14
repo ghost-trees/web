@@ -1,5 +1,6 @@
 import { SidePanelButton } from './side-panel-button';
 import { useMapSelectionStore } from '../../state/selection-store';
+import { asset } from '../../utils/asset';
 
 const panelActions = [
   { label: 'Map', icon: 'map', isActive: true },
@@ -15,7 +16,7 @@ export function SidePanel() {
     <div className="flex h-full flex-col gap-6">
       <header>
         <div className="flex items-center gap-2">
-          <img src="/logo.svg" alt="Ghost Trees logo" className="h-6 w-6" />
+          <img src={asset('logo.svg')} alt="Ghost Trees logo" className="h-6 w-6" />
           <h1 className="text-lg font-semibold tracking-[var(--tracking-display-tight)] text-[var(--color-primary)]">
             Ghost Trees
           </h1>

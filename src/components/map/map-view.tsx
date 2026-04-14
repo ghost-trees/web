@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from 'react';
 import maplibregl, { NavigationControl, ScaleControl } from 'maplibre-gl';
 import { useMapSelectionStore } from '../../state/selection-store';
 import { MapTooltip } from './map-tooltip';
+import { asset } from '../../utils/asset';
 
 const DEFAULT_STADIA_STYLE_URL = 'https://tiles.stadiamaps.com/styles/alidade_smooth_dark.json';
 const POINT_LAYER_ID = 'tree-points-layer';
@@ -230,7 +231,7 @@ export function MapView() {
     map.on('load', () => {
       void (async () => {
         try {
-          const dataGeoJsonUrl = `${import.meta.env.BASE_URL}${DATA_GEOJSON_PATH}`;
+          const dataGeoJsonUrl = asset(DATA_GEOJSON_PATH);
           const response = await fetch(dataGeoJsonUrl);
           if (!response.ok) {
             throw new Error(
