@@ -14,9 +14,12 @@ export function SidePanel() {
   return (
     <div className="flex h-full flex-col gap-6">
       <header>
-        <h1 className="text-lg font-semibold tracking-[var(--tracking-display-tight)] text-[var(--color-primary)]">
-          Ghost Trees
-        </h1>
+        <div className="flex items-center gap-2">
+          <img src="/logo.svg" alt="Ghost Trees logo" className="h-6 w-6" />
+          <h1 className="text-lg font-semibold tracking-[var(--tracking-display-tight)] text-[var(--color-primary)]">
+            Ghost Trees
+          </h1>
+        </div>
       </header>
 
       <nav aria-label="Primary">
