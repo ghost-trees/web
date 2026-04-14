@@ -1,5 +1,11 @@
 import { SidePanelButton } from './side-panel-button';
 import { useMapSelectionStore } from '../../state/selection-store';
+import {
+  selectDataError,
+  selectDataLoading,
+  selectPointCount,
+  useDataStore,
+} from '../../state/data-store';
 import { asset } from '../../utils/asset';
 
 const panelActions = [
@@ -11,6 +17,9 @@ export function SidePanel() {
   const selectedCount = useMapSelectionStore((state) => state.selectedIds.size);
   const hoveredId = useMapSelectionStore((state) => state.hoveredId);
   const clearSelection = useMapSelectionStore((state) => state.clearSelection);
+  const pointCount = useDataStore(selectPointCount);
+  const isDataLoading = useDataStore(selectDataLoading);
+  const dataError = useDataStore(selectDataError);
 
   return (
     <div className="flex h-full flex-col gap-6">
@@ -40,6 +49,11 @@ export function SidePanel() {
         <p className="text-sm font-medium text-[var(--color-nav-fg)]">
           Selected points: {selectedCount}
         </p>
+        <p className="mt-2 text-xs text-[var(--color-nav-fg)]/75">Loaded records: {pointCount}</p>
+        {isDataLoading ? (
+          <p className="mt-2 text-xs text-[var(--color-nav-fg)]/75">Data status: Loading...</p>
+        ) : null}
+        {dataError ? <p className="mt-2 text-xs text-red-300">Data status: {dataError}</p> : null}
         <p className="mt-2 text-xs text-[var(--color-nav-fg)]/75">
           Hovered record: {hoveredId ?? 'None'}
         </p>

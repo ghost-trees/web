@@ -3,71 +3,12 @@ import { MapboxOverlay } from '@deck.gl/mapbox';
 import { useEffect, useRef, useState } from 'react';
 import maplibregl, { NavigationControl, ScaleControl } from 'maplibre-gl';
 import { useMapSelectionStore } from '../../state/selection-store';
+import { selectPoints, useDataStore, type MapPoint } from '../../state/data-store';
 import { MapTooltip } from './map-tooltip';
-import { asset } from '../../utils/asset';
 
 const DEFAULT_STADIA_STYLE_URL = 'https://tiles.stadiamaps.com/styles/alidade_smooth_dark.json';
 const POINT_LAYER_ID = 'tree-points-layer';
 const BRUSH_MIN_PIXELS = 4;
-const DATA_GEOJSON_PATH = 'data.geojson';
-
-type PointFeatureProperties = {
-  record_number?: string;
-  date?: string;
-  record_type?: string;
-  address?: string;
-};
-
-type PointFeature = {
-  geometry: {
-    type: 'Point';
-    coordinates: [number, number];
-  };
-  properties?: PointFeatureProperties;
-};
-
-type DataGeoJson = {
-  type: 'FeatureCollection';
-  features: PointFeature[];
-};
-
-type MapPoint = {
-  id: string;
-  coordinates: [number, number];
-  date: string;
-  recordType: string;
-  address: string;
-};
-
-type TooltipState = {
-  pointId: string;
-  date: string;
-  recordType: string;
-  address: string;
-  x: number;
-  y: number;
-};
-
-function toMapPoints(data: DataGeoJson): MapPoint[] {
-  return data.features
-    .filter((feature): feature is PointFeature => {
-      return (
-        feature.geometry?.type === 'Point' &&
-        Array.isArray(feature.geometry.coordinates) &&
-        feature.geometry.coordinates.length === 2
-      );
-    })
-    .map((feature, index) => {
-      const id = feature.properties?.record_number?.trim();
-      return {
-        id: id && id.length > 0 ? id : `point-${index}`,
-        coordinates: feature.geometry.coordinates,
-        date: feature.properties?.date?.trim() || 'Unknown',
-        recordType: feature.properties?.record_type?.trim() || 'Unknown',
-        address: feature.properties?.address?.trim() || 'Unknown',
-      };
-    });
-}
 
 function createPointLayer(points: MapPoint[], selectedIds: Set<string>) {
   return new ScatterplotLayer<MapPoint>({
@@ -93,8 +34,11 @@ export function MapView() {
   const brushStartRef = useRef<maplibregl.Point | null>(null);
   const brushAdditiveRef = useRef(false);
   const brushBoxRef = useRef<HTMLDivElement | null>(null);
-  const tooltipPointRef = useRef<MapPoint | null>(null);
-  const [tooltip, setTooltip] = useState<TooltipState | null>(null);
+  const [renderMap, setRenderMap] = useState<maplibregl.Map | null>(null);
+  const [, setMapViewVersion] = useState(0);
+  const points = useDataStore(selectPoints);
+  const pointsById = useDataStore((state) => state.pointsById);
+  const loadPoints = useDataStore((state) => state.loadPoints);
   const selectedIds = useMapSelectionStore((state) => state.selectedIds);
   const replaceSelection = useMapSelectionStore((state) => state.replaceSelection);
   const addSelection = useMapSelectionStore((state) => state.addSelection);
@@ -147,21 +91,8 @@ export function MapView() {
       });
     };
 
-    const syncTooltipPosition = () => {
-      const tooltipPoint = tooltipPointRef.current;
-      if (!tooltipPoint) {
-        return;
-      }
-
-      const projected = map.project(tooltipPoint.coordinates);
-      setTooltip({
-        pointId: tooltipPoint.id,
-        date: tooltipPoint.date,
-        recordType: tooltipPoint.recordType,
-        address: tooltipPoint.address,
-        x: projected.x,
-        y: projected.y,
-      });
+    const handleMapViewChange = () => {
+      setMapViewVersion((version) => version + 1);
     };
 
     const endBrush = (event?: maplibregl.MapMouseEvent) => {
@@ -229,23 +160,8 @@ export function MapView() {
     };
 
     map.on('load', () => {
-      void (async () => {
-        try {
-          const dataGeoJsonUrl = asset(DATA_GEOJSON_PATH);
-          const response = await fetch(dataGeoJsonUrl);
-          if (!response.ok) {
-            throw new Error(
-              `Unable to load ${dataGeoJsonUrl}: ${response.status} ${response.statusText}`,
-            );
-          }
-
-          const data = (await response.json()) as DataGeoJson;
-          pointsRef.current = toMapPoints(data);
-          updateLayers();
-        } catch (error) {
-          console.error(error);
-        }
-      })();
+      setRenderMap(map);
+      updateLayers();
     });
 
     map.on('click', (event) => {
@@ -307,25 +223,38 @@ export function MapView() {
       endBrush();
       setHovered(null);
     });
-    map.on('move', syncTooltipPosition);
-    map.on('zoom', syncTooltipPosition);
-    map.on('resize', syncTooltipPosition);
+    map.on('move', handleMapViewChange);
+    map.on('zoom', handleMapViewChange);
+    map.on('resize', handleMapViewChange);
 
     return () => {
       mapContainerElement.removeEventListener('contextmenu', handleContextMenu);
       brushBoxRef.current?.remove();
       brushBoxRef.current = null;
-      tooltipPointRef.current = null;
-      setTooltip(null);
-      map.off('move', syncTooltipPosition);
-      map.off('zoom', syncTooltipPosition);
-      map.off('resize', syncTooltipPosition);
+      map.off('move', handleMapViewChange);
+      map.off('zoom', handleMapViewChange);
+      map.off('resize', handleMapViewChange);
       overlay.finalize();
       overlayRef.current = null;
       map.remove();
       mapRef.current = null;
     };
   }, [addSelection, replaceSelection, setHovered, toggleSelection]);
+
+  useEffect(() => {
+    void loadPoints();
+  }, [loadPoints]);
+
+  useEffect(() => {
+    pointsRef.current = points;
+    if (!overlayRef.current) {
+      return;
+    }
+
+    overlayRef.current.setProps({
+      layers: [createPointLayer(pointsRef.current, useMapSelectionStore.getState().selectedIds)],
+    });
+  }, [points]);
 
   useEffect(() => {
     if (!overlayRef.current) {
@@ -335,32 +264,12 @@ export function MapView() {
     overlayRef.current.setProps({
       layers: [createPointLayer(pointsRef.current, selectedIds)],
     });
-
-    if (!mapRef.current || selectedIds.size !== 1) {
-      tooltipPointRef.current = null;
-      setTooltip(null);
-      return;
-    }
-
-    const [selectedPointId] = selectedIds;
-    const selectedPoint = pointsRef.current.find((point) => point.id === selectedPointId);
-    if (!selectedPoint) {
-      tooltipPointRef.current = null;
-      setTooltip(null);
-      return;
-    }
-
-    tooltipPointRef.current = selectedPoint;
-    const projected = mapRef.current.project(selectedPoint.coordinates);
-    setTooltip({
-      pointId: selectedPoint.id,
-      date: selectedPoint.date,
-      recordType: selectedPoint.recordType,
-      address: selectedPoint.address,
-      x: projected.x,
-      y: projected.y,
-    });
   }, [selectedIds]);
+
+  const selectedPointId = selectedIds.size === 1 ? selectedIds.values().next().value : null;
+  const selectedPoint = selectedPointId ? pointsById.get(selectedPointId) : null;
+  const projectedTooltip =
+    selectedPoint && renderMap ? renderMap.project(selectedPoint.coordinates) : null;
 
   return (
     <section
@@ -369,14 +278,14 @@ export function MapView() {
     >
       <div className="relative h-full w-full">
         <div ref={mapContainerRef} className="h-full w-full" />
-        {tooltip ? (
+        {selectedPoint && projectedTooltip ? (
           <MapTooltip
-            pointId={tooltip.pointId}
-            date={tooltip.date}
-            recordType={tooltip.recordType}
-            address={tooltip.address}
-            x={tooltip.x}
-            y={tooltip.y}
+            pointId={selectedPoint.id}
+            date={selectedPoint.date}
+            recordType={selectedPoint.recordType}
+            address={selectedPoint.address}
+            x={projectedTooltip.x}
+            y={projectedTooltip.y}
           />
         ) : null}
       </div>
