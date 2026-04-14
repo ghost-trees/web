@@ -25,6 +25,11 @@ export default defineConfig({
   resolve: {
     alias: {
       '@': path.resolve(__dirname, 'src'), // Enables clean "@/..." imports
+      // Force Node child_process imports to a browser shim so transitive deps
+      // (for example loaders.gl worker process helpers) cannot pull Node-only APIs
+      // into the client bundle.
+      child_process: path.resolve(__dirname, 'src/shims/child-process-browser.ts'),
+      'node:child_process': path.resolve(__dirname, 'src/shims/child-process-browser.ts'),
     },
   },
 

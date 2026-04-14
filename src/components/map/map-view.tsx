@@ -1,4 +1,4 @@
-import { ScatterplotLayer } from 'deck.gl';
+import { ScatterplotLayer } from '@deck.gl/layers';
 import { MapboxOverlay } from '@deck.gl/mapbox';
 import { useEffect, useRef, useState } from 'react';
 import maplibregl, { NavigationControl, ScaleControl } from 'maplibre-gl';
