@@ -1,3 +1,9 @@
+/**
+ * @file tooltip.tsx
+ * @description
+ * Floating tooltip shown for the currently selected map point.
+ */
+
 type MapTooltipProps = {
   pointId: string;
   date: string;
