@@ -6,12 +6,8 @@ import {
   selectPointCount,
   useDataStore,
 } from '../../state/data-store';
+import { useUiStore } from '../../state/ui-store';
 import { asset } from '../../utils/asset';
-
-const panelActions = [
-  { label: 'Map', icon: 'map', isActive: true },
-  { label: 'Filters', icon: 'filter_alt', isActive: false },
-] as const;
 
 export function SidePanel() {
   const selectedCount = useMapSelectionStore((state) => state.selectedIds.size);
@@ -20,6 +16,9 @@ export function SidePanel() {
   const pointCount = useDataStore(selectPointCount);
   const isDataLoading = useDataStore(selectDataLoading);
   const dataError = useDataStore(selectDataError);
+  const isFiltersOpen = useUiStore((state) => state.isFiltersOpen);
+  const closeFilters = useUiStore((state) => state.closeFilters);
+  const toggleFilters = useUiStore((state) => state.toggleFilters);
 
   return (
     <div className="flex h-full flex-col gap-6">
@@ -34,11 +33,23 @@ export function SidePanel() {
 
       <nav aria-label="Primary">
         <ul className="space-y-[var(--spacing-list-item-gap)]">
-          {panelActions.map((action) => (
-            <li key={action.label}>
-              <SidePanelButton label={action.label} icon={action.icon} isActive={action.isActive} />
-            </li>
-          ))}
+          <li>
+            <SidePanelButton
+              label="Map"
+              icon="map"
+              isActive={!isFiltersOpen}
+              onClick={closeFilters}
+            />
+          </li>
+          <li>
+            <SidePanelButton
+              label="Filters"
+              icon="filter_alt"
+              isActive={isFiltersOpen}
+              onClick={toggleFilters}
+              aria-pressed={isFiltersOpen}
+            />
+          </li>
         </ul>
       </nav>
 
