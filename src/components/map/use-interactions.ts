@@ -33,9 +33,21 @@ export function useMapInteractions({
   const brushStartRef = useRef<maplibregl.Point | null>(null);
   const brushAdditiveRef = useRef(false);
   const brushBoxRef = useRef<HTMLDivElement | null>(null);
+  const hoverFrameRef = useRef<number | null>(null);
+  const hoverPointRef = useRef<{ x: number; y: number } | null>(null);
 
   return useCallback(
     ({ map, overlay, mapContainerElement, onMapViewChange }: AttachMapInteractionsArgs) => {
+      const isPickReady = () => {
+        // Deck initialization is async; early pointer events can arrive before
+        // the picker exists, which throws an assertion inside deck.gl _pick().
+        const deck = (overlay as unknown as { _deck?: { isInitialized?: boolean } })._deck;
+        return map.loaded() && map.isStyleLoaded() && Boolean(deck?.isInitialized);
+      };
+
+      const isValidPickPosition = (x: number, y: number) =>
+        Number.isFinite(x) && Number.isFinite(y) && x >= 0 && y >= 0;
+
       const brushBoxElement = document.createElement('div');
       brushBoxElement.className =
         'pointer-events-none absolute z-20 hidden rounded border border-[var(--color-primary)] bg-[var(--color-primary)]/15';
@@ -73,6 +85,10 @@ export function useMapInteractions({
 
         const x = Math.min(start.x, endPoint.x);
         const y = Math.min(start.y, endPoint.y);
+        if (!isPickReady() || !isValidPickPosition(x, y)) {
+          return;
+        }
+
         const hitPoints = overlay.pickObjects({
           x,
           y,
@@ -117,9 +133,15 @@ export function useMapInteractions({
           return;
         }
 
+        const { x, y } = event.point;
+        if (!isPickReady() || !isValidPickPosition(x, y)) {
+          replaceSelection([]);
+          return;
+        }
+
         const hit = overlay.pickObject({
-          x: event.point.x,
-          y: event.point.y,
+          x,
+          y,
           layerIds: [POINT_LAYER_ID],
           radius: 6,
         });
@@ -143,15 +165,36 @@ export function useMapInteractions({
           return;
         }
 
-        const hit = overlay.pickObject({
-          x: event.point.x,
-          y: event.point.y,
-          layerIds: [POINT_LAYER_ID],
-          radius: 4,
-        });
+        hoverPointRef.current = { x: event.point.x, y: event.point.y };
+        if (hoverFrameRef.current !== null) {
+          return;
+        }
 
-        const point = hit?.object as MapPoint | undefined;
-        setHovered(point?.id ?? null);
+        // Coalesce rapid mousemove events so picking runs once per frame.
+        hoverFrameRef.current = window.requestAnimationFrame(() => {
+          hoverFrameRef.current = null;
+
+          const hoverPoint = hoverPointRef.current;
+          hoverPointRef.current = null;
+          if (!hoverPoint) {
+            return;
+          }
+
+          if (!isPickReady() || !isValidPickPosition(hoverPoint.x, hoverPoint.y)) {
+            setHovered(null);
+            return;
+          }
+
+          const hit = overlay.pickObject({
+            x: hoverPoint.x,
+            y: hoverPoint.y,
+            layerIds: [POINT_LAYER_ID],
+            radius: 4,
+          });
+
+          const point = hit?.object as MapPoint | undefined;
+          setHovered(point?.id ?? null);
+        });
       };
 
       const handleMouseDown = (event: maplibregl.MapMouseEvent) => {
@@ -169,6 +212,11 @@ export function useMapInteractions({
 
       const handleMouseOut = () => {
         endBrush();
+        if (hoverFrameRef.current !== null) {
+          window.cancelAnimationFrame(hoverFrameRef.current);
+          hoverFrameRef.current = null;
+          hoverPointRef.current = null;
+        }
         setHovered(null);
       };
 
@@ -192,9 +240,16 @@ export function useMapInteractions({
         map.off('move', onMapViewChange);
         map.off('zoom', onMapViewChange);
         map.off('resize', onMapViewChange);
+        // Cancel queued hover work so teardown cannot restore stale hover state.
+        if (hoverFrameRef.current !== null) {
+          window.cancelAnimationFrame(hoverFrameRef.current);
+          hoverFrameRef.current = null;
+          hoverPointRef.current = null;
+        }
         brushBoxRef.current?.remove();
         brushBoxRef.current = null;
         brushStartRef.current = null;
+        setHovered(null);
       };
     },
     [addSelection, replaceSelection, setHovered, toggleSelection],
