@@ -3,6 +3,9 @@
  * @description
  * Main map container that initializes the map instance, syncs layers with state,
  * and composes map UI elements.
+ *
+ * Includes a ResizeObserver-based resize sync so MapLibre keeps its canvas in
+ * lock-step with animated layout width changes (such as opening/closing filters).
  */
 
 import { MapboxOverlay } from '@deck.gl/mapbox';
@@ -92,6 +95,45 @@ export function MapView() {
       mapRef.current = null;
     };
   }, [attachMapInteractions]);
+
+  // Keep the MapLibre canvas dimensions synchronized with CSS-driven container
+  // size transitions. Without this, width animations can briefly expose blank
+  // regions while the map catches up to the new layout.
+  useEffect(() => {
+    const map = mapRef.current;
+    const mapContainerElement = mapContainerRef.current;
+
+    if (!renderMap || !map || !mapContainerElement || typeof ResizeObserver === 'undefined') {
+      return;
+    }
+
+    let animationFrameId: number | null = null;
+    const scheduleResize = () => {
+      if (animationFrameId !== null) {
+        return;
+      }
+
+      animationFrameId = window.requestAnimationFrame(() => {
+        animationFrameId = null;
+        map.resize();
+      });
+    };
+
+    const resizeObserver = new ResizeObserver(() => {
+      scheduleResize();
+    });
+
+    resizeObserver.observe(mapContainerElement);
+    scheduleResize();
+
+    return () => {
+      resizeObserver.disconnect();
+
+      if (animationFrameId !== null) {
+        window.cancelAnimationFrame(animationFrameId);
+      }
+    };
+  }, [renderMap]);
 
   useEffect(() => {
     void loadPoints();
