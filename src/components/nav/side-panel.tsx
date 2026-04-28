@@ -16,9 +16,9 @@ export function SidePanel() {
   const pointCount = useDataStore(selectPointCount);
   const isDataLoading = useDataStore(selectDataLoading);
   const dataError = useDataStore(selectDataError);
-  const isFiltersOpen = useUiStore((state) => state.isFiltersOpen);
-  const closeFilters = useUiStore((state) => state.closeFilters);
-  const toggleFilters = useUiStore((state) => state.toggleFilters);
+  const activePane = useUiStore((state) => state.activePane);
+  const showMapPane = useUiStore((state) => state.showMapPane);
+  const togglePane = useUiStore((state) => state.togglePane);
 
   return (
     <div className="flex h-full flex-col gap-6">
@@ -37,17 +37,35 @@ export function SidePanel() {
             <SidePanelButton
               label="Map"
               icon="map"
-              isActive={!isFiltersOpen}
-              onClick={closeFilters}
+              isActive={activePane === 'map'}
+              onClick={showMapPane}
             />
           </li>
           <li>
             <SidePanelButton
               label="Filters"
               icon="filter_alt"
-              isActive={isFiltersOpen}
-              onClick={toggleFilters}
-              aria-pressed={isFiltersOpen}
+              isActive={activePane === 'filters'}
+              onClick={() => togglePane('filters')}
+              aria-pressed={activePane === 'filters'}
+            />
+          </li>
+          <li>
+            <SidePanelButton
+              label="Charts"
+              icon="bar_chart"
+              isActive={activePane === 'charts'}
+              onClick={() => togglePane('charts')}
+              aria-pressed={activePane === 'charts'}
+            />
+          </li>
+          <li>
+            <SidePanelButton
+              label="Settings"
+              icon="settings"
+              isActive={activePane === 'settings'}
+              onClick={() => togglePane('settings')}
+              aria-pressed={activePane === 'settings'}
             />
           </li>
         </ul>

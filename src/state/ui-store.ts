@@ -1,15 +1,20 @@
 import { create } from 'zustand';
 
+export type UiPane = 'map' | 'filters' | 'charts' | 'settings';
+
 type UiStoreState = {
-  isFiltersOpen: boolean;
-  openFilters: () => void;
-  closeFilters: () => void;
-  toggleFilters: () => void;
+  activePane: UiPane;
+  setActivePane: (pane: UiPane) => void;
+  togglePane: (pane: Exclude<UiPane, 'map'>) => void;
+  showMapPane: () => void;
 };
 
 export const useUiStore = create<UiStoreState>((set) => ({
-  isFiltersOpen: false,
-  openFilters: () => set({ isFiltersOpen: true }),
-  closeFilters: () => set({ isFiltersOpen: false }),
-  toggleFilters: () => set((state) => ({ isFiltersOpen: !state.isFiltersOpen })),
+  activePane: 'map',
+  setActivePane: (pane) => set({ activePane: pane }),
+  togglePane: (pane) =>
+    set((state) => ({
+      activePane: state.activePane === pane ? 'map' : pane,
+    })),
+  showMapPane: () => set({ activePane: 'map' }),
 }));
