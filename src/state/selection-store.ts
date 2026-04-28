@@ -3,11 +3,13 @@ import { create } from 'zustand';
 type MapSelectionState = {
   selectedIds: Set<string>;
   hoveredId: string | null;
+  hoveredIds: Set<string>;
   replaceSelection: (ids: Iterable<string>) => void;
   addSelection: (ids: Iterable<string>) => void;
   toggleSelection: (id: string) => void;
   clearSelection: () => void;
   setHovered: (id: string | null) => void;
+  setHoveredIds: (ids: Iterable<string>) => void;
 };
 
 function toSet(ids: Iterable<string>): Set<string> {
@@ -17,6 +19,7 @@ function toSet(ids: Iterable<string>): Set<string> {
 export const useMapSelectionStore = create<MapSelectionState>((set) => ({
   selectedIds: new Set<string>(),
   hoveredId: null,
+  hoveredIds: new Set<string>(),
   replaceSelection: (ids) => {
     set({ selectedIds: toSet(ids) });
   },
@@ -47,5 +50,8 @@ export const useMapSelectionStore = create<MapSelectionState>((set) => ({
   },
   setHovered: (id) => {
     set({ hoveredId: id });
+  },
+  setHoveredIds: (ids) => {
+    set({ hoveredIds: toSet(ids) });
   },
 }));

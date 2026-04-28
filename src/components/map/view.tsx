@@ -31,6 +31,7 @@ export function MapView() {
   const loadPoints = useDataStore((state) => state.loadPoints);
   const filteredPoints = useFilterStore((state) => state.visiblePoints);
   const selectedIds = useMapSelectionStore((state) => state.selectedIds);
+  const hoveredIds = useMapSelectionStore((state) => state.hoveredIds);
   const replaceSelection = useMapSelectionStore((state) => state.replaceSelection);
   const addSelection = useMapSelectionStore((state) => state.addSelection);
   const toggleSelection = useMapSelectionStore((state) => state.toggleSelection);
@@ -48,6 +49,9 @@ export function MapView() {
   const visibleSelectedIds = useMemo(() => {
     return new Set([...selectedIds].filter((id) => visiblePointIds.has(id)));
   }, [selectedIds, visiblePointIds]);
+  const visibleHoveredIds = useMemo(() => {
+    return new Set([...hoveredIds].filter((id) => visiblePointIds.has(id)));
+  }, [hoveredIds, visiblePointIds]);
 
   useEffect(() => {
     const mapContainerElement = mapContainerRef.current;
@@ -76,7 +80,13 @@ export function MapView() {
 
     const updateLayers = () => {
       overlay.setProps({
-        layers: [createPointLayer(pointsRef.current, useMapSelectionStore.getState().selectedIds)],
+        layers: [
+          createPointLayer(
+            pointsRef.current,
+            useMapSelectionStore.getState().selectedIds,
+            useMapSelectionStore.getState().hoveredIds,
+          ),
+        ],
       });
     };
 
@@ -154,7 +164,13 @@ export function MapView() {
     }
 
     overlayRef.current.setProps({
-      layers: [createPointLayer(pointsRef.current, useMapSelectionStore.getState().selectedIds)],
+      layers: [
+        createPointLayer(
+          pointsRef.current,
+          useMapSelectionStore.getState().selectedIds,
+          useMapSelectionStore.getState().hoveredIds,
+        ),
+      ],
     });
   }, [filteredPoints]);
 
@@ -184,9 +200,9 @@ export function MapView() {
     }
 
     overlayRef.current.setProps({
-      layers: [createPointLayer(pointsRef.current, visibleSelectedIds)],
+      layers: [createPointLayer(pointsRef.current, visibleSelectedIds, visibleHoveredIds)],
     });
-  }, [visibleSelectedIds]);
+  }, [visibleHoveredIds, visibleSelectedIds]);
 
   const selectedPointId =
     visibleSelectedIds.size === 1 ? visibleSelectedIds.values().next().value : null;
