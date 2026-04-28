@@ -29,7 +29,7 @@ export function Shell({ sidebar, filtersPane, chartsPane, settingsPane, content 
       {filtersPane || chartsPane || settingsPane ? (
         <section
           aria-label="Inline detail panel"
-          className={`min-h-0 shrink-0 overflow-hidden bg-[var(--color-surface-container-low)] transition-[width,padding,border-color] duration-200 ease-out ${
+          className={`min-h-0 shrink-0 overflow-hidden bg-[var(--color-surface-container-low)] ${
             isAuxiliaryPaneOpen
               ? 'w-80 border-r border-[var(--color-outline-variant)] p-4'
               : 'w-0 border-r border-transparent p-0'
