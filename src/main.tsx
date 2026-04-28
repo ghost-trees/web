@@ -7,6 +7,9 @@ import { SidePanel } from './components/nav/side-panel';
 import { FiltersPane } from './components/filters/filters-pane';
 import { ChartsPane } from './components/charts/charts-pane';
 import { SettingsPane } from './components/settings/settings-pane';
+import { registerEchartsTheme } from './components/charts/echarts-theme';
+
+registerEchartsTheme();
 
 const rootElement = document.getElementById('root');
 
