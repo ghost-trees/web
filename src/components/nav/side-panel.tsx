@@ -64,7 +64,11 @@ export function SidePanel() {
         {isDataLoading ? (
           <p className="mt-2 text-xs text-[var(--color-nav-fg)]/75">Data status: Loading...</p>
         ) : null}
-        {dataError ? <p className="mt-2 text-xs text-red-300">Data status: {dataError}</p> : null}
+        {dataError ? (
+          <p className="mt-2 text-xs text-[var(--color-feedback-error)]">
+            Data status: {dataError}
+          </p>
+        ) : null}
         <p className="mt-2 text-xs text-[var(--color-nav-fg)]/75">
           Hovered record: {hoveredId ?? 'None'}
         </p>

@@ -13,6 +13,7 @@
   --color-primary: #a4d393;
   --color-primary-container: #254d1c;
   --color-secondary-container: #5a4530;
+  --color-feedback-error: #fca5a5;
   --color-nav-fg: var(--color-on-surface-variant);
   --color-nav-hover-fg: var(--color-primary);
   --color-nav-hover-bg: var(--color-surface-container-highest);
