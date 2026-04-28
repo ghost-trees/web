@@ -1,13 +1,17 @@
-import { useState } from 'react';
+import { useFilterStore } from '../../state/filter-store';
 
 export function Year() {
-  const floorYear = 2010;
-  const ceilingYear = 2026;
-  const [minYear, setMinYear] = useState(2018);
-  const [maxYear, setMaxYear] = useState(2024);
-  const rangeSpan = ceilingYear - floorYear;
-  const minPercent = ((minYear - floorYear) / rangeSpan) * 100;
-  const maxPercent = ((maxYear - floorYear) / rangeSpan) * 100;
+  const minAvailableYear = useFilterStore((state) => state.minAvailableYear);
+  const maxAvailableYear = useFilterStore((state) => state.maxAvailableYear);
+  const minYear = useFilterStore((state) => state.minYear);
+  const maxYear = useFilterStore((state) => state.maxYear);
+  const hasAvailableYears = useFilterStore((state) => state.hasAvailableYears);
+  const setMinYear = useFilterStore((state) => state.setMinYear);
+  const setMaxYear = useFilterStore((state) => state.setMaxYear);
+  const rangeSpan = Math.max(maxAvailableYear - minAvailableYear, 1);
+  const minPercent = ((minYear - minAvailableYear) / rangeSpan) * 100;
+  const maxPercent = ((maxYear - minAvailableYear) / rangeSpan) * 100;
+  const isSliderDisabled = !hasAvailableYears || minAvailableYear === maxAvailableYear;
 
   return (
     <div className="rounded-[var(--radius-round-four)] border border-[var(--color-outline-variant)] bg-[var(--color-surface-container-high)] p-4">
@@ -16,7 +20,7 @@ export function Year() {
       </p>
       <div className="mt-4 flex items-center gap-3">
         <span className="w-11 text-left text-sm font-semibold text-[var(--color-on-surface)]">
-          {minYear}
+          {hasAvailableYears ? minYear : '--'}
         </span>
         <div className="year-range relative h-8 flex-1">
           <div className="absolute left-0 top-1/2 h-1 w-full -translate-y-1/2 rounded-full bg-[var(--color-outline-variant)]/70" />
@@ -26,9 +30,10 @@ export function Year() {
           />
           <input
             type="range"
-            min={floorYear}
-            max={ceilingYear}
+            min={minAvailableYear}
+            max={maxAvailableYear}
             value={minYear}
+            disabled={isSliderDisabled}
             onChange={(event) => {
               const nextMinYear = Math.min(Number(event.target.value), maxYear - 1);
               setMinYear(nextMinYear);
@@ -37,9 +42,10 @@ export function Year() {
           />
           <input
             type="range"
-            min={floorYear}
-            max={ceilingYear}
+            min={minAvailableYear}
+            max={maxAvailableYear}
             value={maxYear}
+            disabled={isSliderDisabled}
             onChange={(event) => {
               const nextMaxYear = Math.max(Number(event.target.value), minYear + 1);
               setMaxYear(nextMaxYear);
@@ -48,7 +54,7 @@ export function Year() {
           />
         </div>
         <span className="w-11 text-right text-sm font-semibold text-[var(--color-on-surface)]">
-          {maxYear}
+          {hasAvailableYears ? maxYear : '--'}
         </span>
       </div>
       <style>{`

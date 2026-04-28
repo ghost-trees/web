@@ -9,10 +9,11 @@
  */
 
 import { MapboxOverlay } from '@deck.gl/mapbox';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import maplibregl, { ScaleControl } from 'maplibre-gl';
 import { useMapSelectionStore } from '../../state/selection-store';
-import { selectPoints, useDataStore, type MapPoint } from '../../state/data-store';
+import { useDataStore, type MapPoint } from '../../state/data-store';
+import { useFilterStore } from '../../state/filter-store';
 import { DEFAULT_STADIA_STYLE_URL, INITIAL_CENTER, INITIAL_ZOOM } from './constants';
 import { MapControls } from './controls';
 import { createPointLayer } from './point-layer';
@@ -26,9 +27,9 @@ export function MapView() {
   const pointsRef = useRef<MapPoint[]>([]);
   const [renderMap, setRenderMap] = useState<maplibregl.Map | null>(null);
   const [, setMapViewVersion] = useState(0);
-  const points = useDataStore(selectPoints);
   const pointsById = useDataStore((state) => state.pointsById);
   const loadPoints = useDataStore((state) => state.loadPoints);
+  const filteredPoints = useFilterStore((state) => state.visiblePoints);
   const selectedIds = useMapSelectionStore((state) => state.selectedIds);
   const replaceSelection = useMapSelectionStore((state) => state.replaceSelection);
   const addSelection = useMapSelectionStore((state) => state.addSelection);
@@ -40,6 +41,13 @@ export function MapView() {
     toggleSelection,
     setHovered,
   });
+  const visiblePointIds = useMemo(
+    () => new Set(filteredPoints.map((point) => point.id)),
+    [filteredPoints],
+  );
+  const visibleSelectedIds = useMemo(() => {
+    return new Set([...selectedIds].filter((id) => visiblePointIds.has(id)));
+  }, [selectedIds, visiblePointIds]);
 
   useEffect(() => {
     const mapContainerElement = mapContainerRef.current;
@@ -140,7 +148,7 @@ export function MapView() {
   }, [loadPoints]);
 
   useEffect(() => {
-    pointsRef.current = points;
+    pointsRef.current = filteredPoints;
     if (!overlayRef.current) {
       return;
     }
@@ -148,7 +156,27 @@ export function MapView() {
     overlayRef.current.setProps({
       layers: [createPointLayer(pointsRef.current, useMapSelectionStore.getState().selectedIds)],
     });
-  }, [points]);
+  }, [filteredPoints]);
+
+  useEffect(() => {
+    if (selectedIds.size === 0) {
+      return;
+    }
+
+    const nextVisibleSelectedIds: string[] = [];
+    let hasOutOfRangeSelections = false;
+    for (const selectedId of selectedIds) {
+      if (visiblePointIds.has(selectedId)) {
+        nextVisibleSelectedIds.push(selectedId);
+      } else {
+        hasOutOfRangeSelections = true;
+      }
+    }
+
+    if (hasOutOfRangeSelections) {
+      replaceSelection(nextVisibleSelectedIds);
+    }
+  }, [selectedIds, visiblePointIds, replaceSelection]);
 
   useEffect(() => {
     if (!overlayRef.current) {
@@ -156,11 +184,12 @@ export function MapView() {
     }
 
     overlayRef.current.setProps({
-      layers: [createPointLayer(pointsRef.current, selectedIds)],
+      layers: [createPointLayer(pointsRef.current, visibleSelectedIds)],
     });
-  }, [selectedIds]);
+  }, [visibleSelectedIds]);
 
-  const selectedPointId = selectedIds.size === 1 ? selectedIds.values().next().value : null;
+  const selectedPointId =
+    visibleSelectedIds.size === 1 ? visibleSelectedIds.values().next().value : null;
   const selectedPoint = selectedPointId ? pointsById.get(selectedPointId) : null;
   const projectedTooltip =
     selectedPoint && renderMap ? renderMap.project(selectedPoint.coordinates) : null;
