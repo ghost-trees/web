@@ -13,7 +13,26 @@ type MapTooltipProps = {
   y: number;
 };
 
+const UNKNOWN_VALUE = 'Unknown';
+
+function parseAddressDetails(address: string) {
+  const normalizedAddress = address.trim();
+
+  if (!normalizedAddress || normalizedAddress.toLowerCase() === 'unknown') {
+    return { streetLine: UNKNOWN_VALUE, zipCode: UNKNOWN_VALUE };
+  }
+
+  const [firstLineCandidate] = normalizedAddress.split(',');
+  const streetLine = firstLineCandidate?.trim() || UNKNOWN_VALUE;
+  const zipMatch = normalizedAddress.match(/\b(\d{5}(?:-\d{4})?)\b(?!.*\b\d{5}(?:-\d{4})?\b)/);
+  const zipCode = zipMatch?.[1] ?? UNKNOWN_VALUE;
+
+  return { streetLine, zipCode };
+}
+
 export function MapTooltip({ pointId, date, recordType, address, x, y }: MapTooltipProps) {
+  const { streetLine, zipCode } = parseAddressDetails(address);
+
   return (
     <div
       className="pointer-events-none absolute z-30 w-72 translate-x-4 -translate-y-4"
@@ -49,7 +68,13 @@ export function MapTooltip({ pointId, date, recordType, address, x, y }: MapTool
             <div className="flex items-start justify-between gap-3">
               <span className="text-xs text-on-surface-variant">Address</span>
               <span className="max-w-44 text-right text-xs font-semibold text-on-surface">
-                {address}
+                {streetLine}
+              </span>
+            </div>
+            <div className="flex items-center justify-between gap-3">
+              <span className="text-xs text-on-surface-variant">ZIP</span>
+              <span className="max-w-44 text-right text-xs font-semibold text-on-surface">
+                {zipCode}
               </span>
             </div>
           </div>
