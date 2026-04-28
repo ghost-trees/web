@@ -4,7 +4,7 @@ import type { MapPoint } from './data-store';
 
 const FALLBACK_YEAR = new Date().getFullYear();
 
-type FilterStoreState = {
+export type FilterStoreState = {
   allPoints: MapPoint[];
   visiblePoints: MapPoint[];
   hasAvailableYears: boolean;
@@ -165,6 +165,9 @@ export const useFilterStore = create<FilterStoreState>((set, get) => ({
     });
   },
 }));
+
+export const selectVisiblePointCount = (state: FilterStoreState) => state.visiblePoints.length;
+export const selectTotalPointCount = (state: FilterStoreState) => state.allPoints.length;
 
 useFilterStore.getState().setSourcePoints(useDataStore.getState().points);
 useDataStore.subscribe((state, previousState) => {

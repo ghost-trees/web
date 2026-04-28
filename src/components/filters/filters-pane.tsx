@@ -1,14 +1,24 @@
 import { useUiStore } from '../../state/ui-store';
+import {
+  selectTotalPointCount,
+  selectVisiblePointCount,
+  useFilterStore,
+} from '../../state/filter-store';
 import { Year } from './year';
 
 export function FiltersPane() {
   const closeFilters = useUiStore((state) => state.closeFilters);
+  const visiblePointCount = useFilterStore(selectVisiblePointCount);
+  const totalPointCount = useFilterStore(selectTotalPointCount);
 
   return (
     <section aria-label="Filters" className="flex h-full min-h-0 flex-col">
       <header className="mb-4 flex items-start justify-between gap-3">
         <div>
           <h2 className="text-base font-semibold text-[var(--color-on-surface)]">Filters</h2>
+          <p className="mt-1 text-xs text-[var(--color-on-surface-variant)]">
+            Filtering {visiblePointCount} of {totalPointCount} points
+          </p>
         </div>
         <button
           type="button"
