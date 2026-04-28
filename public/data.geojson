@@ -16,7 +16,8 @@
         "status": "Fine",
         "descriptor": "Fine and fees for the illegal removal of one unknown DBH HW in the ROW at this address",
         "paid": 1080,
-        "outstanding": 0
+        "outstanding": 0,
+        "tree_types": ["hardwood"]
       }
     },
     {
@@ -34,7 +35,8 @@
         "status": "Fine",
         "descriptor": "Removal of the following 32 trees without permit: 11\" HW (T1), 11\" HW (T2), 16\" HW (T3), 35\" HW (T4), 10\" HW (T6), 11\" HW (T7), 15\" HW (T8), 10\" HW (T9), 14\" HW (T10), 22\" HW (T11), 10\" HW (T12), 27\" HW (T13), 12\" HW (T14), 11\" HW (T15), 11\" HW (T17), 19\" HW (T18), 18\" HW (T20), 17\" HW (T22), 24\" HW (T23), 22\" HW (T24), 17\" HW (T25), 12\" HW (T26), 10\" HW (T27), 18\" HW (T28), 17\" HW (T29), 21\" PN (T32), 17\" HW (T33), 19\" HW (T34), 15\" HW (T35), 23\" HW (T36), 14\" HW (T37), & 10\" HW (T38).",
         "paid": 0,
-        "outstanding": 0
+        "outstanding": 0,
+        "tree_types": ["hardwood", "pine"]
       }
     },
     {
@@ -52,7 +54,8 @@
         "status": "Fine",
         "descriptor": "Removal of three 15\" hickory trees without permit.",
         "paid": 4650,
-        "outstanding": 0
+        "outstanding": 0,
+        "tree_types": ["hickory"]
       }
     },
     {
@@ -70,7 +73,8 @@
         "status": "Fine",
         "descriptor": "31\" Magnolia tree removed from front yard before permit issuance.",
         "paid": 2030,
-        "outstanding": 0
+        "outstanding": 0,
+        "tree_types": ["magnolia"]
       }
     },
     {
@@ -88,7 +92,8 @@
         "status": "Fine",
         "descriptor": "The following three private property trees were removed without permit: one 18\" oak, one 15\" oak, and one 21\" oak.",
         "paid": 4920,
-        "outstanding": 0
+        "outstanding": 0,
+        "tree_types": ["oak"]
       }
     },
     {
@@ -106,7 +111,8 @@
         "status": "Fine",
         "descriptor": "Tree #10 (13\" Hackberry) and tree #11 (8\" Poplar) removed without permit application, or issuance.",
         "paid": 0,
-        "outstanding": 0
+        "outstanding": 0,
+        "tree_types": ["hackberry", "poplar"]
       }
     },
     {
@@ -124,7 +130,8 @@
         "status": "Fine",
         "descriptor": "9 trees, at 124 diameter inches, removed without permit issuance. The trees include trees # 21, 22, 29, 35, 42, 64, 65, 94, & 95, on the data chart provided with permit number BB-202504597.",
         "paid": 13620,
-        "outstanding": 0
+        "outstanding": 0,
+        "tree_types": []
       }
     },
     {
@@ -142,7 +149,8 @@
         "status": "Fine",
         "descriptor": "Destruction of one 28\" sweetgum, due to its structural root plate being severed.",
         "paid": 0,
-        "outstanding": 1440
+        "outstanding": 1440,
+        "tree_types": ["sweetgum"]
       }
     },
     {
@@ -160,7 +168,8 @@
         "status": "Fine",
         "descriptor": "Illegal tree destruction. Grading outside of the approved LOD and impacting over 33% of the net root zone of a 17\" Magnolia tree located on the neighboring property (903 Courtenay Dr).",
         "paid": 1610,
-        "outstanding": 0
+        "outstanding": 0,
+        "tree_types": ["magnolia"]
       }
     },
     {
@@ -178,7 +187,8 @@
         "status": "Fine",
         "descriptor": "8\" Tree in rear left shown as preserved on the previous approved plan (BB-202202144), has been removed without permit application, or issuance.",
         "paid": 1340,
-        "outstanding": 0
+        "outstanding": 0,
+        "tree_types": []
       }
     },
     {
@@ -196,7 +206,8 @@
         "status": "Fine",
         "descriptor": "7\", 10\", 8\", & 7\" trees removed from rear yard without permit application, or issuance.",
         "paid": 0,
-        "outstanding": 0
+        "outstanding": 0,
+        "tree_types": []
       }
     },
     {
@@ -214,7 +225,8 @@
         "status": "Fine",
         "descriptor": "Unpermitted removal of 3/3/4\" hickory shown on plans and removed before precon for wall project",
         "paid": 1400,
-        "outstanding": 0
+        "outstanding": 0,
+        "tree_types": ["hickory"]
       }
     },
     {
@@ -232,7 +244,8 @@
         "status": "Fine",
         "descriptor": null,
         "paid": 0,
-        "outstanding": 0
+        "outstanding": 0,
+        "tree_types": []
       }
     },
     {
@@ -250,7 +263,8 @@
         "status": "Fine",
         "descriptor": "Illegal destruction of 12\" Oak. Destroyed due to removal of entire canopy.",
         "paid": 0,
-        "outstanding": 1460
+        "outstanding": 1460,
+        "tree_types": ["oak"]
       }
     },
     {
@@ -268,7 +282,8 @@
         "status": "Fine",
         "descriptor": "Illegal Removal of two Pines in the front. Diameters unknown.",
         "paid": 0,
-        "outstanding": 2520
+        "outstanding": 2520,
+        "tree_types": ["pine"]
       }
     },
     {
@@ -286,7 +301,8 @@
         "status": "Closed",
         "descriptor": "Illegal removal of two River Birches in the front of the property. Diameter unknown.",
         "paid": 0,
-        "outstanding": 0
+        "outstanding": 0,
+        "tree_types": ["birch"]
       }
     },
     {
@@ -304,7 +320,8 @@
         "status": "Fine",
         "descriptor": "Fines and fees associated with the illegal destruction of 5 ROW trees and the illegal removal of one ROW tree, totalling 60\" DBH",
         "paid": 0,
-        "outstanding": 0
+        "outstanding": 0,
+        "tree_types": []
       }
     },
     {
@@ -322,7 +339,8 @@
         "status": "Fine",
         "descriptor": "Illegal tree destruction of (1) 22\" Beech (Sideyard Left).",
         "paid": 0,
-        "outstanding": 0
+        "outstanding": 0,
+        "tree_types": ["beech"]
       }
     },
     {
@@ -340,7 +358,8 @@
         "status": "Fine",
         "descriptor": "Destruction of one 18\" maple tree without permit.",
         "paid": 1140,
-        "outstanding": 0
+        "outstanding": 0,
+        "tree_types": ["maple"]
       }
     },
     {
@@ -358,7 +377,8 @@
         "status": "Fine",
         "descriptor": null,
         "paid": 2600,
-        "outstanding": 0
+        "outstanding": 0,
+        "tree_types": []
       }
     },
     {
@@ -376,7 +396,8 @@
         "status": "Fine",
         "descriptor": null,
         "paid": 0,
-        "outstanding": 1010
+        "outstanding": 1010,
+        "tree_types": []
       }
     },
     {
@@ -394,7 +415,8 @@
         "status": "Fine",
         "descriptor": "5 trees destroyed by work prior to any permitting, reported on plans submitted due to Site Development SWOCredit given for 1 tree at 2.5\" not the 7 at 17.5\" reported on plans due to spacing not documentedPines at 16\", 18\", 18\", 24\"Sweetgum at 16\"",
         "paid": 8085,
-        "outstanding": 0
+        "outstanding": 0,
+        "tree_types": ["sweetgum"]
       }
     },
     {
@@ -412,7 +434,8 @@
         "status": "Fine",
         "descriptor": "Unpermitted removal of multiple trees at rearBeech- 24\" 28\"White oak 27\"Tulip-poplar 28\" 12\" 44\"Sweetgum 24\"SWO posted on siteApex Tree on site picking up logs",
         "paid": 0,
-        "outstanding": 12210
+        "outstanding": 12210,
+        "tree_types": ["oak", "poplar", "sweetgum"]
       }
     },
     {
@@ -430,7 +453,8 @@
         "status": "Fine",
         "descriptor": "Removal of the following two trees without permit: one 44\" oak and one 31\" hackberry.",
         "paid": 0,
-        "outstanding": 3950
+        "outstanding": 3950,
+        "tree_types": ["hackberry", "oak"]
       }
     },
     {
@@ -448,7 +472,8 @@
         "status": "Fine",
         "descriptor": "Trees 1070 and 1071 were removed prior to completion of yellow posting. 28\" Hardwood26\" Hardwood54\" total.",
         "paid": 0,
-        "outstanding": 3320
+        "outstanding": 3320,
+        "tree_types": []
       }
     },
     {
@@ -466,7 +491,8 @@
         "status": "Fine",
         "descriptor": "Unpermitted removal of multiple trees beyond the sole DDH approved pine on site24\" pine, 14\" hardwood at front right43\" tulip-poplar, 26\" pine, 14\" pine, 20\" hardwood right and rear right of house25\" pine, 25\" pine, 6\" hardwood, 10\" sweetgum, 15\" hackberry, 15\" oak 14\" oak left of property11\" trees at 251\" destroyed on site",
         "paid": 19630,
-        "outstanding": 0
+        "outstanding": 0,
+        "tree_types": ["hackberry", "hardwood", "oak", "pine", "poplar", "sweetgum"]
       }
     },
     {
@@ -484,7 +510,8 @@
         "status": "Fine",
         "descriptor": "Grading and digging outside of the approved LOD. Structural root plate cut on tree #5 (15\" Hemlock).",
         "paid": 0,
-        "outstanding": 0
+        "outstanding": 0,
+        "tree_types": ["hemlock"]
       }
     },
     {
@@ -502,7 +529,8 @@
         "status": "Fine",
         "descriptor": "Trees #3, 5, 6, & 7 shown on site plan associated with BB-202508375 removed without permit application, or issuance. Tree #4 removed before yellow posting and before permit issuance.",
         "paid": 8110,
-        "outstanding": 0
+        "outstanding": 0,
+        "tree_types": []
       }
     },
     {
@@ -520,7 +548,8 @@
         "status": "Fine",
         "descriptor": "Grading outside of the approved LOD compromised over 33% of the net root zone on tree #9 (27\" Poplar). Illegal removal of tree #7 (7\" Boxelder)",
         "paid": 3220,
-        "outstanding": 0
+        "outstanding": 0,
+        "tree_types": ["poplar"]
       }
     },
     {
@@ -538,7 +567,8 @@
         "status": "Fine",
         "descriptor": "Grading and land disturbance outside of the approved LOD impacting the SRP of a 44\" Oak in the rear center and an 8\" Pecan on the right side of the property.",
         "paid": 3760,
-        "outstanding": 0
+        "outstanding": 0,
+        "tree_types": ["oak", "pecan"]
       }
     },
     {
@@ -556,7 +586,8 @@
         "status": "Fine",
         "descriptor": "Fines and fees associated with the illegal destruction of 5 trees totaling 70\" DBH. Trees were destroyed by unapproved construction.",
         "paid": 7100,
-        "outstanding": 0
+        "outstanding": 0,
+        "tree_types": []
       }
     },
     {
@@ -574,7 +605,8 @@
         "status": "Fine",
         "descriptor": "Removal of a 9\" Hardwood without a permit.",
         "paid": 870,
-        "outstanding": 0
+        "outstanding": 0,
+        "tree_types": ["hardwood"]
       }
     },
     {
@@ -592,7 +624,8 @@
         "status": "Fine",
         "descriptor": "Removal of the following three trees without permit: (T148) 10\" water oak, (T183) 10\" hemlock, (T215) 34\" water oak.",
         "paid": 4420,
-        "outstanding": 0
+        "outstanding": 0,
+        "tree_types": ["hemlock", "oak"]
       }
     },
     {
@@ -610,7 +643,8 @@
         "status": "Fine",
         "descriptor": "26\" Pine in the rear left, 27\" Pine in the rear center, and 35\" Sweetgum on the right of the house were all removed after permit denial.",
         "paid": 4420,
-        "outstanding": 0
+        "outstanding": 0,
+        "tree_types": ["pine", "sweetgum"]
       }
     },
     {
@@ -628,7 +662,8 @@
         "status": "Fine",
         "descriptor": "Unpermitted destruction by topping of 6 crape myrtles at front, 6 trees at 138\"Topping specifically stated in tree ordinance as violation and is not arboriculturally sound practice",
         "paid": 0,
-        "outstanding": 10740
+        "outstanding": 10740,
+        "tree_types": ["crape myrtle"]
       }
     },
     {
@@ -646,7 +681,8 @@
         "status": "Fine",
         "descriptor": "15\" Hemlock tree removed from the front yard without permit application, or issuance.",
         "paid": 1550,
-        "outstanding": 0
+        "outstanding": 0,
+        "tree_types": ["hemlock"]
       }
     },
     {
@@ -664,7 +700,8 @@
         "status": "Fine",
         "descriptor": "Unpermitted removal of multiple trees on sitePine and oak at left of house removed and ground before measurements29\" pine at rear leftWater oak at right poorly pruned, reported to be removed later by crew on site",
         "paid": 4490,
-        "outstanding": 0
+        "outstanding": 0,
+        "tree_types": ["oak", "pine"]
       }
     },
     {
@@ -682,7 +719,8 @@
         "status": "Fine",
         "descriptor": "Illegal removal of a 12\" Pine at rear left without a permit.",
         "paid": 0,
-        "outstanding": 0
+        "outstanding": 0,
+        "tree_types": ["pine"]
       }
     },
     {
@@ -700,7 +738,8 @@
         "status": "Fine",
         "descriptor": "Removal of one 16\" hardwood without permit.",
         "paid": 0,
-        "outstanding": 0
+        "outstanding": 0,
+        "tree_types": ["hardwood"]
       }
     },
     {
@@ -718,7 +757,8 @@
         "status": "Fine",
         "descriptor": "Unpermitted removal of 25\" sweetgum at front, previously issued permit approved 1 26\" sweetgum.  2 trees were removed",
         "paid": 1850,
-        "outstanding": 0
+        "outstanding": 0,
+        "tree_types": ["sweetgum"]
       }
     },
     {
@@ -736,7 +776,8 @@
         "status": "Fine",
         "descriptor": "21\" Hardwood was removed in the front of 841 Lullwater Park Lane. There was no permit application, or issuance.",
         "paid": 0,
-        "outstanding": 1230
+        "outstanding": 1230,
+        "tree_types": ["hardwood"]
       }
     },
     {
@@ -754,7 +795,8 @@
         "status": "Fine",
         "descriptor": "34\" Oak tree removed from center of rear yard. There is no permit application, or issuance for the removal.",
         "paid": 2120,
-        "outstanding": 0
+        "outstanding": 0,
+        "tree_types": ["oak"]
       }
     },
     {
@@ -772,7 +814,8 @@
         "status": "Fine",
         "descriptor": "Unpermitted destruction reported by designer of T6, 34\" hardwood at front",
         "paid": 2120,
-        "outstanding": 0
+        "outstanding": 0,
+        "tree_types": ["hardwood"]
       }
     },
     {
@@ -790,7 +833,8 @@
         "status": "Fine",
         "descriptor": "The following two trees were removed without permit: one 24\" hardwood and one 17\" hardwood.",
         "paid": 0,
-        "outstanding": 2930
+        "outstanding": 2930,
+        "tree_types": ["hardwood"]
       }
     },
     {
@@ -808,7 +852,8 @@
         "status": "Fine",
         "descriptor": "Illegal removal of 11\" Oak, 17\" Elm, & 10\" Elm along right side of property. No permit was applied, or issued for the removals.",
         "paid": 0,
-        "outstanding": 4440
+        "outstanding": 4440,
+        "tree_types": ["elm", "oak"]
       }
     },
     {
@@ -826,7 +871,8 @@
         "status": "Fine",
         "descriptor": "Removal of the following three trees without permit: 18\" red oak, 9\" hardwood, and 12\" sweetgum.",
         "paid": 3970,
-        "outstanding": 0
+        "outstanding": 0,
+        "tree_types": ["hardwood", "oak", "sweetgum"]
       }
     },
     {
@@ -844,7 +890,8 @@
         "status": "Fine",
         "descriptor": "Removal of one 18\" red maple without permit.",
         "paid": 1140,
-        "outstanding": 0
+        "outstanding": 0,
+        "tree_types": ["maple"]
       }
     },
     {
@@ -862,7 +909,8 @@
         "status": "Fine",
         "descriptor": "Removal of 18\" oak prior to inspection for yellow postingCredit given for 1 replacement overstory at 3\" as per plan",
         "paid": 1450,
-        "outstanding": 0
+        "outstanding": 0,
+        "tree_types": ["oak"]
       }
     },
     {
@@ -880,7 +928,8 @@
         "status": "Fine",
         "descriptor": "Fence installed outside of the approved LOD. Fence post dug into the SRP of a 15\" Poplar in the rear right. This tree is labelled s a 15\" Oak on the plan.",
         "paid": 1550,
-        "outstanding": 0
+        "outstanding": 0,
+        "tree_types": ["oak", "poplar"]
       }
     },
     {
@@ -898,7 +947,8 @@
         "status": "Fine",
         "descriptor": "Unpermitted destruction of 14\" pine and 38\" hardwood at right, pine by destruction of upper canopy, hardwood by construction well within the SRP of tree outside of permitted LoD",
         "paid": 3760,
-        "outstanding": 0
+        "outstanding": 0,
+        "tree_types": ["hardwood", "pine"]
       }
     },
     {
@@ -916,7 +966,8 @@
         "status": "Fine",
         "descriptor": "Illegal tree removal of (3)6\" Hardwoods.",
         "paid": 3340,
-        "outstanding": 0
+        "outstanding": 0,
+        "tree_types": ["hardwood"]
       }
     },
     {
@@ -934,7 +985,8 @@
         "status": "Fine",
         "descriptor": "Unpermitted destruction by topping of 3 Kousa dogwood at front right of drive3 trees at 10\" each",
         "paid": 0,
-        "outstanding": 0
+        "outstanding": 0,
+        "tree_types": ["dogwood"]
       }
     },
     {
@@ -952,7 +1004,8 @@
         "status": "Fine",
         "descriptor": "Fines and fees assocaiated with the illegal removal of 46 trees and 650\" DBH",
         "paid": 0,
-        "outstanding": 0
+        "outstanding": 0,
+        "tree_types": []
       }
     },
     {
@@ -970,7 +1023,8 @@
         "status": "Fine",
         "descriptor": "SRP impacted with construction activities outside of the approved LOD on trees #2 (26\" Oak) and tree #7 (36\" Poplar)",
         "paid": 4060,
-        "outstanding": 0
+        "outstanding": 0,
+        "tree_types": ["oak", "poplar"]
       }
     },
     {
@@ -988,7 +1042,8 @@
         "status": "Invoiced",
         "descriptor": "Destruction of one 26\" water oak tree without permit.",
         "paid": 0,
-        "outstanding": 1380
+        "outstanding": 1380,
+        "tree_types": ["oak"]
       }
     },
     {
@@ -1006,7 +1061,8 @@
         "status": "Fine",
         "descriptor": "Tree #4 (24\" HW) was removed before the posting.",
         "paid": 0,
-        "outstanding": 1820
+        "outstanding": 1820,
+        "tree_types": ["hardwood"]
       }
     },
     {
@@ -1024,7 +1080,8 @@
         "status": "Fine",
         "descriptor": "Removal of one 6\" hardwood without permit.",
         "paid": 780,
-        "outstanding": 0
+        "outstanding": 0,
+        "tree_types": ["hardwood"]
       }
     },
     {
@@ -1042,7 +1099,8 @@
         "status": "Fine",
         "descriptor": "Destruction of one 16\" magnolia tree without permit.",
         "paid": 1080,
-        "outstanding": 0
+        "outstanding": 0,
+        "tree_types": ["magnolia"]
       }
     },
     {
@@ -1060,7 +1118,8 @@
         "status": "Fine",
         "descriptor": "Tree #11 (8\" HW, tree #12 (10\" HW), and tree #13 (11\" HW) removed without permit application, or issuance.",
         "paid": 4170,
-        "outstanding": 0
+        "outstanding": 0,
+        "tree_types": ["hardwood"]
       }
     },
     {
@@ -1078,7 +1137,8 @@
         "status": "Fine",
         "descriptor": "Removal of one 9\" magnolia tree without permit.",
         "paid": 870,
-        "outstanding": 0
+        "outstanding": 0,
+        "tree_types": ["magnolia"]
       }
     },
     {
@@ -1096,7 +1156,8 @@
         "status": "Fine",
         "descriptor": "Land disturbance outside of the approved LOD. SRP impacted on 49\" Water Oak on adjacent property in the front left. Over 33% net root zone impacted on 24\" Pecan in front on right side. 24\" HW removed from the right side of the house without permit application, or issuance.",
         "paid": 0,
-        "outstanding": 0
+        "outstanding": 0,
+        "tree_types": ["hardwood", "oak", "pecan"]
       }
     },
     {
@@ -1114,7 +1175,8 @@
         "status": "Fine",
         "descriptor": "Illegal tree destruction of (1)9\" Sweetgum, (1)12\" Oak, (1)8\" Sweetgum, (1)12\" Oak, & (1)24\" Pine.",
         "paid": 6950,
-        "outstanding": 0
+        "outstanding": 0,
+        "tree_types": ["oak", "pine", "sweetgum"]
       }
     },
     {
@@ -1132,7 +1194,8 @@
         "status": "Pending - Illegal Activity",
         "descriptor": null,
         "paid": 0,
-        "outstanding": 0
+        "outstanding": 0,
+        "tree_types": []
       }
     },
     {
@@ -1150,7 +1213,8 @@
         "status": "Fine",
         "descriptor": "Fine and fees for illegal tree destruction of one 20\" DBH HW in the ROW due to unpermitted construction.",
         "paid": 1200,
-        "outstanding": 0
+        "outstanding": 0,
+        "tree_types": ["hardwood"]
       }
     },
     {
@@ -1168,7 +1232,8 @@
         "status": "Fine",
         "descriptor": "Reported unpermitted destruction of T5, T16, T173 trees at 84\" destroyed",
         "paid": 5820,
-        "outstanding": 0
+        "outstanding": 0,
+        "tree_types": []
       }
     },
     {
@@ -1186,7 +1251,8 @@
         "status": "Fine",
         "descriptor": "Per decision of the TCC, The fine (record BA-202303915), Should be split in half. Half of the fines and fees are reflected on the contractor (American Outdoor), and the remaining half is the responsibility of the homeowner. This record is the portion imposed on American Outdoor.",
         "paid": 0,
-        "outstanding": 10675
+        "outstanding": 10675,
+        "tree_types": []
       }
     },
     {
@@ -1204,7 +1270,8 @@
         "status": "Fine",
         "descriptor": "Per decision of the TCC, 1/2 of the fines and fees (from record BA-202303915) are reflected on the contractor (American Outdoor), and the remaining portion is reflected on the property owner.",
         "paid": 10675,
-        "outstanding": 0
+        "outstanding": 0,
+        "tree_types": []
       }
     },
     {
@@ -1222,7 +1289,8 @@
         "status": "Fine",
         "descriptor": "Illegal Destruction of (3) trees bi impacting the SRP while working outside of the approved LOD. #8 (38\" Poplar), #10 (18\" Sweetgum), #11 (21\" Pine)",
         "paid": 5610,
-        "outstanding": 0
+        "outstanding": 0,
+        "tree_types": ["pine", "poplar", "sweetgum"]
       }
     },
     {
@@ -1240,7 +1308,8 @@
         "status": "Fine",
         "descriptor": "42\" Oak tree removed from the front left corner of the property. There was no permit application, or issuance for the removal.",
         "paid": 1860,
-        "outstanding": 0
+        "outstanding": 0,
+        "tree_types": ["oak"]
       }
     },
     {
@@ -1258,7 +1327,8 @@
         "status": "Fine",
         "descriptor": "Digging in the SRP of tree #5. Digging in SRP and attaching fence to tree #3. No permit exists for the new fence. The trees are destroyed as defined in section 158-26.",
         "paid": 2950,
-        "outstanding": 0
+        "outstanding": 0,
+        "tree_types": []
       }
     },
     {
@@ -1276,7 +1346,8 @@
         "status": "Fine",
         "descriptor": "Unpermitted removal of additional trees at front beyond DDH and previous destruction 24\" magnolia and 6\" holly at front right 22\" and 34\" pine at front left 4 trees at 86\"",
         "paid": 6980,
-        "outstanding": 0
+        "outstanding": 0,
+        "tree_types": ["holly", "magnolia", "pine"]
       }
     },
     {
@@ -1294,7 +1365,8 @@
         "status": "Fine",
         "descriptor": "Illegal Tree Removal from unpermitted installation of new driveway",
         "paid": 1260,
-        "outstanding": 0
+        "outstanding": 0,
+        "tree_types": []
       }
     },
     {
@@ -1312,7 +1384,8 @@
         "status": "Fine",
         "descriptor": "Unpermitted destruction of multiple flowering cherries at fence line, no DDH or posting record found.T1-T6, 14\" 13\", 13\", 12\", 13\" 16\" flowering cherries6 trees at 81\" removed",
         "paid": 0,
-        "outstanding": 9030
+        "outstanding": 9030,
+        "tree_types": []
       }
     },
     {
@@ -1330,7 +1403,8 @@
         "status": "Fine",
         "descriptor": "SRP impacted on 17\" Oak tree front center near the ROW. Over 33% of net root zone impacted with grading activity. Tree is destroyed as defined in section 158-26 of the tree ordinance.",
         "paid": 1110,
-        "outstanding": 0
+        "outstanding": 0,
+        "tree_types": ["oak"]
       }
     },
     {
@@ -1348,7 +1422,8 @@
         "status": "Fine",
         "descriptor": null,
         "paid": 1520,
-        "outstanding": 0
+        "outstanding": 0,
+        "tree_types": []
       }
     },
     {
@@ -1366,7 +1441,8 @@
         "status": "Fine",
         "descriptor": "Fines and fees associated with the illegal destruction of 4 trees totalling 63\" DBH",
         "paid": 5790,
-        "outstanding": 0
+        "outstanding": 0,
+        "tree_types": []
       }
     },
     {
@@ -1384,7 +1460,8 @@
         "status": "Fine",
         "descriptor": "Unpermitted destruction of 3 denied DDH trees on site42\", 38\" and 30\" pines3 trees at 110\"",
         "paid": 6100,
-        "outstanding": 0
+        "outstanding": 0,
+        "tree_types": []
       }
     },
     {
@@ -1402,7 +1479,8 @@
         "status": "Fine",
         "descriptor": "Illegal destruction of 12\" Magnolia, 8\" Magnolia, & 37\" Water Oak on the right side of the house. 100% of the net root zones are compromised by the installation of artificial turf. No permit was applied, or issued for the site development in the area.",
         "paid": 0,
-        "outstanding": 4510
+        "outstanding": 4510,
+        "tree_types": ["magnolia", "oak"]
       }
     },
     {
@@ -1420,7 +1498,8 @@
         "status": "Assigned",
         "descriptor": "Land disturbance outside of the approved LOD. Impact exceeds 33% of net root zone, and/or SRP damage on trees #23 &39",
         "paid": 0,
-        "outstanding": 0
+        "outstanding": 0,
+        "tree_types": []
       }
     },
     {
@@ -1438,7 +1517,8 @@
         "status": "Fine",
         "descriptor": "Digging in the SRP of the 43\" White Oak in the front yard.",
         "paid": 0,
-        "outstanding": 2390
+        "outstanding": 2390,
+        "tree_types": ["oak"]
       }
     },
     {
@@ -1456,7 +1536,8 @@
         "status": "Fine",
         "descriptor": "Tree destruction of 34\" and 26\" Magnolia trees in rear right.",
         "paid": 4060,
-        "outstanding": 0
+        "outstanding": 0,
+        "tree_types": ["magnolia"]
       }
     },
     {
@@ -1474,7 +1555,8 @@
         "status": "Fine",
         "descriptor": "SRP impact with land disturbance outside of the approved LOD. Tree #10: 22\" Hackberry",
         "paid": 1760,
-        "outstanding": 0
+        "outstanding": 0,
+        "tree_types": ["hackberry"]
       }
     },
     {
@@ -1492,7 +1574,8 @@
         "status": "Fine",
         "descriptor": "Illegal tree destruction of (1)26\" White Oak, (1)37\" Pine, (1)27\" Pine, (1)18\" Magnolia, & (1)44\" Water Oak.",
         "paid": 9560,
-        "outstanding": 0
+        "outstanding": 0,
+        "tree_types": ["magnolia", "oak", "pine"]
       }
     },
     {
@@ -1510,7 +1593,8 @@
         "status": "Fine",
         "descriptor": null,
         "paid": 0,
-        "outstanding": 0
+        "outstanding": 0,
+        "tree_types": []
       }
     },
     {
@@ -1528,7 +1612,8 @@
         "status": "Assigned",
         "descriptor": "The following two trees were removed without permit: one 24\" hardwood and one 17\" hardwood.",
         "paid": 0,
-        "outstanding": 0
+        "outstanding": 0,
+        "tree_types": ["hardwood"]
       }
     },
     {
@@ -1546,7 +1631,8 @@
         "status": "Fine",
         "descriptor": "3 trees removed from rear yard without permit application, or issuance.",
         "paid": 0,
-        "outstanding": 1770
+        "outstanding": 1770,
+        "tree_types": []
       }
     },
     {
@@ -1564,7 +1650,8 @@
         "status": "Fine",
         "descriptor": "32\" Post oak on adjacent lot in rear left had well over 20% of the overall canopy removed. 23\" Water Oak in rear has 100% net root zone impact. 13\" & 9\" hardwoods removed outside of fence in rear left. No permit was applied, or issued for the tree removal/destruction.",
         "paid": 6210,
-        "outstanding": 0
+        "outstanding": 0,
+        "tree_types": ["hardwood", "oak"]
       }
     },
     {
@@ -1582,7 +1669,8 @@
         "status": "Fine",
         "descriptor": "Fine and fees for the illegal removal of two trees at this address. 1) 20\" Pine and 2) 10\" HW",
         "paid": 3100,
-        "outstanding": 0
+        "outstanding": 0,
+        "tree_types": ["hardwood", "pine"]
       }
     },
     {
@@ -1600,7 +1688,8 @@
         "status": "Closed - Illegal Activity",
         "descriptor": "Fees and fines for ilegal destruction of one 45\" DBH tree in the ROW due to SRP impact from construction",
         "paid": 3130,
-        "outstanding": 0
+        "outstanding": 0,
+        "tree_types": []
       }
     },
     {
@@ -1618,7 +1707,8 @@
         "status": "Fine",
         "descriptor": null,
         "paid": 0,
-        "outstanding": 12890
+        "outstanding": 12890,
+        "tree_types": []
       }
     },
     {
@@ -1636,7 +1726,8 @@
         "status": "Fine",
         "descriptor": "8\" Oak and 20\" Oak removed from rear left without permit application, or issuance.",
         "paid": 3040,
-        "outstanding": 0
+        "outstanding": 0,
+        "tree_types": ["oak"]
       }
     },
     {
@@ -1654,7 +1745,8 @@
         "status": "Fine",
         "descriptor": "Destruction of the following two trees without permit: one 24\" pecan and one 30\" water oak.",
         "paid": 3320,
-        "outstanding": 0
+        "outstanding": 0,
+        "tree_types": ["oak", "pecan"]
       }
     },
     {
@@ -1672,7 +1764,8 @@
         "status": "Fine",
         "descriptor": "Removal of the following eight trees without permit: 37\" hardwood, 27\" pine, 15\" hardwood, 22\" hardwood, 28\" pine, 16\" hardwood, 22\" pine, and 29\" hardwood.",
         "paid": 0,
-        "outstanding": 14180
+        "outstanding": 14180,
+        "tree_types": ["hardwood", "pine"]
       }
     },
     {
@@ -1690,7 +1783,8 @@
         "status": "Fine",
         "descriptor": "Unpermitted destruction of T8, T9, T10 and T13 by work outside of approved LoD and destruction of SRP of all 44 trees at 102\"",
         "paid": 7460,
-        "outstanding": 0
+        "outstanding": 0,
+        "tree_types": []
       }
     },
     {
@@ -1708,7 +1802,8 @@
         "status": "Fine",
         "descriptor": "Tree of unknown diameter removed from the right side of the driveway. 17\" Hardwood removed from the rear left. No permit was applied, or issued for the removals.",
         "paid": 2620,
-        "outstanding": 0
+        "outstanding": 0,
+        "tree_types": ["hardwood"]
       }
     },
     {
@@ -1726,7 +1821,8 @@
         "status": "Fine",
         "descriptor": "Trenched in silt fence outside of the approved LOD. Tree #6 (17\" Hardwood) straight line impact 4.5' distance = 33.36% impact. Tree #7 (32\" Pine) straight line impact 7' distance =36.2% impact. Tree #9 (20\" Hardwood) straight line impact 3' distance = 40.51% impact. Tree #10 (16\" Hardwood) straight line impact 3.5' distance + 36.2% impact. 4 total trees destroyed at 85 diameter inches.",
         "paid": 0,
-        "outstanding": 0
+        "outstanding": 0,
+        "tree_types": ["hardwood", "pine"]
       }
     },
     {
@@ -1744,7 +1840,8 @@
         "status": "Fine",
         "descriptor": "Unpermitted destruction of magnolias at right of drive with changed retaining wall, 13\" and 8\"",
         "paid": 2830,
-        "outstanding": 0
+        "outstanding": 0,
+        "tree_types": ["magnolia"]
       }
     },
     {
@@ -1762,7 +1859,8 @@
         "status": "Fine",
         "descriptor": "Trenching outside the limits of disturbance and in the structural root plate of trees #10 & 11.",
         "paid": 0,
-        "outstanding": 0
+        "outstanding": 0,
+        "tree_types": []
       }
     },
     {
@@ -1780,7 +1878,8 @@
         "status": "Fine",
         "descriptor": "Removal of 11\" hardwood from the neighboring property (368 5th Street) without permission from the owner of the tree, permit application, or issuance.",
         "paid": 1430,
-        "outstanding": 0
+        "outstanding": 0,
+        "tree_types": ["hardwood"]
       }
     },
     {
@@ -1798,7 +1897,8 @@
         "status": "Fine",
         "descriptor": "9 trees totaling 130 diameter inches were removed along the right property line. No permit was applied, or issued.",
         "paid": 0,
-        "outstanding": 13800
+        "outstanding": 13800,
+        "tree_types": []
       }
     },
     {
@@ -1816,7 +1916,8 @@
         "status": "Fine",
         "descriptor": "Removal of 20 trees of unknown diameter without permit.",
         "paid": 0,
-        "outstanding": 0
+        "outstanding": 0,
+        "tree_types": []
       }
     },
     {
@@ -1834,7 +1935,8 @@
         "status": "Fine",
         "descriptor": "Illegal removal of (1) Hardwood of unknown diameter.",
         "paid": 0,
-        "outstanding": 0
+        "outstanding": 0,
+        "tree_types": ["hardwood"]
       }
     },
     {
@@ -1852,7 +1954,8 @@
         "status": "Fine",
         "descriptor": "4 trees removed at right of drive on slope, 3 pines and an oak.  No permits on file or applications pending",
         "paid": 0,
-        "outstanding": 0
+        "outstanding": 0,
+        "tree_types": ["oak", "pine"]
       }
     },
     {
@@ -1870,7 +1973,8 @@
         "status": "Fine",
         "descriptor": "Removal of the following three trees without permit: one 13\" hardwood, one 12\" hardwood, and one 11\" hardwood.",
         "paid": 3880,
-        "outstanding": 0
+        "outstanding": 0,
+        "tree_types": ["hardwood"]
       }
     },
     {
@@ -1888,7 +1992,8 @@
         "status": "Fine",
         "descriptor": "Working outside the LOD and outside the scope of work. Trees #4, #7, & #13 have SRP impacts and net root zone impacts over 33%. These trees are destroyed.",
         "paid": 5250,
-        "outstanding": 0
+        "outstanding": 0,
+        "tree_types": []
       }
     },
     {
@@ -1906,7 +2011,8 @@
         "status": "Fine",
         "descriptor": "One Large Water Oak removed from the front yard, and a row of Leland Cypress removed along the right property line. No permit application, or issuance for the removals.",
         "paid": 1510,
-        "outstanding": 0
+        "outstanding": 0,
+        "tree_types": ["cypress", "oak"]
       }
     },
     {
@@ -1924,7 +2030,8 @@
         "status": "Fine",
         "descriptor": "Grading and land disturbance outside of the approved LOD. Over 33% of net root zones compromised on trees #1, #4, #11, & #12. SRP cut on tree #2. Tree#22 removed without permit application, or issuance. Other trees impacted #5, #6, #15, #23, & #39",
         "paid": 10620,
-        "outstanding": 0
+        "outstanding": 0,
+        "tree_types": []
       }
     },
     {
@@ -1942,7 +2049,8 @@
         "status": "Fine",
         "descriptor": "Straight line impact and SRP damage from trenching 2' away from tree #53. Straight line impact from trenching at 1332 Wayne, and digging for rain garden outside the LOD at 1338 Wayne. Both disturbances are 16' away on adjacent sides of tree #17. Both tree #53 and #17 are illegally destroyed.",
         "paid": 3880,
-        "outstanding": 0
+        "outstanding": 0,
+        "tree_types": []
       }
     },
     {
@@ -1960,7 +2068,8 @@
         "status": "Fine",
         "descriptor": "Two trees removed and one tree destroyed without permit.",
         "paid": 4530,
-        "outstanding": 0
+        "outstanding": 0,
+        "tree_types": []
       }
     },
     {
@@ -1978,7 +2087,8 @@
         "status": "Fine",
         "descriptor": "Destruction of one 38\" sweetgum without permit.",
         "paid": 1740,
-        "outstanding": 0
+        "outstanding": 0,
+        "tree_types": ["sweetgum"]
       }
     },
     {
@@ -1996,7 +2106,8 @@
         "status": "Fine",
         "descriptor": "Destruction of one 13\" pine tree without permit.",
         "paid": 990,
-        "outstanding": 0
+        "outstanding": 0,
+        "tree_types": ["pine"]
       }
     },
     {
@@ -2014,7 +2125,8 @@
         "status": "Fine",
         "descriptor": "Illegal tree removal of (6) trees of unknown diameter.",
         "paid": 0,
-        "outstanding": 8560
+        "outstanding": 8560,
+        "tree_types": []
       }
     },
     {
@@ -2032,7 +2144,8 @@
         "status": "Fine",
         "descriptor": "Unpermitted removal of 12\" magnolia, 13\" hardwood, 8\" hardwood, 12\" hardwood and 25\" magnolia at rear.  No permits applied for or issued prior to removalStop Work posted, crew returned to work after being told to leave site",
         "paid": 0,
-        "outstanding": 7600
+        "outstanding": 7600,
+        "tree_types": ["hardwood", "magnolia"]
       }
     },
     {
@@ -2050,7 +2163,8 @@
         "status": "Fine",
         "descriptor": "Removal of seven trees of unknown diameter without permit.",
         "paid": 10070,
-        "outstanding": 0
+        "outstanding": 0,
+        "tree_types": []
       }
     },
     {
@@ -2068,7 +2182,8 @@
         "status": "Fine",
         "descriptor": "Removal of one 10\" hardwood without permit. Destruction of one 25\" hardwood without permit.",
         "paid": 2750,
-        "outstanding": 0
+        "outstanding": 0,
+        "tree_types": ["hardwood"]
       }
     },
     {
@@ -2086,7 +2201,8 @@
         "status": "Fine",
         "descriptor": "Destruction of one 26\" hardwood without permit.",
         "paid": 1380,
-        "outstanding": 0
+        "outstanding": 0,
+        "tree_types": ["hardwood"]
       }
     },
     {
@@ -2104,7 +2220,8 @@
         "status": "Fine",
         "descriptor": null,
         "paid": 0,
-        "outstanding": 0
+        "outstanding": 0,
+        "tree_types": []
       }
     },
     {
@@ -2122,7 +2239,8 @@
         "status": "Fine",
         "descriptor": "Unpermitted removal of 16\" and 12\" hardwoods at left of lot.  Trees were to be preserved on previous permit that expired, no recompense can be found as having been paid.",
         "paid": 0,
-        "outstanding": 0
+        "outstanding": 0,
+        "tree_types": ["hardwood"]
       }
     },
     {
@@ -2140,7 +2258,8 @@
         "status": "Assigned",
         "descriptor": null,
         "paid": 0,
-        "outstanding": 0
+        "outstanding": 0,
+        "tree_types": []
       }
     },
     {
@@ -2158,7 +2277,8 @@
         "status": "Fine",
         "descriptor": "Removal of one 8\" hardwood tree without permit.",
         "paid": 840,
-        "outstanding": 0
+        "outstanding": 0,
+        "tree_types": ["hardwood"]
       }
     },
     {
@@ -2176,7 +2296,8 @@
         "status": "Fine",
         "descriptor": "Removal of the following two trees without permit: one 11\" American holly and one 9\" black cherry.",
         "paid": 0,
-        "outstanding": 0
+        "outstanding": 0,
+        "tree_types": ["cherry", "holly"]
       }
     },
     {
@@ -2194,7 +2315,8 @@
         "status": "Fine",
         "descriptor": "Unpermitted destruction of multiple trees during construction",
         "paid": 23620,
-        "outstanding": 0
+        "outstanding": 0,
+        "tree_types": []
       }
     },
     {
@@ -2212,7 +2334,8 @@
         "status": "Fine",
         "descriptor": "26\" Pine, 24\" Water Oak, 21\" Water Oak, 24\" Water Oak, 20\" Magnolia, & 10\" Magnolia destroyed during land disturbance activities outside of the approved LOD.",
         "paid": 10350,
-        "outstanding": 0
+        "outstanding": 0,
+        "tree_types": ["magnolia", "oak", "pine"]
       }
     },
     {
@@ -2230,7 +2353,8 @@
         "status": "Fine",
         "descriptor": "Removal of two large hardwood trees of unknown diameter.",
         "paid": 0,
-        "outstanding": 3020
+        "outstanding": 3020,
+        "tree_types": ["hardwood"]
       }
     },
     {
@@ -2248,7 +2372,8 @@
         "status": "Fine",
         "descriptor": "Unpermitted destruction of multiple trees not shown on plans11\" hickory at front left, grading and materials in SRP9\", 9\", 9\", 10\", 10\", 13\", 13\", 13\", 15\" leyland cypress10 trees at 112\" destroyed",
         "paid": 0,
-        "outstanding": 14360
+        "outstanding": 14360,
+        "tree_types": ["hickory"]
       }
     },
     {
@@ -2266,7 +2391,8 @@
         "status": "Fine",
         "descriptor": "Working through a legal Stop Work Order and removal of an additional tree without permit application or issuance. (20\" Sweetgum tree in the far rear)",
         "paid": 0,
-        "outstanding": 2200
+        "outstanding": 2200,
+        "tree_types": ["sweetgum"]
       }
     },
     {
@@ -2284,7 +2410,8 @@
         "status": "Fine",
         "descriptor": "Removal of one 11\" hackberry without permit.",
         "paid": 930,
-        "outstanding": 0
+        "outstanding": 0,
+        "tree_types": ["hackberry"]
       }
     },
     {
@@ -2302,7 +2429,8 @@
         "status": "Fine",
         "descriptor": "9\" Cryptomeria in front of 419 Parkway Drive NE was destroyed by topping.",
         "paid": 0,
-        "outstanding": 870
+        "outstanding": 870,
+        "tree_types": ["cryptomeria"]
       }
     },
     {
@@ -2320,7 +2448,8 @@
         "status": "Fine",
         "descriptor": "Destruction of one 23\" red oak without permit.",
         "paid": 0,
-        "outstanding": 1290
+        "outstanding": 1290,
+        "tree_types": ["oak"]
       }
     },
     {
@@ -2338,7 +2467,8 @@
         "status": "Fine",
         "descriptor": "Removal of four trees without a permit. T1,T2,T4, and T6-8\" Hardwood-6\" Hardwood-12\" Pine-6\" Hardwood",
         "paid": 0,
-        "outstanding": 4860
+        "outstanding": 4860,
+        "tree_types": ["hardwood", "pine"]
       }
     },
     {
@@ -2356,7 +2486,8 @@
         "status": "Fine",
         "descriptor": "Destruction of one 32\" Southern Red Oak, without permit, due to impact of its structural root plate.",
         "paid": 1560,
-        "outstanding": 0
+        "outstanding": 0,
+        "tree_types": ["oak"]
       }
     },
     {
@@ -2374,7 +2505,8 @@
         "status": "Fine",
         "descriptor": "Removal of one 35\" water oak without permit.",
         "paid": 1650,
-        "outstanding": 0
+        "outstanding": 0,
+        "tree_types": ["oak"]
       }
     },
     {
@@ -2392,7 +2524,8 @@
         "status": "Fine",
         "descriptor": "Destruction of one 24\" pecan tree without permit.",
         "paid": 0,
-        "outstanding": 0
+        "outstanding": 0,
+        "tree_types": ["pecan"]
       }
     },
     {
@@ -2410,7 +2543,8 @@
         "status": "Fine",
         "descriptor": "Unpermitted removal of 41\" magnolia at front.  No permit filed or application created for removal of healthy tree at front left",
         "paid": 1830,
-        "outstanding": 0
+        "outstanding": 0,
+        "tree_types": ["magnolia"]
       }
     },
     {
@@ -2428,7 +2562,8 @@
         "status": "Fine",
         "descriptor": "One pecan tree of unknown diameter was removed from the lot‚Äôs front right corner without permit.",
         "paid": 1010,
-        "outstanding": 0
+        "outstanding": 0,
+        "tree_types": ["pecan"]
       }
     },
     {
@@ -2446,7 +2581,8 @@
         "status": "Assigned",
         "descriptor": null,
         "paid": 0,
-        "outstanding": 0
+        "outstanding": 0,
+        "tree_types": []
       }
     },
     {
@@ -2464,7 +2600,8 @@
         "status": "Fine",
         "descriptor": "Removal of one 33\" willow oak tree without permit.",
         "paid": 1590,
-        "outstanding": 0
+        "outstanding": 0,
+        "tree_types": ["oak"]
       }
     },
     {
@@ -2482,7 +2619,8 @@
         "status": "Fine",
         "descriptor": "Removal of 11\", 14\", 15\", and 14\" hackberry trees along the left side of the rear property line without permit application, or issuance.",
         "paid": 0,
-        "outstanding": 5550
+        "outstanding": 5550,
+        "tree_types": ["hackberry"]
       }
     },
     {
@@ -2500,7 +2638,8 @@
         "status": "Fine",
         "descriptor": "27\" Magnolia and 14\" Hackberry removed without permit application, or issuance.",
         "paid": 2930,
-        "outstanding": 0
+        "outstanding": 0,
+        "tree_types": ["hackberry", "magnolia"]
       }
     },
     {
@@ -2518,7 +2657,8 @@
         "status": "Fine",
         "descriptor": "Removal of the following nine trees without permit: (T#4) 7\" HW, (T#6) 8\" HW, (T#7) 10\" HW, (T#10) 10\" HW, (T#18) 6\" HW, (T#28) 7\" HW, (T#29) 9\" HW, (T#30) 7\" HW, & (T#51) 12\" HW.This invoice's balance has been adjusted to reflect the COA TCC's decision.",
         "paid": 0,
-        "outstanding": 6680
+        "outstanding": 6680,
+        "tree_types": ["hardwood"]
       }
     },
     {
@@ -2536,7 +2676,8 @@
         "status": "Fine",
         "descriptor": "Removal of one 12\" dogwood without permit.",
         "paid": 960,
-        "outstanding": 0
+        "outstanding": 0,
+        "tree_types": ["dogwood"]
       }
     },
     {
@@ -2554,7 +2695,8 @@
         "status": "Assigned",
         "descriptor": null,
         "paid": 0,
-        "outstanding": 0
+        "outstanding": 0,
+        "tree_types": []
       }
     },
     {
@@ -2572,7 +2714,8 @@
         "status": "Fine",
         "descriptor": "Removal of one 31\" swamp chestnut oak without permit.",
         "paid": 0,
-        "outstanding": 1530
+        "outstanding": 1530,
+        "tree_types": ["oak"]
       }
     },
     {
@@ -2590,7 +2733,8 @@
         "status": "Fine",
         "descriptor": "Unpermitted removal of 3 flowering cherry at front right of lot, 15\", 16\" and 20\"3 trees at 51\"",
         "paid": 0,
-        "outstanding": 4830
+        "outstanding": 4830,
+        "tree_types": ["cherry"]
       }
     },
     {
@@ -2608,7 +2752,8 @@
         "status": "Fine",
         "descriptor": "Removal of 48\" Oak, 14\" Hardwood, & 18\" Hardwood without permit application, or issuance. Stop work order now posted.",
         "paid": 0,
-        "outstanding": 5200
+        "outstanding": 5200,
+        "tree_types": ["hardwood", "oak"]
       }
     },
     {
@@ -2626,7 +2771,8 @@
         "status": "Fine",
         "descriptor": "Removal of 50\" Oak, 12\" Cedar, 13\" Cedar, 39\" Oak, 15\" Oak, and 30\" Oak without permit application, or issuance. Stop Work Order is now posted.",
         "paid": 0,
-        "outstanding": 10870
+        "outstanding": 10870,
+        "tree_types": ["cedar", "oak"]
       }
     },
     {
@@ -2644,7 +2790,8 @@
         "status": "Fine",
         "descriptor": "Removal of the following two trees without permit: one 24\" magnolia and one 18\" pecan.",
         "paid": 2960,
-        "outstanding": 0
+        "outstanding": 0,
+        "tree_types": ["magnolia", "pecan"]
       }
     },
     {
@@ -2662,7 +2809,8 @@
         "status": "Fine",
         "descriptor": null,
         "paid": 1550,
-        "outstanding": 0
+        "outstanding": 0,
+        "tree_types": []
       }
     },
     {
@@ -2680,7 +2828,8 @@
         "status": "Fine",
         "descriptor": "34\" Pine, 36\" Pine and 43\" Oak all removed without a permit.",
         "paid": 6190,
-        "outstanding": 0
+        "outstanding": 0,
+        "tree_types": ["oak", "pine"]
       }
     },
     {
@@ -2698,7 +2847,8 @@
         "status": "Fine",
         "descriptor": "Unpermitted destruction of multiple trees on siteT11 12\" hickory off siteT33 19\" oakT35 19\" oak destroyed by fence posts within SRP T76 13\" mapleT75 10\" tulip-poplarT73 27\" tulip-poplar6 trees @ 100\" destroyed",
         "paid": 9600,
-        "outstanding": 0
+        "outstanding": 0,
+        "tree_types": ["hickory", "oak"]
       }
     },
     {
@@ -2716,7 +2866,8 @@
         "status": "Fine",
         "descriptor": "Removal of two pine trees of unknown diameter without permit.",
         "paid": 0,
-        "outstanding": 2520
+        "outstanding": 2520,
+        "tree_types": ["pine"]
       }
     },
     {
@@ -2734,7 +2885,8 @@
         "status": "Fine",
         "descriptor": "Trenching outside of the approved LOD and in the SRP of tree #1 (24\" Oak) and tree #2 (10\" Oak)",
         "paid": 0,
-        "outstanding": 0
+        "outstanding": 0,
+        "tree_types": ["oak"]
       }
     },
     {
@@ -2752,7 +2904,8 @@
         "status": "Fine",
         "descriptor": "The following five trees were destroyed without permit totaling 83\"17\" Pine11\" Water Oak 12\" Sweetgum19\" Poplar24\" Red Oak",
         "paid": 0,
-        "outstanding": 0
+        "outstanding": 0,
+        "tree_types": ["oak"]
       }
     },
     {
@@ -2770,7 +2923,8 @@
         "status": "Fine",
         "descriptor": "Removal of one 12\" black cherry tree without permit.",
         "paid": 960,
-        "outstanding": 0
+        "outstanding": 0,
+        "tree_types": ["cherry"]
       }
     },
     {
@@ -2788,7 +2942,8 @@
         "status": "Fine",
         "descriptor": "Removal of 20\" Pecan tree in rear left without permit application, or issuance.",
         "paid": 1200,
-        "outstanding": 0
+        "outstanding": 0,
+        "tree_types": ["pecan"]
       }
     },
     {
@@ -2806,7 +2961,8 @@
         "status": "Fine",
         "descriptor": "Unpermitted destruction of Japanese maple to be posted for as destroyed by new pool. 14\" japanese maple",
         "paid": 1520,
-        "outstanding": 0
+        "outstanding": 0,
+        "tree_types": ["maple"]
       }
     },
     {
@@ -2824,7 +2980,8 @@
         "status": "Fine",
         "descriptor": "Removal of 5 trees along the left property line in the rear yard without permit application, or issuance.",
         "paid": 6440,
-        "outstanding": 0
+        "outstanding": 0,
+        "tree_types": []
       }
     },
     {
@@ -2842,7 +2999,8 @@
         "status": "Assigned",
         "descriptor": null,
         "paid": 0,
-        "outstanding": 1650
+        "outstanding": 1650,
+        "tree_types": []
       }
     },
     {
@@ -2860,7 +3018,8 @@
         "status": "Fine",
         "descriptor": "Trees #5, & 6 (11' & 28\" Oaks) removed without permit issuance. Tree #3 (14\" Magnolia) has nearly 100% CRZ impact with grading outside the LOD.",
         "paid": 4890,
-        "outstanding": 0
+        "outstanding": 0,
+        "tree_types": ["magnolia", "oak"]
       }
     },
     {
@@ -2878,7 +3037,8 @@
         "status": "Fine",
         "descriptor": "Removal of the following tree without permit: 12\" pine (T#28).Destruction of the following four trees without permit: one 8\" red oak, one 8\" sourwood (T#14), one 10\" hickory (T#25), and one 30\" red oak (T#6).",
         "paid": 0,
-        "outstanding": 7040
+        "outstanding": 7040,
+        "tree_types": ["hickory", "oak", "pine", "sourwood"]
       }
     },
     {
@@ -2896,7 +3056,8 @@
         "status": "Fine",
         "descriptor": "10\" Oak destroyed in the front left. Storm water pipe installed in the SRP. 11\" Oak destroyed along the front left property line. Heavy equipment bashed into the mainstem leaving a large mechanical injury.",
         "paid": 2830,
-        "outstanding": 0
+        "outstanding": 0,
+        "tree_types": ["oak"]
       }
     },
     {
@@ -2914,7 +3075,8 @@
         "status": "Fine",
         "descriptor": "Illegal tree destruction of (13) trees totaling 221\" inches.",
         "paid": 0,
-        "outstanding": 0
+        "outstanding": 0,
+        "tree_types": []
       }
     },
     {
@@ -2932,7 +3094,8 @@
         "status": "Fine",
         "descriptor": "Illegal tree removal of (2) hardwoods at 9\" & 17\".",
         "paid": 2480,
-        "outstanding": 0
+        "outstanding": 0,
+        "tree_types": ["hardwood"]
       }
     },
     {
@@ -2950,7 +3113,8 @@
         "status": "Fine",
         "descriptor": "Heavy equipment operations outside of the approved limits of disturbance on a house demo. Structural root plate damage on a 21\" Hardwood tree. The tree is destroyed.",
         "paid": 1730,
-        "outstanding": 0
+        "outstanding": 0,
+        "tree_types": ["hardwood"]
       }
     },
     {
@@ -2968,7 +3132,8 @@
         "status": "Fine",
         "descriptor": "Removal of the following two trees without permit: one 30\" post oak and one 30\" southern red oak.",
         "paid": 3500,
-        "outstanding": 0
+        "outstanding": 0,
+        "tree_types": ["oak"]
       }
     },
     {
@@ -2986,7 +3151,8 @@
         "status": "Fine",
         "descriptor": "Unpermitted destruction of 8 trees at rear and front of lot due to work well outside of the established limits of disturbance.  Soil removal for new wall compacted throughout CRZ and damage to multiple tree trunks.T7, T9, T10, T11, T12, T13, T19, T23 destroyed as per report from private arborist",
         "paid": 13570,
-        "outstanding": 0
+        "outstanding": 0,
+        "tree_types": []
       }
     },
     {
@@ -3004,7 +3170,8 @@
         "status": "Fine",
         "descriptor": "Grading activities in front and rear yard without permit application, or issuance. Visible SRP damage on 23\" Pecan in the front, and 19\" Pecan in the rear.",
         "paid": 3460,
-        "outstanding": 0
+        "outstanding": 0,
+        "tree_types": ["pecan"]
       }
     },
     {
@@ -3022,7 +3189,8 @@
         "status": "Fine",
         "descriptor": "Removal of one large pine tree without permit.This invoice's balance has been adjusted to reflect the COA TCC's decision.",
         "paid": 510,
-        "outstanding": 0
+        "outstanding": 0,
+        "tree_types": ["pine"]
       }
     },
     {
@@ -3040,7 +3208,8 @@
         "status": "Fine",
         "descriptor": "Driveway installed differently than shown on the approved plan and in the structural root plate of 36\" and 21\" trees on the left side of the new house (Trees #5,and #6). These trees are destroyed and the canopies are in visible decline.",
         "paid": 3910,
-        "outstanding": 0
+        "outstanding": 0,
+        "tree_types": []
       }
     },
     {
@@ -3058,7 +3227,8 @@
         "status": "Fine",
         "descriptor": "Removal of one 30\" oak tree without permit.",
         "paid": 0,
-        "outstanding": 0
+        "outstanding": 0,
+        "tree_types": ["oak"]
       }
     },
     {
@@ -3076,7 +3246,8 @@
         "status": "Fine",
         "descriptor": "Destruction of the following two trees without permit: one 27\" oak and one 30\" oak.",
         "paid": 3410,
-        "outstanding": 0
+        "outstanding": 0,
+        "tree_types": ["oak"]
       }
     },
     {
@@ -3094,7 +3265,8 @@
         "status": "Fine",
         "descriptor": "Removal of the following two trees without permit: one 22\" Chinese Holly and one 23\" Chinese Holly.",
         "paid": 3050,
-        "outstanding": 0
+        "outstanding": 0,
+        "tree_types": ["holly"]
       }
     },
     {
@@ -3112,7 +3284,8 @@
         "status": "Fine",
         "descriptor": "Two trees destroyed by digging outside of the approved LOD and in the structural root plates. These include 42\" Sweetgum and 36\" Oak.",
         "paid": 4540,
-        "outstanding": 0
+        "outstanding": 0,
+        "tree_types": ["oak", "sweetgum"]
       }
     },
     {
@@ -3130,7 +3303,8 @@
         "status": "Fine",
         "descriptor": "Trenching outside of the limits of disturbance and in the structural root plate of a 25\" Pine on the left side of the property.",
         "paid": 1850,
-        "outstanding": 0
+        "outstanding": 0,
+        "tree_types": ["pine"]
       }
     },
     {
@@ -3148,7 +3322,8 @@
         "status": "Fine",
         "descriptor": "Unpermitted removal of 4 magnolia at drive.  Trees were removed after denial of setback trees, stump measure used for DBH as required by ordinance",
         "paid": 0,
-        "outstanding": 0
+        "outstanding": 0,
+        "tree_types": ["magnolia"]
       }
     },
     {
@@ -3166,7 +3341,8 @@
         "status": "Fine",
         "descriptor": "Removal of five pine trees of unknown diameter without permit.",
         "paid": 0,
-        "outstanding": 7050
+        "outstanding": 7050,
+        "tree_types": ["pine"]
       }
     },
     {
@@ -3184,7 +3360,8 @@
         "status": "Fine",
         "descriptor": "Removal of (2) 25\" healthy Cryptomeria trees from front yard after DDH permit denial.",
         "paid": 0,
-        "outstanding": 0
+        "outstanding": 0,
+        "tree_types": ["cryptomeria"]
       }
     },
     {
@@ -3202,7 +3379,8 @@
         "status": "Fine",
         "descriptor": "Removal of the following four trees without permit: one sweetgum, two pines, and one white oak.",
         "paid": 0,
-        "outstanding": 5540
+        "outstanding": 5540,
+        "tree_types": ["oak", "pine", "sweetgum"]
       }
     },
     {
@@ -3220,7 +3398,8 @@
         "status": "Assigned",
         "descriptor": null,
         "paid": 0,
-        "outstanding": 0
+        "outstanding": 0,
+        "tree_types": []
       }
     },
     {
@@ -3238,7 +3417,8 @@
         "status": "Assigned",
         "descriptor": "Illegal removal of 1 - 39\" Magnolia Front Right",
         "paid": 1770,
-        "outstanding": 0
+        "outstanding": 0,
+        "tree_types": ["magnolia"]
       }
     },
     {
@@ -3256,7 +3436,8 @@
         "status": "Assigned",
         "descriptor": "Two trees removed without permit.",
         "paid": 0,
-        "outstanding": 0
+        "outstanding": 0,
+        "tree_types": []
       }
     },
     {
@@ -3274,7 +3455,8 @@
         "status": "Fine",
         "descriptor": "Illegal removal of 16\" Pecan at the rear left.",
         "paid": 0,
-        "outstanding": 1080
+        "outstanding": 1080,
+        "tree_types": ["pecan"]
       }
     },
     {
@@ -3292,7 +3474,8 @@
         "status": "Fine",
         "descriptor": "Illegal tree removal of (1)Hardwood of unknown diameter.",
         "paid": 0,
-        "outstanding": 1010
+        "outstanding": 1010,
+        "tree_types": ["hardwood"]
       }
     },
     {
@@ -3310,7 +3493,8 @@
         "status": "Pending - Illegal Activity",
         "descriptor": null,
         "paid": 0,
-        "outstanding": 0
+        "outstanding": 0,
+        "tree_types": []
       }
     },
     {
@@ -3328,7 +3512,8 @@
         "status": "Fine",
         "descriptor": "Removal of the following two trees without permit: one 6\" hardwood and one 12\" hardwood.",
         "paid": 2240,
-        "outstanding": 0
+        "outstanding": 0,
+        "tree_types": ["hardwood"]
       }
     },
     {
@@ -3346,7 +3531,8 @@
         "status": "Fine",
         "descriptor": "49\" native Cherry removed from the front yard without permit application, or issuance.",
         "paid": 575,
-        "outstanding": 0
+        "outstanding": 0,
+        "tree_types": ["cherry"]
       }
     },
     {
@@ -3364,7 +3550,8 @@
         "status": "Fine",
         "descriptor": "Removal of one 6\" boxelder maple without permit.",
         "paid": 780,
-        "outstanding": 0
+        "outstanding": 0,
+        "tree_types": ["maple"]
       }
     },
     {
@@ -3382,7 +3569,8 @@
         "status": "Fine",
         "descriptor": "Destruction of the following two trees without permit: one 17\" crepe myrtle and one 48\" magnolia.",
         "paid": 3650,
-        "outstanding": 0
+        "outstanding": 0,
+        "tree_types": ["crape myrtle", "magnolia"]
       }
     },
     {
@@ -3400,7 +3588,8 @@
         "status": "Fine",
         "descriptor": "Multiple trees removed prior to yellow posting16\" river birch not shown on plans, shown on demoT50 22\" river birchT40 21\" crape myrtleT43 8\" crape myrtleT52 19\" pecanT58 16\" hardwood, shown at 8\" on plan field measured largerT59 13\" hardwood, shown at 8\" on plan field measured largerT53 13\" ash, large leader removed12\" crape myrtle not shown on at plans at T5711\" hardwood at left property line not shown on plans11\" hardwood at left property line not shown on plansT68 21\" crape myrtle, larger leader cut and other leads damagedT70 19\" crape myrtle, larger leader cut and other leads damaged13 trees at 202\" removed or destroyed without permit, credit given for original 6 trees at 3\" each as shown on planPosting will still have to be done for T60",
         "paid": 19220,
-        "outstanding": 0
+        "outstanding": 0,
+        "tree_types": ["birch", "crape myrtle", "hardwood"]
       }
     },
     {
@@ -3418,7 +3607,8 @@
         "status": "Fine",
         "descriptor": "Illegal tree removal & destruction of (12) trees totaling 260\" inches.",
         "paid": 16140,
-        "outstanding": 0
+        "outstanding": 0,
+        "tree_types": []
       }
     },
     {
@@ -3436,7 +3626,8 @@
         "status": "Fine",
         "descriptor": "Deck footer installed 1-2' from the base of a 12\" white oak.",
         "paid": 960,
-        "outstanding": 0
+        "outstanding": 0,
+        "tree_types": ["oak"]
       }
     },
     {
@@ -3454,7 +3645,8 @@
         "status": "Fine",
         "descriptor": "Unpermitted removal of T267\" hardwood",
         "paid": 0,
-        "outstanding": 1310
+        "outstanding": 1310,
+        "tree_types": ["hardwood"]
       }
     },
     {
@@ -3472,7 +3664,8 @@
         "status": "Fine",
         "descriptor": "Unpermitted destruction of 25\" hardwood at left of lot due to wall construction and excavation within SRP",
         "paid": 1850,
-        "outstanding": 0
+        "outstanding": 0,
+        "tree_types": ["hardwood"]
       }
     },
     {
@@ -3490,7 +3683,8 @@
         "status": "Fine",
         "descriptor": "Two hardwoods removed without a permit. 24\" Hardwood49\" Hardwood",
         "paid": 0,
-        "outstanding": 0
+        "outstanding": 0,
+        "tree_types": ["hardwood"]
       }
     },
     {
@@ -3508,7 +3702,8 @@
         "status": "Fine",
         "descriptor": "Two Pine trees of unknown diameter were removed without permit application, or issuance.",
         "paid": 0,
-        "outstanding": 2520
+        "outstanding": 2520,
+        "tree_types": ["pine"]
       }
     },
     {
@@ -3526,7 +3721,8 @@
         "status": "Fine",
         "descriptor": "Removal of one 15\" hardwood without permit.",
         "paid": 0,
-        "outstanding": 1050
+        "outstanding": 1050,
+        "tree_types": ["hardwood"]
       }
     },
     {
@@ -3544,7 +3740,8 @@
         "status": "Fine",
         "descriptor": "Illegal destruction of (10)HWs & Pines totaling 161\"in.",
         "paid": 0,
-        "outstanding": 15830
+        "outstanding": 15830,
+        "tree_types": ["hardwood", "pine"]
       }
     },
     {
@@ -3562,7 +3759,8 @@
         "status": "Fine",
         "descriptor": "Removal of tree #6 (8\" HW) and tree #2 (18\" HW). There was no permit application, or issuance for the removals.",
         "paid": 2980,
-        "outstanding": 0
+        "outstanding": 0,
+        "tree_types": ["hardwood"]
       }
     },
     {
@@ -3580,7 +3778,8 @@
         "status": "Assigned",
         "descriptor": "Two pine trees of unknown diameter were removed from the backyard's center without permit.",
         "paid": 2980,
-        "outstanding": 0
+        "outstanding": 0,
+        "tree_types": ["pine"]
       }
     },
     {
@@ -3598,7 +3797,8 @@
         "status": "Fine",
         "descriptor": "Removal of the following two trees without permit: one 25\" oak and one 60\" oak.",
         "paid": 0,
-        "outstanding": 0
+        "outstanding": 0,
+        "tree_types": ["oak"]
       }
     },
     {
@@ -3616,7 +3816,8 @@
         "status": "Fine",
         "descriptor": "Illegal tree destruction of (1)16\" Japanese Maple due to CRZ impact.",
         "paid": 0,
-        "outstanding": 0
+        "outstanding": 0,
+        "tree_types": ["maple"]
       }
     },
     {
@@ -3634,7 +3835,8 @@
         "status": "Fine",
         "descriptor": "Illegal tree destruction of 38\" Oak in front right. Land disturbance occurred outside of the approved limit of disturbance and compromised over 33% of the root zone. In addition, multiple mechanical injuries are on the structural root plate and mainstem.",
         "paid": 2240,
-        "outstanding": 0
+        "outstanding": 0,
+        "tree_types": ["oak"]
       }
     },
     {
@@ -3652,7 +3854,8 @@
         "status": "Fine",
         "descriptor": "Removal of the following two trees without permit: one 16\" hardwood (T#4) and one 30\" hardwood (T#5).",
         "paid": 0,
-        "outstanding": 0
+        "outstanding": 0,
+        "tree_types": ["hardwood"]
       }
     },
     {
@@ -3670,7 +3873,8 @@
         "status": "Fine",
         "descriptor": "Removal of one large hardwood tree of unknown diameter without permit.",
         "paid": 0,
-        "outstanding": 0
+        "outstanding": 0,
+        "tree_types": ["hardwood"]
       }
     },
     {
@@ -3688,7 +3892,8 @@
         "status": "Fine",
         "descriptor": "Destruction of one 24\" elm tree without permit.",
         "paid": 0,
-        "outstanding": 1320
+        "outstanding": 1320,
+        "tree_types": ["elm"]
       }
     },
     {
@@ -3706,7 +3911,8 @@
         "status": "Fine",
         "descriptor": "Removal of one large oak tree of unknown diameter without permit.",
         "paid": 1510,
-        "outstanding": 0
+        "outstanding": 0,
+        "tree_types": ["oak"]
       }
     },
     {
@@ -3724,7 +3930,8 @@
         "status": "Fine",
         "descriptor": "Illegal tree removal of (1)26\" Oak, (1)11\" Hackberry, and (1)17\" Oak.",
         "paid": 0,
-        "outstanding": 4420
+        "outstanding": 4420,
+        "tree_types": ["hackberry", "oak"]
       }
     },
     {
@@ -3742,7 +3949,8 @@
         "status": "Fine",
         "descriptor": "15\" Hickory near front left property line destroyed by SRP damage. This tree is not depicted on the site plan. Tree #5 has over 50% canopy death from grading activities outside of the approved LOD compromising over 33% of the net root zone.",
         "paid": 0,
-        "outstanding": 3580
+        "outstanding": 3580,
+        "tree_types": ["hickory"]
       }
     },
     {
@@ -3760,7 +3968,8 @@
         "status": "Fine",
         "descriptor": "Unpermitted destruction of multiple trees on site by work beyond LOD on plans30\" oak at rear center18\" hardwood at right of drive10\", 12\" and 26\": hardwoods at left of property5 trees at 96\" destroyedBe advised others trees at left property line may be destroyed pending as built survey showing work down and impact percentages.",
         "paid": 0,
-        "outstanding": 8380
+        "outstanding": 8380,
+        "tree_types": ["hardwood", "oak"]
       }
     },
     {
@@ -3778,7 +3987,8 @@
         "status": "Fine",
         "descriptor": "Disturbance outside of the approved limits of disturbance. 17\" Pine, 22\" Pine, 25\" Pine, 20\" Pine, and 12\" Oak all have SRP impact and net root zone impact over 33%. These are destroyed trees.",
         "paid": 8380,
-        "outstanding": 0
+        "outstanding": 0,
+        "tree_types": ["oak", "pine"]
       }
     },
     {
@@ -3796,7 +4006,8 @@
         "status": "Assigned",
         "descriptor": null,
         "paid": 0,
-        "outstanding": 2480
+        "outstanding": 2480,
+        "tree_types": []
       }
     },
     {
@@ -3814,7 +4025,8 @@
         "status": "Fine",
         "descriptor": "Destruction of one 12\" sweetgum tree without permit.",
         "paid": 960,
-        "outstanding": 0
+        "outstanding": 0,
+        "tree_types": ["sweetgum"]
       }
     },
     {
@@ -3832,7 +4044,8 @@
         "status": "Fine",
         "descriptor": "Unpermitted removal of T2 on site.  Multiple violations of tree protection on site, no resolution to final SWO for soil storage at front and front right",
         "paid": 0,
-        "outstanding": 0
+        "outstanding": 0,
+        "tree_types": []
       }
     },
     {
@@ -3850,7 +4063,8 @@
         "status": "Fine",
         "descriptor": "30\" Pecan removed from rear yard without permit application, or issuance.",
         "paid": 1500,
-        "outstanding": 0
+        "outstanding": 0,
+        "tree_types": ["pecan"]
       }
     },
     {
@@ -3868,7 +4082,8 @@
         "status": "Fine",
         "descriptor": "Unpermitted destruction of multiple trees on site7\", 8\" and 11/8\" black cherry spiked and topped at left of drive, trees were not shown on plans",
         "paid": 4320,
-        "outstanding": 0
+        "outstanding": 0,
+        "tree_types": ["cherry"]
       }
     },
     {
@@ -3886,7 +4101,8 @@
         "status": "Assigned",
         "descriptor": "Unpermitted destruction of 3 flowering cherries at front by work outside of limits of disturbance26\", 19\". 23\" cherries3 trees at 71\"",
         "paid": 5430,
-        "outstanding": 0
+        "outstanding": 0,
+        "tree_types": []
       }
     },
     {
@@ -3904,7 +4120,8 @@
         "status": "Fine",
         "descriptor": "Destroyed trees: #1 (19\" Holly) front right, topped#2 (13\" Elm) Rear right, topped",
         "paid": 2660,
-        "outstanding": 0
+        "outstanding": 0,
+        "tree_types": ["elm", "holly"]
       }
     },
     {
@@ -3922,7 +4139,8 @@
         "status": "Fine",
         "descriptor": "Removal of one 12\" magnolia tree without permit.",
         "paid": 960,
-        "outstanding": 0
+        "outstanding": 0,
+        "tree_types": ["magnolia"]
       }
     },
     {
@@ -3940,7 +4158,8 @@
         "status": "Fine",
         "descriptor": "Unpermitted destruction of multiple trees by work on site29\" oak left of house20\" hickory, 20\" hickory and 23\" oak left rear of house",
         "paid": 7160,
-        "outstanding": 0
+        "outstanding": 0,
+        "tree_types": ["hickory", "oak"]
       }
     },
     {
@@ -3958,7 +4177,8 @@
         "status": "Fine",
         "descriptor": "25\" pine at rear left removed, no permit found28\" oak, 12\" hackberry and 10\" hickory have grading and soil within SRP and associated decline in canopy, rain garden relocated to within CRZ of all 34 trees at 75\" destroyed or removed without permit",
         "paid": 6650,
-        "outstanding": 0
+        "outstanding": 0,
+        "tree_types": ["hackberry", "hickory", "oak", "pine"]
       }
     },
     {
@@ -3976,7 +4196,8 @@
         "status": "Fine",
         "descriptor": "Working without a permit and caused SRP impact to tree #1(28\" Water Oak), and tree #2 (21\" Red Oak).",
         "paid": 3170,
-        "outstanding": 0
+        "outstanding": 0,
+        "tree_types": ["oak"]
       }
     },
     {
@@ -3994,7 +4215,8 @@
         "status": "Pending - Illegal Activity",
         "descriptor": null,
         "paid": 0,
-        "outstanding": 0
+        "outstanding": 0,
+        "tree_types": []
       }
     },
     {
@@ -4012,7 +4234,8 @@
         "status": "Fine",
         "descriptor": "Illegal tree removal of (7) Hardwoods of unknown diameter.",
         "paid": 0,
-        "outstanding": 10070
+        "outstanding": 10070,
+        "tree_types": ["hardwood"]
       }
     },
     {
@@ -4030,7 +4253,8 @@
         "status": "Fine",
         "descriptor": "Illegal tree removal of (14) Hardwoods and Pines totaling 300\" inches.",
         "paid": 0,
-        "outstanding": 24400
+        "outstanding": 24400,
+        "tree_types": ["hardwood", "pine"]
       }
     },
     {
@@ -4048,7 +4272,8 @@
         "status": "Fine",
         "descriptor": "Tree #5 (21\") and tree #6 (14\") were removed without permit application, or issuance.",
         "paid": 3250,
-        "outstanding": 0
+        "outstanding": 0,
+        "tree_types": []
       }
     },
     {
@@ -4066,7 +4291,8 @@
         "status": "Assigned",
         "descriptor": "Removal of 9 trees totaling 185\" DBH per submitted site plan.",
         "paid": 14950,
-        "outstanding": 0
+        "outstanding": 0,
+        "tree_types": []
       }
     },
     {
@@ -4084,7 +4310,8 @@
         "status": "Fine",
         "descriptor": "Removal of three pine trees of unknown diameter without permit.",
         "paid": 4030,
-        "outstanding": 0
+        "outstanding": 0,
+        "tree_types": ["pine"]
       }
     },
     {
@@ -4102,7 +4329,8 @@
         "status": "Fine",
         "descriptor": "A 15\" Hickory tree behind tree #1 has SRP damage and is destroyed. Tree #5 (31\" White Oak) is over 50% dead due to the impacts of grading activities outside the approved LOD. Tree #57 (36\" Pecan),shown as saved on the approved plan, has been removed without permit application, or issuance.",
         "paid": 0,
-        "outstanding": 0
+        "outstanding": 0,
+        "tree_types": ["hickory", "oak", "pecan"]
       }
     },
     {
@@ -4120,7 +4348,8 @@
         "status": "Fine",
         "descriptor": "Tree destruction; root zone impact outside the LOD and in the SRP of tree #5 (22\" Elm).",
         "paid": 1760,
-        "outstanding": 0
+        "outstanding": 0,
+        "tree_types": ["elm"]
       }
     },
     {
@@ -4138,7 +4367,8 @@
         "status": "Assigned",
         "descriptor": null,
         "paid": 1320,
-        "outstanding": 0
+        "outstanding": 0,
+        "tree_types": []
       }
     },
     {
@@ -4156,7 +4386,8 @@
         "status": "Fine",
         "descriptor": "Grading/Fill and land disturbance in the SRP and compromising over 33% of the net root zones of 6\" Magnolia and 10\" Cherry in the rear of the property.",
         "paid": 0,
-        "outstanding": 2680
+        "outstanding": 2680,
+        "tree_types": ["cherry", "magnolia"]
       }
     },
     {
@@ -4174,7 +4405,8 @@
         "status": "Assigned",
         "descriptor": null,
         "paid": 1050,
-        "outstanding": 0
+        "outstanding": 0,
+        "tree_types": []
       }
     },
     {
@@ -4192,7 +4424,8 @@
         "status": "Fine",
         "descriptor": "Removal of two trees of unknown diameter without permit.",
         "paid": 0,
-        "outstanding": 2520
+        "outstanding": 2520,
+        "tree_types": []
       }
     },
     {
@@ -4210,7 +4443,8 @@
         "status": "Fine",
         "descriptor": "Grading activities incurred that impacted structural root plates on tree #3 (44\" Oak) and tree #4 (29\" Oak). Per COA ordinance, any SRP impact is considered a destroyed tree.",
         "paid": 3890,
-        "outstanding": 0
+        "outstanding": 0,
+        "tree_types": ["oak"]
       }
     },
     {
@@ -4228,7 +4462,8 @@
         "status": "Fine",
         "descriptor": "Sidewalk erected in the SRP of a 41\" Sycamore tree. No permit applied, or issued for the work. The tree is destroyed.",
         "paid": 2330,
-        "outstanding": 0
+        "outstanding": 0,
+        "tree_types": ["sycamore"]
       }
     },
     {
@@ -4246,7 +4481,8 @@
         "status": "Fine",
         "descriptor": "18\" tree shown as protected on the approved plans has new structural root plate damage from heavy equipment operating outside of the approved limit of disturbance.",
         "paid": 1640,
-        "outstanding": 0
+        "outstanding": 0,
+        "tree_types": []
       }
     },
     {
@@ -4264,7 +4500,8 @@
         "status": "Fine",
         "descriptor": "Removal of the following seven trees without permit: 17\" hardwood, 16\" hardwood, 15\" hackberry, 12\" hardwood, 14\" hardwood, 14\" hardwood, & 14\" hardwood.This invoice's balance has been adjusted to reflect the COA TCC's decision.",
         "paid": 50,
-        "outstanding": 0
+        "outstanding": 0,
+        "tree_types": ["hackberry", "hardwood"]
       }
     },
     {
@@ -4282,7 +4519,8 @@
         "status": "Fine",
         "descriptor": "Unpermitted removal of trees on property discovered at time of yellow posting. Trees as listed were reported by applicant, may not be exhaustive list until field verified at time of next yellow posting21\" pine, 10\", 27\", 18\" and 9\" hardwoods removed without permit5 trees at 85\"",
         "paid": 8050,
-        "outstanding": 0
+        "outstanding": 0,
+        "tree_types": ["hardwood", "pine"]
       }
     },
     {
@@ -4300,7 +4538,8 @@
         "status": "Fine",
         "descriptor": "Removal of one 36\" oak tree without permit.",
         "paid": 0,
-        "outstanding": 1680
+        "outstanding": 1680,
+        "tree_types": ["oak"]
       }
     },
     {
@@ -4318,7 +4557,8 @@
         "status": "Fine",
         "descriptor": "Illegal tree destruction of (1)28\" Pine, (1)22\" Pine, (1)8\" Maple, (1)6\" Maple, (1)28\" Pine, (1)25\" Tulip Poplar, & (1)30\" Pine",
         "paid": 12110,
-        "outstanding": 0
+        "outstanding": 0,
+        "tree_types": ["maple", "pine", "poplar"]
       }
     },
     {
@@ -4336,7 +4576,8 @@
         "status": "Fine",
         "descriptor": "Multiple additional trees removed or destroyed on site beyond DDH and previous fines.19\" pine at rear right of house removed10\" holly at left of house removed20\" pine has been debarked on lower trunk and root collar buried24: hardwood damaged and root collar buried",
         "paid": 6590,
-        "outstanding": 0
+        "outstanding": 0,
+        "tree_types": ["hardwood", "holly", "pine"]
       }
     },
     {
@@ -4354,7 +4595,8 @@
         "status": "Fine",
         "descriptor": "11\" hardwood tree destroyed in rear left. SRP impact and damage to the mainstem from heavy equipment operations outside the approved LOD.",
         "paid": 0,
-        "outstanding": 0
+        "outstanding": 0,
+        "tree_types": ["hardwood"]
       }
     },
     {
@@ -4372,7 +4614,8 @@
         "status": "Fine",
         "descriptor": "Removal of 24\" Pecan on the right side of the garage after DDH denial.",
         "paid": 0,
-        "outstanding": 0
+        "outstanding": 0,
+        "tree_types": ["pecan"]
       }
     },
     {
@@ -4390,7 +4633,8 @@
         "status": "Fine",
         "descriptor": "Illegal tree destruction of (1)41\" Post Oak in frontyard left and (1)49\" Tulip  Poplar in frontyard yard.",
         "paid": 0,
-        "outstanding": 4400
+        "outstanding": 4400,
+        "tree_types": ["oak", "poplar"]
       }
     },
     {
@@ -4408,7 +4652,8 @@
         "status": "Assigned",
         "descriptor": null,
         "paid": 0,
-        "outstanding": 0
+        "outstanding": 0,
+        "tree_types": []
       }
     },
     {
@@ -4426,7 +4671,8 @@
         "status": "Fine",
         "descriptor": "Tree labelled \"C\" on building plan BB-202108844 was removed without permit application, or issuance.",
         "paid": 555,
-        "outstanding": 0
+        "outstanding": 0,
+        "tree_types": []
       }
     },
     {
@@ -4444,7 +4690,8 @@
         "status": "Fine",
         "descriptor": "2 trees of unknown diameter were removed without permit application, or issuance. One was on the left side of the house, and one was on the right side of the house.",
         "paid": 3020,
-        "outstanding": 0
+        "outstanding": 0,
+        "tree_types": []
       }
     },
     {
@@ -4462,7 +4709,8 @@
         "status": "Fine",
         "descriptor": "Fine for removal of one 10\" Hackberry tree in the rear yard without permit application, or issuance.",
         "paid": 0,
-        "outstanding": 900
+        "outstanding": 900,
+        "tree_types": ["hackberry"]
       }
     },
     {
@@ -4480,7 +4728,8 @@
         "status": "Fine",
         "descriptor": "Removal of one post oak tree of unknown diameter without permit.",
         "paid": 0,
-        "outstanding": 1010
+        "outstanding": 1010,
+        "tree_types": ["oak"]
       }
     },
     {
@@ -4498,7 +4747,8 @@
         "status": "Fine",
         "descriptor": "Illegal tree removal of (1)8\" Crepe Myrtle from frontyard and (1)9\" Cherry from backyard.",
         "paid": 2210,
-        "outstanding": 0
+        "outstanding": 0,
+        "tree_types": ["cherry", "crape myrtle"]
       }
     },
     {
@@ -4516,7 +4766,8 @@
         "status": "Fine",
         "descriptor": "Removal of two pine trees of unknown diameter without a permit.",
         "paid": 0,
-        "outstanding": 0
+        "outstanding": 0,
+        "tree_types": ["pine"]
       }
     },
     {
@@ -4534,7 +4785,8 @@
         "status": "Fine",
         "descriptor": "Illegal removal for neighboring lot of 1690 Adams Drive. March 19, 2025:  The TCC reduced the fines and fees by 50% at a previous hearing on Feb 19, 2025.  At the March hearing, the TCC upheld the appellant's request to assign the remaining fines and fees (($14,390) for this address to the adjacent property at 1696 Adams Dr, SW.  The appellants requested this change because they anticipate completing and selling the new construction at 1690 Adams Dr, SW, which will allow them to obtain funding to pay the fines and fees for both projects. ",
         "paid": 0,
-        "outstanding": 0
+        "outstanding": 0,
+        "tree_types": []
       }
     },
     {
@@ -4552,7 +4804,8 @@
         "status": "Fine",
         "descriptor": "16 trees removed, and one tree destroyed. No permit application, or issuance for these trees.",
         "paid": 24160,
-        "outstanding": 0
+        "outstanding": 0,
+        "tree_types": []
       }
     },
     {
@@ -4570,7 +4823,8 @@
         "status": "Fine",
         "descriptor": "Destruction of one 8\" hackberry tree without permit due to the severing of this tree's structural root plate.",
         "paid": 840,
-        "outstanding": 0
+        "outstanding": 0,
+        "tree_types": ["hackberry"]
       }
     },
     {
@@ -4588,7 +4842,8 @@
         "status": "Fine",
         "descriptor": "T25, T26, T27, T28, T38, T43, T44, T45 removed without permit, self-reported during review",
         "paid": 12580,
-        "outstanding": 0
+        "outstanding": 0,
+        "tree_types": []
       }
     },
     {
@@ -4606,7 +4861,8 @@
         "status": "Fine",
         "descriptor": "Removal of 4 pines at front without permit, trees were ground prior to inspection.",
         "paid": 0,
-        "outstanding": 0
+        "outstanding": 0,
+        "tree_types": ["pine"]
       }
     },
     {
@@ -4624,7 +4880,8 @@
         "status": "Fine",
         "descriptor": "Illegal tree removal of (3)Pines of unknown diameter, (1)Magnolia of unknown diameter, and (1)Hardwood of unknown diameter.",
         "paid": 7450,
-        "outstanding": 0
+        "outstanding": 0,
+        "tree_types": ["hardwood", "magnolia", "pine"]
       }
     },
     {
@@ -4642,7 +4899,8 @@
         "status": "Fine",
         "descriptor": "Tree T6 (6\" Japanese Maple) destroyed by the impacts of construction activities outside of the approved LOD.",
         "paid": 24160,
-        "outstanding": 0
+        "outstanding": 0,
+        "tree_types": ["maple"]
       }
     },
     {
@@ -4660,7 +4918,8 @@
         "status": "Fine",
         "descriptor": "Tree #4, a 14\" Magnolia, was removed without permit application, or issuance. Tree #5, a 30\" Water Oak is now destroyed. A structural root was cut for the unauthorized installation of a wood fence.",
         "paid": 3520,
-        "outstanding": 0
+        "outstanding": 0,
+        "tree_types": ["magnolia", "oak"]
       }
     },
     {
@@ -4678,7 +4937,8 @@
         "status": "Fine",
         "descriptor": "Multiple trees found removed beyond 2 self reported at frontT5, T6, T11, T12, T16, T73 removed as per final plan for new SFRAll replacement trees from new SFR and subdivision LD must be replanted/replaced under this permit as well.",
         "paid": 11040,
-        "outstanding": 0
+        "outstanding": 0,
+        "tree_types": []
       }
     },
     {
@@ -4696,7 +4956,8 @@
         "status": "Fine",
         "descriptor": "8\" Dogwood removed from rear left. 49\" White Oak in rear right was destroyed by removing over 40% of the live canopy. Both were done without permit application, or issuance.",
         "paid": 0,
-        "outstanding": 3410
+        "outstanding": 3410,
+        "tree_types": ["dogwood", "oak"]
       }
     },
     {
@@ -4714,7 +4975,8 @@
         "status": "Fine",
         "descriptor": "Illegal destruction of a 27\" Post Oak on the left side of the house. A large structural root cut with a chainsaw.",
         "paid": 0,
-        "outstanding": 1910
+        "outstanding": 1910,
+        "tree_types": ["oak"]
       }
     },
     {
@@ -4732,7 +4994,8 @@
         "status": "Fine",
         "descriptor": "36\" Water Oak is destroyed. Over 50% of the canopy was removed without permit application, or issuance. Tree is on the right side of the existing house.",
         "paid": 0,
-        "outstanding": 2180
+        "outstanding": 2180,
+        "tree_types": ["oak"]
       }
     },
     {
@@ -4750,7 +5013,8 @@
         "status": "Issued",
         "descriptor": "Illegal tree removal of (1)Magnolia of unknown diameter.",
         "paid": 0,
-        "outstanding": 0
+        "outstanding": 0,
+        "tree_types": ["magnolia"]
       }
     },
     {
@@ -4768,7 +5032,8 @@
         "status": "Fine",
         "descriptor": "Illegal tree removal of (1)28\" Pine and (1)9\" Dogwood.",
         "paid": 3310,
-        "outstanding": 0
+        "outstanding": 0,
+        "tree_types": ["dogwood", "pine"]
       }
     },
     {
@@ -4786,7 +5051,8 @@
         "status": "Fine",
         "descriptor": "Multiple trees removed on site, no permit issued, previous application was insufficient for decisionFront right-14\", 18\", 18\", 26\" oaks, 20\" tulip-poplarRear right-24\", 18\", 24\" 33\", 18\", 12\", 18\", 14\", 23\" oak, 24\" tulip-poplar heaving spiked, 9\" sweetgum notchedFront center of house-22\", 23\", 23\" mapleFront- 24\", 22\" oak, 18\", 16\", 18\", 22\" pineStumps pulled out-36\" oak, 21\" oakTotal of 29 trees at 578\"",
         "paid": 0,
-        "outstanding": 0
+        "outstanding": 0,
+        "tree_types": ["oak", "poplar", "sweetgum"]
       }
     },
     {
@@ -4804,7 +5070,8 @@
         "status": "Fine",
         "descriptor": "14\" Poplar destroyed in rear center. Fill soil and boulder retaining wall installed against the trunk of the tree and in the SRP.",
         "paid": 1520,
-        "outstanding": 0
+        "outstanding": 0,
+        "tree_types": ["poplar"]
       }
     },
     {
@@ -4822,7 +5089,8 @@
         "status": "Fine",
         "descriptor": "SRP impact to 14\" Japanese Maple in far rear center. Disturbance is 4' away and the SRP damage is visible. Tree is notated as 6/8 Oak on the approved site plan associated with BB-202404860.",
         "paid": 1520,
-        "outstanding": 0
+        "outstanding": 0,
+        "tree_types": ["maple", "oak"]
       }
     },
     {
@@ -4840,7 +5108,8 @@
         "status": "Fine",
         "descriptor": "Removal of the following three trees without permit: 24\" hardwood, 18\" hardwood, and 14\" hardwood.This invoice's balance has been adjusted to reflect the COA TCC's decision.",
         "paid": 1460,
-        "outstanding": 0
+        "outstanding": 0,
+        "tree_types": ["hardwood"]
       }
     },
     {
@@ -4858,7 +5127,8 @@
         "status": "Fine",
         "descriptor": "Tree in rear right, labelled as 13\" on site plan, (associated with BB-20241088) field measured at 16\". SRP visibly damaged. Impact 6'4\" from center of tree. Tree is destroyed.",
         "paid": 1580,
-        "outstanding": 0
+        "outstanding": 0,
+        "tree_types": []
       }
     },
     {
@@ -4876,7 +5146,8 @@
         "status": "Fine",
         "descriptor": "Multiple trees removed and stumps ground on siteStreetView shows 1 dogwood at front, right of drive, 1 Japanese maple at front of house, 2 gingko at front right of lot, hardwood at rear right, hardwood at rear left of house6 trees ground, builder is looking for survey to confirm tree sizes",
         "paid": 8560,
-        "outstanding": 0
+        "outstanding": 0,
+        "tree_types": ["dogwood", "ginkgo", "hardwood", "maple"]
       }
     },
     {
@@ -4894,7 +5165,8 @@
         "status": "Assigned",
         "descriptor": "Removal of 1 - 37\" Pine at the front center",
         "paid": 1710,
-        "outstanding": 0
+        "outstanding": 0,
+        "tree_types": ["pine"]
       }
     },
     {
@@ -4912,7 +5184,8 @@
         "status": "Fine",
         "descriptor": "Removal of a 10\" hardwood alongside the rear right property line.",
         "paid": 900,
-        "outstanding": 0
+        "outstanding": 0,
+        "tree_types": ["hardwood"]
       }
     },
     {
@@ -4930,7 +5203,8 @@
         "status": "Fine",
         "descriptor": "Illegal removal of 10 trees of unknown diameter. Most at the rear of the property abutting 877 Lee Andrews.",
         "paid": 0,
-        "outstanding": 14600
+        "outstanding": 14600,
+        "tree_types": []
       }
     },
     {
@@ -4948,7 +5222,8 @@
         "status": "Assigned",
         "descriptor": null,
         "paid": 1350,
-        "outstanding": 0
+        "outstanding": 0,
+        "tree_types": []
       }
     },
     {
@@ -4966,7 +5241,8 @@
         "status": "Fine",
         "descriptor": "Removal of the following two private property trees without permit: one 23\" oak and one 21\" oak.",
         "paid": 0,
-        "outstanding": 0
+        "outstanding": 0,
+        "tree_types": ["oak"]
       }
     },
     {
@@ -4984,7 +5260,8 @@
         "status": "Fine",
         "descriptor": "Removal of one 51\" Bois Darc tree without permit at the following land parcel: 14 008400070300.",
         "paid": 2630,
-        "outstanding": 0
+        "outstanding": 0,
+        "tree_types": ["bois darc"]
       }
     },
     {
@@ -5002,7 +5279,8 @@
         "status": "Fine",
         "descriptor": "The SRP was cut on 23\" Magnolia in the front left for unauthorized driveway replacement. SRP cut on 18\" Hackberry located near the left property line. Tree is located on the neighboring property. The driveway appears closer to the tree than how it is depicted on the plans (BB-202308915)",
         "paid": 0,
-        "outstanding": 0
+        "outstanding": 0,
+        "tree_types": ["hackberry", "magnolia"]
       }
     },
     {
@@ -5020,7 +5298,8 @@
         "status": "Fine",
         "descriptor": "Multiple trees destroyed at rear and rear left by work and grading within SRP without permit.  16\" magnolia-entire CRZ paved over, patio grouted to trunk16\" oak-flume through SRP36\" oak-trunk damage removing X painted by removing bark, root damage25\" oak-trunk damage removing X painted by removing bark, root damage4 trees at 92\"",
         "paid": 0,
-        "outstanding": 0
+        "outstanding": 0,
+        "tree_types": ["magnolia", "oak"]
       }
     },
     {
@@ -5038,7 +5317,8 @@
         "status": "Fine",
         "descriptor": "Artificial turf installed in the rear yard without permit application, or issuance. The entire critical root zone of a 45\" White Oak on the left of the house was impacted. The tree is now dead.",
         "paid": 0,
-        "outstanding": 2450
+        "outstanding": 2450,
+        "tree_types": ["oak"]
       }
     },
     {
@@ -5056,7 +5336,8 @@
         "status": "Fine",
         "descriptor": "Illegal removal of a 24\" Pine at the front of the property.",
         "paid": 1320,
-        "outstanding": 0
+        "outstanding": 0,
+        "tree_types": ["pine"]
       }
     },
     {
@@ -5074,7 +5355,8 @@
         "status": "Fine",
         "descriptor": "Unpermitted removal of 23\" beech at rear right of house",
         "paid": 1790,
-        "outstanding": 0
+        "outstanding": 0,
+        "tree_types": ["beech"]
       }
     },
     {
@@ -5092,7 +5374,8 @@
         "status": "Fine",
         "descriptor": "Unpermitted destruction of multiple trees at front and removal of additional trees beyond permitT192, 193, 195, 196 all destroyed at front by grading and removal of tree protection T52, 53, 54, 55, 57, 62, 98, 184 all removed, shown as saved on site plans for house and pool12 trees at 217\"",
         "paid": 19710,
-        "outstanding": 0
+        "outstanding": 0,
+        "tree_types": []
       }
     },
     {
@@ -5110,7 +5393,17 @@
         "status": "Fine",
         "descriptor": "Unpermitted destruction of multiple trees with improper tree protection installation26\" pine at front right15\" gingko, 9\" and 9\" dogwoods at front, left of drive8\" sweetgum at rear left of house13\" hickory at rear center21\" sweetgum, 22\" laurel, 7\" holly, 8\" sweetgum, 12\" sweetgum at right property line6\" hardwood, 6\" hardwood, 13\" sweetgum, 25\" pine at rear right",
         "paid": 22500,
-        "outstanding": 0
+        "outstanding": 0,
+        "tree_types": [
+          "dogwood",
+          "ginkgo",
+          "hardwood",
+          "hickory",
+          "holly",
+          "laurel",
+          "pine",
+          "sweetgum"
+        ]
       }
     },
     {
@@ -5128,7 +5421,8 @@
         "status": "Fine",
         "descriptor": "Trees 10, 25, 26, 28, 29, 30, 32, & 33 were removed before permit issuance.",
         "paid": 11090,
-        "outstanding": 0
+        "outstanding": 0,
+        "tree_types": []
       }
     },
     {
@@ -5146,7 +5440,8 @@
         "status": "Fine",
         "descriptor": "Removal of the following two trees without permit: one hardwood of unknown diameter and one pine tree of unknown diameter.",
         "paid": 0,
-        "outstanding": 0
+        "outstanding": 0,
+        "tree_types": ["hardwood", "pine"]
       }
     },
     {
@@ -5164,7 +5459,8 @@
         "status": "Fine",
         "descriptor": "Illegal tree destruction of (1)18\" Hackberry.",
         "paid": 0,
-        "outstanding": 0
+        "outstanding": 0,
+        "tree_types": ["hackberry"]
       }
     },
     {
@@ -5182,7 +5478,8 @@
         "status": "Fine",
         "descriptor": "Unpermitted removal of multiple trees before permit issuance/applicationT17 (24\" tulip-poplar)T18 (26\" sweetgum)T19 (16\" sweetgum)T29 (28\" pine)T30 (16\" flowering cherry) damaged",
         "paid": 0,
-        "outstanding": 0
+        "outstanding": 0,
+        "tree_types": ["cherry", "pine", "poplar", "sweetgum"]
       }
     },
     {
@@ -5200,7 +5497,8 @@
         "status": "Assigned",
         "descriptor": "1 -16ù Oak at the front right and 1 ì 12ù Oak at the right side. Trees destroyed by trenching to install underground utility line. All underground utilities were proposed on left side of house and trees were to be saved.",
         "paid": 2540,
-        "outstanding": 0
+        "outstanding": 0,
+        "tree_types": ["oak"]
       }
     },
     {
@@ -5218,7 +5516,8 @@
         "status": "Fine",
         "descriptor": "Illegal tree removal on(1)23\" HW and (1)24\" HW.",
         "paid": 0,
-        "outstanding": 0
+        "outstanding": 0,
+        "tree_types": ["hardwood"]
       }
     },
     {
@@ -5236,7 +5535,8 @@
         "status": "Fine",
         "descriptor": "Illegal tree destruction of (1)12\" Magnolia.",
         "paid": 1460,
-        "outstanding": 0
+        "outstanding": 0,
+        "tree_types": ["magnolia"]
       }
     },
     {
@@ -5254,7 +5554,8 @@
         "status": "Fine",
         "descriptor": "Illegal Tree Removal 1 - 30\" Water Oak in the ROW2 - 35\" S. Red oak in the ROW",
         "paid": 3650,
-        "outstanding": 0
+        "outstanding": 0,
+        "tree_types": ["oak"]
       }
     },
     {
@@ -5272,7 +5573,8 @@
         "status": "Fine",
         "descriptor": "Removal of one oak tree of unknown diameter and destruction of another oak tree of unknown diameter. This invoice's balance has been adjusted to reflect the COA TCC's decision.",
         "paid": 113,
-        "outstanding": 0
+        "outstanding": 0,
+        "tree_types": ["oak"]
       }
     },
     {
@@ -5290,7 +5592,8 @@
         "status": "Fine",
         "descriptor": "Unpermitted removal of 24\" white oak, 29\" oak, 15\" pine without permitUnpermitted destruction of 24\" oak, 10\" hardwood at right of house by excavation of SRP of tree and noncompliance with tree protection plan as stamped and issuedTotal of 5 trees at 102\"",
         "paid": 113,
-        "outstanding": 0
+        "outstanding": 0,
+        "tree_types": ["hardwood", "oak", "pine"]
       }
     },
     {
@@ -5308,7 +5611,8 @@
         "status": "Fine",
         "descriptor": "Illegal tree removal of (1)23\"ù Hardwood, (1)24\"ù Hardwood, & (1)9\"ù Hardwood.",
         "paid": 0,
-        "outstanding": 0
+        "outstanding": 0,
+        "tree_types": ["hardwood"]
       }
     },
     {
@@ -5326,7 +5630,8 @@
         "status": "Fine",
         "descriptor": "Destruction of one 33\" White Oak without permit.",
         "paid": 0,
-        "outstanding": 0
+        "outstanding": 0,
+        "tree_types": ["oak"]
       }
     },
     {
@@ -5344,7 +5649,8 @@
         "status": "Fine",
         "descriptor": "Tree protection removed at front and left of property, soil grading within tree save/undisturbed areaT58 9\" hickory destroyed by gradingT60 13\" birch and T61 8\" hickory destroyed by gradingT63 (18\" hickory), T64 (24\" pine), T65(7\" oak), T66 (21\" pine), T67 (24\" maple), T68 (32\" pine) removed9 trees at 156\" destroyed or removed",
         "paid": 14580,
-        "outstanding": 0
+        "outstanding": 0,
+        "tree_types": ["birch", "hickory", "maple", "oak", "pine"]
       }
     },
     {
@@ -5362,7 +5668,8 @@
         "status": "Assigned",
         "descriptor": null,
         "paid": 0,
-        "outstanding": 6480
+        "outstanding": 6480,
+        "tree_types": []
       }
     },
     {
@@ -5380,7 +5687,8 @@
         "status": "Assigned",
         "descriptor": "Destruction of 1 - 22\" Tulip Poplar at back right by construction impacts.",
         "paid": 1260,
-        "outstanding": 0
+        "outstanding": 0,
+        "tree_types": ["poplar"]
       }
     },
     {
@@ -5398,7 +5706,8 @@
         "status": "Fine",
         "descriptor": null,
         "paid": 0,
-        "outstanding": 0
+        "outstanding": 0,
+        "tree_types": []
       }
     },
     {
@@ -5416,7 +5725,8 @@
         "status": "Assigned",
         "descriptor": null,
         "paid": 0,
-        "outstanding": 0
+        "outstanding": 0,
+        "tree_types": []
       }
     },
     {
@@ -5434,7 +5744,8 @@
         "status": "Fine",
         "descriptor": "Illegal tree removal of a 29\" hardwood.",
         "paid": 0,
-        "outstanding": 0
+        "outstanding": 0,
+        "tree_types": ["hardwood"]
       }
     },
     {
@@ -5452,7 +5763,8 @@
         "status": "Fine",
         "descriptor": null,
         "paid": 0,
-        "outstanding": 0
+        "outstanding": 0,
+        "tree_types": []
       }
     },
     {
@@ -5470,7 +5782,8 @@
         "status": "Fine",
         "descriptor": "7 trees of unknown diameter have been removed. There are no remaining trees on the property.",
         "paid": 0,
-        "outstanding": 10070
+        "outstanding": 10070,
+        "tree_types": []
       }
     },
     {
@@ -5488,7 +5801,8 @@
         "status": "Assigned",
         "descriptor": "Illegal destruction of 1 - 24\" Oak and 1 - 18\" Oak at the back right from pruning in excess of 20%.",
         "paid": 0,
-        "outstanding": 48740
+        "outstanding": 48740,
+        "tree_types": ["oak"]
       }
     },
     {
@@ -5506,7 +5820,8 @@
         "status": "Fine",
         "descriptor": "Illegal removal of a 10\" Maple at the front left before posting completion.",
         "paid": 900,
-        "outstanding": 0
+        "outstanding": 0,
+        "tree_types": ["maple"]
       }
     },
     {
@@ -5524,7 +5839,8 @@
         "status": "Fine",
         "descriptor": "29, 25, & 40\" trees removed without permit application, or issuance.",
         "paid": 6120,
-        "outstanding": 0
+        "outstanding": 0,
+        "tree_types": []
       }
     },
     {
@@ -5542,7 +5858,8 @@
         "status": "Fine",
         "descriptor": "Unpermitted removal of multiple trees on site, work well outside of scope18\", 24\", 6\", 21\", 16\" hardwoods at rear5 trees at 85\"  Required replacement of 3 trees at 2.5\" each must be shown on revised plans for restamp and will be required at final, cannot be waived with future revisions",
         "paid": 7525,
-        "outstanding": 0
+        "outstanding": 0,
+        "tree_types": ["hardwood"]
       }
     },
     {
@@ -5560,7 +5877,8 @@
         "status": "Fine",
         "descriptor": "Unpermitted destruction of T47, 22\" pine by trenching through SRP",
         "paid": 0,
-        "outstanding": 1760
+        "outstanding": 1760,
+        "tree_types": ["pine"]
       }
     },
     {
@@ -5578,7 +5896,8 @@
         "status": "Fine",
         "descriptor": "16\" Magnolia destroyed by construction activities outside of the approved LOD impacting the CRZ and multiple mechanical injuries on the mainstem. 24\" Pine removed in rear left and 12\" Oak removed from rear right without permit application, or issuance.",
         "paid": 4860,
-        "outstanding": 0
+        "outstanding": 0,
+        "tree_types": ["magnolia", "oak", "pine"]
       }
     },
     {
@@ -5596,7 +5915,8 @@
         "status": "Fine",
         "descriptor": "Removal of the following 19 trees: 26\" OAK (T1), 17\" PN (T2), 21\" PN (T3), 23\" PN (T4), 20\" PN (T5), 9\" HW (T6), 14\" HW, (T7), 22\" HW (T8), 13\" HW (T9), 16\" HW (T10), 24\" PN (T11), 29\" OAK (T12), 24\" PN (T13), 18\" PN (T15), 28\" PN (T16), 17\" SG (T21), 23\" PN (T23), one PN of unknown diameter (T24), and one OAK of unknown diameter (T25).Six, of the 25 trees that were removed, were permitted for removal, being: T#20, T#19, T#18, T#14, T#17, and T#22.",
         "paid": 0,
-        "outstanding": 0
+        "outstanding": 0,
+        "tree_types": ["hardwood", "oak", "pine"]
       }
     },
     {
@@ -5614,7 +5934,8 @@
         "status": "Fine",
         "descriptor": "Multiple trees destroyed or removed on site without permit15\", 15\" and 17\" crape myrtles at front cut, no permit foundT38 (10\" hw) not found on siteT40 (34\" oak) has excavation within 5' of trunk, no signs of TPF29\" oak and 10\" hardwood at rear left destroyed by wall within SRP23\" pine and 8\" hardwood removed at left25\" tulip-poplar has excavation and work within SRP at base of wall, prescription required27\" tulip-poplar, 10\" ash, 10\" tulip-poplar, 13\" tulip-poplar at front left of house require prescription and soil removal due to work and soil within SRP, no signs of TPF6 trees removed at 88\", 3 trees at 73\" destroyed, 5 trees require prescription or fines may be charged at final",
         "paid": 14730,
-        "outstanding": 0
+        "outstanding": 0,
+        "tree_types": ["crape myrtle", "hardwood", "oak", "pine", "poplar"]
       }
     },
     {
@@ -5632,7 +5953,8 @@
         "status": "Fine",
         "descriptor": null,
         "paid": 4320,
-        "outstanding": 0
+        "outstanding": 0,
+        "tree_types": []
       }
     },
     {
@@ -5650,7 +5972,8 @@
         "status": "Assigned",
         "descriptor": "Illegal removal of 1 -51\" Oak at the front Left",
         "paid": 0,
-        "outstanding": 2130
+        "outstanding": 2130,
+        "tree_types": ["oak"]
       }
     },
     {
@@ -5668,7 +5991,8 @@
         "status": "Closed - No Violation Found",
         "descriptor": "Cutting down large oak without permit",
         "paid": 0,
-        "outstanding": 0
+        "outstanding": 0,
+        "tree_types": ["oak"]
       }
     },
     {
@@ -5686,7 +6010,8 @@
         "status": "Fine",
         "descriptor": "investigation",
         "paid": 17290,
-        "outstanding": 0
+        "outstanding": 0,
+        "tree_types": []
       }
     },
     {
@@ -5704,7 +6029,8 @@
         "status": "Closed - No Violation Found",
         "descriptor": "Illegal tree removal, towards the back of the property on the property line. 2 large or more, cherry laurel. Have before and after",
         "paid": 0,
-        "outstanding": 0
+        "outstanding": 0,
+        "tree_types": ["cherry", "laurel"]
       }
     },
     {
@@ -5722,7 +6048,8 @@
         "status": "Fine",
         "descriptor": "Destruction of one 38‚Äù water oak, located at the property‚Äôs front right corner, without permit.",
         "paid": 0,
-        "outstanding": 0
+        "outstanding": 0,
+        "tree_types": ["oak"]
       }
     },
     {
@@ -5740,7 +6067,8 @@
         "status": "Fine",
         "descriptor": "Removal of one 30\" pine tree without permit.",
         "paid": 1500,
-        "outstanding": 0
+        "outstanding": 0,
+        "tree_types": ["pine"]
       }
     },
     {
@@ -5758,7 +6086,8 @@
         "status": "Fine",
         "descriptor": "Multiple trees removed beyond those permitted19\" and 27\" pine at front right20\" and 24\" pine, 32\" hardwood at front left25\" pine at rear center6\" 10\" and 12\" hardwood, 22\" pine at rear left10 trees at 197\"",
         "paid": 0,
-        "outstanding": 0
+        "outstanding": 0,
+        "tree_types": ["hardwood", "pine"]
       }
     },
     {
@@ -5776,7 +6105,8 @@
         "status": "Assigned",
         "descriptor": "Illegal removal of 1 - 22\" Oak at the front right",
         "paid": 1940,
-        "outstanding": 0
+        "outstanding": 0,
+        "tree_types": ["oak"]
       }
     },
     {
@@ -5794,7 +6124,8 @@
         "status": "Fine",
         "descriptor": "Grading and land disturbance outside of the limits of disturbance impacted over 33% of the net root zone of a 40\" Sweetgum in the front yard.",
         "paid": 2300,
-        "outstanding": 0
+        "outstanding": 0,
+        "tree_types": ["sweetgum"]
       }
     },
     {
@@ -5812,7 +6143,8 @@
         "status": "Fine",
         "descriptor": "Tree #13, a 30\" hardwood, was removed without permit application, or issuance.",
         "paid": 2000,
-        "outstanding": 0
+        "outstanding": 0,
+        "tree_types": ["hardwood"]
       }
     },
     {
@@ -5830,7 +6162,8 @@
         "status": "Fine",
         "descriptor": "Removal of a 38\" Oak at the front of the property without a permit.",
         "paid": 1740,
-        "outstanding": 0
+        "outstanding": 0,
+        "tree_types": ["oak"]
       }
     },
     {
@@ -5848,7 +6181,8 @@
         "status": "Fine",
         "descriptor": "Removal of the following three trees without permit: 11‚Äù HW, 13‚Äù PN, & 11‚Äù HW.",
         "paid": 3850,
-        "outstanding": 0
+        "outstanding": 0,
+        "tree_types": ["hardwood", "pine"]
       }
     },
     {
@@ -5866,7 +6200,8 @@
         "status": "Assigned",
         "descriptor": "2 - 24\" HW destroyed at Right side by heavy equipment use in SRP.",
         "paid": 3140,
-        "outstanding": 0
+        "outstanding": 0,
+        "tree_types": ["hardwood"]
       }
     },
     {
@@ -5884,7 +6219,8 @@
         "status": "Fine",
         "descriptor": "Illegal removal/topping of two hardwoods at the rear. 24\" and 20\".",
         "paid": 0,
-        "outstanding": 3020
+        "outstanding": 3020,
+        "tree_types": ["hardwood"]
       }
     },
     {
@@ -5902,7 +6238,8 @@
         "status": "Fine",
         "descriptor": "Illegal tree removal 27\" HW and 25\" Pine.",
         "paid": 3760,
-        "outstanding": 0
+        "outstanding": 0,
+        "tree_types": ["hardwood", "pine"]
       }
     },
     {
@@ -5920,7 +6257,8 @@
         "status": "Fine",
         "descriptor": "Grading and scraping outside of the approved limits of disturbance causing damage to structural roots on 12\" Oak and 14\" Oak. (trees labelled #2 and 4).",
         "paid": 2980,
-        "outstanding": 0
+        "outstanding": 0,
+        "tree_types": ["oak"]
       }
     },
     {
@@ -5938,7 +6276,8 @@
         "status": "Assigned",
         "descriptor": null,
         "paid": 0,
-        "outstanding": 13200
+        "outstanding": 13200,
+        "tree_types": []
       }
     }
   ]

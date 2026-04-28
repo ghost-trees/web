@@ -6,6 +6,7 @@ type PointFeatureProperties = {
   date?: string;
   record_type?: string;
   address?: string;
+  tree_types?: string[];
 };
 
 type PointFeature = {
@@ -27,6 +28,7 @@ export type MapPoint = {
   date: string;
   recordType: string;
   address: string;
+  treeTypes: string[];
 };
 
 type DataStoreState = {
@@ -50,12 +52,19 @@ function toMapPoints(data: DataGeoJson): MapPoint[] {
     })
     .map((feature, index) => {
       const id = feature.properties?.record_number?.trim();
+      const treeTypes = Array.isArray(feature.properties?.tree_types)
+        ? feature.properties.tree_types
+            .filter((treeType): treeType is string => typeof treeType === 'string')
+            .map((treeType) => treeType.trim().toLowerCase())
+            .filter((treeType) => treeType.length > 0)
+        : [];
       return {
         id: id && id.length > 0 ? id : `point-${index}`,
         coordinates: feature.geometry.coordinates,
         date: feature.properties?.date?.trim() || 'Unknown',
         recordType: feature.properties?.record_type?.trim() || 'Unknown',
         address: feature.properties?.address?.trim() || 'Unknown',
+        treeTypes,
       };
     });
 }
