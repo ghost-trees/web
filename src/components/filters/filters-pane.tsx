@@ -5,6 +5,7 @@ import {
   useFilterStore,
 } from '../../state/filter-store';
 import { PaneHeader } from '../common/pane-header';
+import { Tree } from './tree';
 import { Year } from './year';
 
 export function FiltersPane() {
@@ -24,6 +25,7 @@ export function FiltersPane() {
         onClose={showMapPane}
       />
       <Year />
+      <Tree />
     </section>
   );
 }
