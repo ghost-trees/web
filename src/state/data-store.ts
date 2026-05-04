@@ -7,6 +7,8 @@ type PointFeatureProperties = {
   record_type?: string;
   address?: string;
   tree_types?: string[];
+  paid?: number | string;
+  outstanding?: number | string;
 };
 
 type PointFeature = {
@@ -29,6 +31,7 @@ export type MapPoint = {
   recordType: string;
   address: string;
   treeTypes: string[];
+  feeTotal: number;
 };
 
 type DataStoreState = {
@@ -42,6 +45,17 @@ type DataStoreState = {
 };
 
 function toMapPoints(data: DataGeoJson): MapPoint[] {
+  const toSafeNumber = (value: number | string | undefined): number => {
+    if (typeof value === 'number') {
+      return Number.isFinite(value) && value > 0 ? value : 0;
+    }
+    if (typeof value === 'string') {
+      const parsedValue = Number(value);
+      return Number.isFinite(parsedValue) && parsedValue > 0 ? parsedValue : 0;
+    }
+    return 0;
+  };
+
   return data.features
     .filter((feature): feature is PointFeature => {
       return (
@@ -52,6 +66,8 @@ function toMapPoints(data: DataGeoJson): MapPoint[] {
     })
     .map((feature, index) => {
       const id = feature.properties?.record_number?.trim();
+      const paid = toSafeNumber(feature.properties?.paid);
+      const outstanding = toSafeNumber(feature.properties?.outstanding);
       const treeTypes = Array.isArray(feature.properties?.tree_types)
         ? feature.properties.tree_types
             .filter((treeType): treeType is string => typeof treeType === 'string')
@@ -65,6 +81,7 @@ function toMapPoints(data: DataGeoJson): MapPoint[] {
         recordType: feature.properties?.record_type?.trim() || 'Unknown',
         address: feature.properties?.address?.trim() || 'Unknown',
         treeTypes,
+        feeTotal: paid + outstanding,
       };
     });
 }

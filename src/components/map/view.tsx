@@ -14,6 +14,7 @@ import maplibregl, { ScaleControl } from 'maplibre-gl';
 import { useMapSelectionStore } from '../../state/selection-store';
 import { useDataStore, type MapPoint } from '../../state/data-store';
 import { useFilterStore } from '../../state/filter-store';
+import { useUiStore } from '../../state/ui-store';
 import { DEFAULT_STADIA_STYLE_URL, INITIAL_CENTER, INITIAL_ZOOM } from './constants';
 import { MapControls } from './controls';
 import { createPointLayer } from './point-layer';
@@ -30,6 +31,7 @@ export function MapView() {
   const pointsById = useDataStore((state) => state.pointsById);
   const loadPoints = useDataStore((state) => state.loadPoints);
   const filteredPoints = useFilterStore((state) => state.visiblePoints);
+  const scalePointsByFee = useUiStore((state) => state.scalePointsByFee);
   const selectedIds = useMapSelectionStore((state) => state.selectedIds);
   const hoveredIds = useMapSelectionStore((state) => state.hoveredIds);
   const replaceSelection = useMapSelectionStore((state) => state.replaceSelection);
@@ -85,6 +87,7 @@ export function MapView() {
             pointsRef.current,
             useMapSelectionStore.getState().selectedIds,
             useMapSelectionStore.getState().hoveredIds,
+            useUiStore.getState().scalePointsByFee,
           ),
         ],
       });
@@ -169,10 +172,11 @@ export function MapView() {
           pointsRef.current,
           useMapSelectionStore.getState().selectedIds,
           useMapSelectionStore.getState().hoveredIds,
+          scalePointsByFee,
         ),
       ],
     });
-  }, [filteredPoints]);
+  }, [filteredPoints, scalePointsByFee]);
 
   useEffect(() => {
     if (selectedIds.size === 0) {
@@ -200,9 +204,16 @@ export function MapView() {
     }
 
     overlayRef.current.setProps({
-      layers: [createPointLayer(pointsRef.current, visibleSelectedIds, visibleHoveredIds)],
+      layers: [
+        createPointLayer(
+          pointsRef.current,
+          visibleSelectedIds,
+          visibleHoveredIds,
+          scalePointsByFee,
+        ),
+      ],
     });
-  }, [visibleHoveredIds, visibleSelectedIds]);
+  }, [visibleHoveredIds, visibleSelectedIds, scalePointsByFee]);
 
   const selectedPointId =
     visibleSelectedIds.size === 1 ? visibleSelectedIds.values().next().value : null;

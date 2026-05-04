@@ -15,15 +15,25 @@ import {
   POINT_LINE_WIDTH_DEFAULT,
   POINT_LINE_WIDTH_SELECTED,
   POINT_RADIUS_DEFAULT,
-  POINT_RADIUS_SELECTED,
 } from './constants';
 
 export function createPointLayer(
   points: MapPoint[],
   selectedIds: Set<string>,
   hoveredIds: Set<string>,
+  scalePointsByFee: boolean,
 ) {
   const isHoverFocusEnabled = selectedIds.size === 0;
+  const feeMax = scalePointsByFee
+    ? points.reduce((maxFeeTotal, point) => Math.max(maxFeeTotal, point.feeTotal), 0)
+    : 0;
+  const getScaledRadius = (point: MapPoint) => {
+    if (!scalePointsByFee || feeMax <= 0) {
+      return POINT_RADIUS_DEFAULT;
+    }
+    const feeRatio = Math.min(Math.max(point.feeTotal / feeMax, 0), 1);
+    return 3 + feeRatio * (18 - 3);
+  };
 
   return new ScatterplotLayer<MapPoint>({
     id: POINT_LAYER_ID,
@@ -33,14 +43,7 @@ export function createPointLayer(
     radiusMinPixels: 3,
     radiusMaxPixels: 18,
     getPosition: (point) => point.coordinates,
-    getRadius: (point) => {
-      if (selectedIds.has(point.id)) {
-        return POINT_RADIUS_SELECTED;
-      }
-      return isHoverFocusEnabled && hoveredIds.has(point.id)
-        ? POINT_RADIUS_SELECTED
-        : POINT_RADIUS_DEFAULT;
-    },
+    getRadius: getScaledRadius,
     getFillColor: (point) => {
       if (selectedIds.has(point.id)) {
         return POINT_FILL_COLOR_SELECTED;
@@ -68,7 +71,7 @@ export function createPointLayer(
     },
     lineWidthUnits: 'pixels',
     updateTriggers: {
-      getRadius: [selectedIds, hoveredIds],
+      getRadius: [scalePointsByFee, feeMax],
       getFillColor: [selectedIds, hoveredIds],
       getLineColor: [selectedIds, hoveredIds],
       getLineWidth: [selectedIds, hoveredIds],
