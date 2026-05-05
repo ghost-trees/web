@@ -1,6 +1,9 @@
 import { create } from 'zustand';
 import { asset } from '../utils/asset';
 
+// Internal sentinel for missing/empty tree type values from source data.
+export const UNKNOWN_TREE_TYPE = '__unknown__';
+
 type PointFeatureProperties = {
   record_number?: string;
   date?: string;
@@ -68,12 +71,15 @@ function toMapPoints(data: DataGeoJson): MapPoint[] {
       const id = feature.properties?.record_number?.trim();
       const paid = toSafeNumber(feature.properties?.paid);
       const outstanding = toSafeNumber(feature.properties?.outstanding);
-      const treeTypes = Array.isArray(feature.properties?.tree_types)
+      const normalizedTreeTypes = Array.isArray(feature.properties?.tree_types)
         ? feature.properties.tree_types
             .filter((treeType): treeType is string => typeof treeType === 'string')
             .map((treeType) => treeType.trim().toLowerCase())
             .filter((treeType) => treeType.length > 0)
         : [];
+      const uniqueTreeTypes = [...new Set(normalizedTreeTypes)];
+      // Keep treeTypes non-empty so downstream filter/chart logic can treat unknown as a regular type.
+      const treeTypes = uniqueTreeTypes.length > 0 ? uniqueTreeTypes : [UNKNOWN_TREE_TYPE];
       return {
         id: id && id.length > 0 ? id : `point-${index}`,
         coordinates: feature.geometry.coordinates,

@@ -14,13 +14,10 @@ export type FilterStoreState = {
   maxYear: number;
   availableTreeTypes: string[];
   enabledTreeTypes: string[];
-  hasUnknownTreeTypes: boolean;
-  isUnknownTreeTypeEnabled: boolean;
   setSourcePoints: (points: MapPoint[]) => void;
   setMinYear: (year: number) => void;
   setMaxYear: (year: number) => void;
   setTreeTypeEnabled: (treeType: string, enabled: boolean) => void;
-  setUnknownTreeTypeEnabled: (enabled: boolean) => void;
   setAllTreeTypesEnabled: (enabled: boolean) => void;
 };
 
@@ -95,28 +92,16 @@ function normalizeRange({
   return { minYear: Math.max(minAvailableYear, boundedMax - 1), maxYear: boundedMax };
 }
 
-function deriveAvailableTreeTypes(points: MapPoint[]): {
-  availableTreeTypes: string[];
-  hasUnknownTreeTypes: boolean;
-} {
+function deriveAvailableTreeTypes(points: MapPoint[]): string[] {
   const treeTypeSet = new Set<string>();
-  let hasUnknownTreeTypes = false;
 
   for (const point of points) {
-    if (point.treeTypes.length === 0) {
-      hasUnknownTreeTypes = true;
-      continue;
-    }
-
     for (const treeType of point.treeTypes) {
       treeTypeSet.add(treeType);
     }
   }
 
-  return {
-    availableTreeTypes: [...treeTypeSet].sort((a, b) => a.localeCompare(b)),
-    hasUnknownTreeTypes,
-  };
+  return [...treeTypeSet].sort((a, b) => a.localeCompare(b));
 }
 
 function buildVisiblePoints(
@@ -124,16 +109,11 @@ function buildVisiblePoints(
   minYear: number,
   maxYear: number,
   enabledTreeTypes: Set<string>,
-  isUnknownTreeTypeEnabled: boolean,
 ): MapPoint[] {
   return points.filter((point) => {
     const year = parsePointYear(point.date);
     if (year === null || year < minYear || year > maxYear) {
       return false;
-    }
-
-    if (point.treeTypes.length === 0) {
-      return isUnknownTreeTypeEnabled;
     }
 
     return point.treeTypes.some((treeType) => enabledTreeTypes.has(treeType));
@@ -150,31 +130,19 @@ export const useFilterStore = create<FilterStoreState>((set, get) => ({
   maxYear: FALLBACK_YEAR,
   availableTreeTypes: [],
   enabledTreeTypes: [],
-  hasUnknownTreeTypes: false,
-  isUnknownTreeTypeEnabled: false,
   setSourcePoints: (points) => {
     const { hasAvailableYears, minAvailableYear, maxAvailableYear } = deriveAvailableYears(points);
-    const { availableTreeTypes, hasUnknownTreeTypes } = deriveAvailableTreeTypes(points);
+    const availableTreeTypes = deriveAvailableTreeTypes(points);
     const state = get();
     const previousAvailableTreeTypes = new Set(state.availableTreeTypes);
     const previousEnabledTreeTypes = new Set(state.enabledTreeTypes);
-    const isFirstSourceLoad =
-      state.allPoints.length === 0 &&
-      state.availableTreeTypes.length === 0 &&
-      !state.hasUnknownTreeTypes;
+    const isFirstSourceLoad = state.allPoints.length === 0 && state.availableTreeTypes.length === 0;
     const nextEnabledTreeTypes = isFirstSourceLoad
       ? availableTreeTypes
       : availableTreeTypes.filter(
           (treeType) =>
             previousEnabledTreeTypes.has(treeType) || !previousAvailableTreeTypes.has(treeType),
         );
-    const nextIsUnknownTreeTypeEnabled = hasUnknownTreeTypes
-      ? isFirstSourceLoad
-        ? true
-        : state.hasUnknownTreeTypes
-          ? state.isUnknownTreeTypeEnabled
-          : true
-      : false;
 
     const nextRange = hasAvailableYears
       ? normalizeRange({
@@ -192,7 +160,6 @@ export const useFilterStore = create<FilterStoreState>((set, get) => ({
         nextRange.minYear,
         nextRange.maxYear,
         new Set(nextEnabledTreeTypes),
-        nextIsUnknownTreeTypeEnabled,
       ),
       hasAvailableYears,
       minAvailableYear,
@@ -201,8 +168,6 @@ export const useFilterStore = create<FilterStoreState>((set, get) => ({
       maxYear: nextRange.maxYear,
       availableTreeTypes,
       enabledTreeTypes: nextEnabledTreeTypes,
-      hasUnknownTreeTypes,
-      isUnknownTreeTypeEnabled: nextIsUnknownTreeTypeEnabled,
     });
   },
   setMinYear: (year) => {
@@ -226,7 +191,6 @@ export const useFilterStore = create<FilterStoreState>((set, get) => ({
         nextRange.minYear,
         nextRange.maxYear,
         new Set(state.enabledTreeTypes),
-        state.isUnknownTreeTypeEnabled,
       ),
     });
   },
@@ -251,7 +215,6 @@ export const useFilterStore = create<FilterStoreState>((set, get) => ({
         nextRange.minYear,
         nextRange.maxYear,
         new Set(state.enabledTreeTypes),
-        state.isUnknownTreeTypeEnabled,
       ),
     });
   },
@@ -274,36 +237,19 @@ export const useFilterStore = create<FilterStoreState>((set, get) => ({
         state.minYear,
         state.maxYear,
         new Set(nextEnabledTreeTypes),
-        state.isUnknownTreeTypeEnabled,
-      ),
-    });
-  },
-  setUnknownTreeTypeEnabled: (enabled) => {
-    const state = get();
-    set({
-      isUnknownTreeTypeEnabled: state.hasUnknownTreeTypes ? enabled : false,
-      visiblePoints: buildVisiblePoints(
-        state.allPoints,
-        state.minYear,
-        state.maxYear,
-        new Set(state.enabledTreeTypes),
-        state.hasUnknownTreeTypes ? enabled : false,
       ),
     });
   },
   setAllTreeTypesEnabled: (enabled) => {
     const state = get();
     const nextEnabledTreeTypes = enabled ? state.availableTreeTypes : [];
-    const nextUnknownEnabled = enabled ? state.hasUnknownTreeTypes : false;
     set({
       enabledTreeTypes: nextEnabledTreeTypes,
-      isUnknownTreeTypeEnabled: nextUnknownEnabled,
       visiblePoints: buildVisiblePoints(
         state.allPoints,
         state.minYear,
         state.maxYear,
         new Set(nextEnabledTreeTypes),
-        nextUnknownEnabled,
       ),
     });
   },

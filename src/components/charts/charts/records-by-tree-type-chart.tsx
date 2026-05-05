@@ -1,6 +1,7 @@
 import { useEffect, useMemo } from 'react';
 import type { EChartsOption } from 'echarts';
 import ReactECharts from 'echarts-for-react';
+import { UNKNOWN_TREE_TYPE } from '../../../state/data-store';
 import { useFilterStore } from '../../../state/filter-store';
 import { useMapSelectionStore } from '../../../state/selection-store';
 import { POINT_FILL_COLOR_SELECTED } from '../../map/constants';
@@ -14,6 +15,9 @@ type TreeTypeBucket = {
 type PieSeriesEvent = {
   seriesType?: string;
   name?: string;
+  data?: {
+    treeType?: string;
+  };
 };
 
 function toTitleCase(value: string): string {
@@ -24,19 +28,17 @@ function toTitleCase(value: string): string {
     .join(' ');
 }
 
+// Sentinel stays internal; charts should render a friendly Unknown label.
+function formatTreeTypeLabel(treeType: string): string {
+  return treeType === UNKNOWN_TREE_TYPE ? 'Unknown' : toTitleCase(treeType);
+}
+
 function buildTreeTypeBuckets(
   points: ReturnType<typeof useFilterStore.getState>['visiblePoints'],
 ): TreeTypeBucket[] {
   const pointIdsByTreeType = new Map<string, string[]>();
 
   for (const point of points) {
-    if (point.treeTypes.length === 0) {
-      const unknownIds = pointIdsByTreeType.get('unknown') ?? [];
-      unknownIds.push(point.id);
-      pointIdsByTreeType.set('unknown', unknownIds);
-      continue;
-    }
-
     for (const treeType of point.treeTypes) {
       const pointIds = pointIdsByTreeType.get(treeType) ?? [];
       pointIds.push(point.id);
@@ -98,7 +100,7 @@ export function RecordsByTreeTypeChart() {
 
       return {
         value: bucket.pointIds.length,
-        name: toTitleCase(bucket.treeType),
+        name: formatTreeTypeLabel(bucket.treeType),
         treeType: bucket.treeType,
         itemStyle,
       };
@@ -141,7 +143,11 @@ export function RecordsByTreeTypeChart() {
           return;
         }
 
-        const bucketPointIds = pointIdsByTreeType.get(params.name.toLowerCase());
+        const treeType = params.data?.treeType;
+        if (!treeType) {
+          return;
+        }
+        const bucketPointIds = pointIdsByTreeType.get(treeType);
         if (!bucketPointIds) {
           return;
         }
@@ -154,10 +160,14 @@ export function RecordsByTreeTypeChart() {
         setHoveredIds([]);
       },
       click: (params: PieSeriesEvent) => {
-        if (params.seriesType !== 'pie' || !params.name) {
+        if (params.seriesType !== 'pie') {
           return;
         }
-        const bucketPointIds = pointIdsByTreeType.get(params.name.toLowerCase());
+        const treeType = params.data?.treeType;
+        if (!treeType) {
+          return;
+        }
+        const bucketPointIds = pointIdsByTreeType.get(treeType);
         if (!bucketPointIds) {
           return;
         }

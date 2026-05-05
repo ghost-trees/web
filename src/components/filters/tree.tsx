@@ -1,4 +1,5 @@
 import { useMemo } from 'react';
+import { UNKNOWN_TREE_TYPE } from '../../state/data-store';
 import { useFilterStore } from '../../state/filter-store';
 
 function toTitleCase(value: string): string {
@@ -9,37 +10,46 @@ function toTitleCase(value: string): string {
     .join(' ');
 }
 
+// Sentinel stays internal; UI should always render it as "Unknown".
+function formatTreeTypeLabel(treeType: string): string {
+  return treeType === UNKNOWN_TREE_TYPE ? 'Unknown' : toTitleCase(treeType);
+}
+
 export function Tree() {
   const allPoints = useFilterStore((state) => state.allPoints);
   const availableTreeTypes = useFilterStore((state) => state.availableTreeTypes);
   const enabledTreeTypes = useFilterStore((state) => state.enabledTreeTypes);
-  const hasUnknownTreeTypes = useFilterStore((state) => state.hasUnknownTreeTypes);
-  const isUnknownTreeTypeEnabled = useFilterStore((state) => state.isUnknownTreeTypeEnabled);
   const setTreeTypeEnabled = useFilterStore((state) => state.setTreeTypeEnabled);
-  const setUnknownTreeTypeEnabled = useFilterStore((state) => state.setUnknownTreeTypeEnabled);
   const setAllTreeTypesEnabled = useFilterStore((state) => state.setAllTreeTypesEnabled);
 
   const enabledTreeTypeSet = useMemo(() => new Set(enabledTreeTypes), [enabledTreeTypes]);
-  const { treeTypeCounts, unknownCount } = useMemo(() => {
+  const treeTypeCounts = useMemo(() => {
     const counts = new Map<string, number>();
-    let unknown = 0;
 
     for (const point of allPoints) {
-      if (point.treeTypes.length === 0) {
-        unknown += 1;
-        continue;
-      }
-
       const uniqueTreeTypes = new Set(point.treeTypes);
       for (const treeType of uniqueTreeTypes) {
         counts.set(treeType, (counts.get(treeType) ?? 0) + 1);
       }
     }
 
-    return { treeTypeCounts: counts, unknownCount: unknown };
+    return counts;
   }, [allPoints]);
-  const totalOptions = availableTreeTypes.length + (hasUnknownTreeTypes ? 1 : 0);
-  const enabledOptions = enabledTreeTypes.length + (isUnknownTreeTypeEnabled ? 1 : 0);
+  const sortedTreeTypes = useMemo(
+    () =>
+      [...availableTreeTypes].sort((leftTreeType, rightTreeType) => {
+        if (leftTreeType === UNKNOWN_TREE_TYPE) {
+          return 1;
+        }
+        if (rightTreeType === UNKNOWN_TREE_TYPE) {
+          return -1;
+        }
+        return leftTreeType.localeCompare(rightTreeType);
+      }),
+    [availableTreeTypes],
+  );
+  const totalOptions = sortedTreeTypes.length;
+  const enabledOptions = enabledTreeTypes.length;
   const summaryLabel =
     totalOptions === 0
       ? 'No tree types available'
@@ -90,7 +100,7 @@ export function Tree() {
                 </button>
               </div>
               <div className="max-h-56 space-y-2 overflow-y-auto pr-1">
-                {availableTreeTypes.map((treeType) => (
+                {sortedTreeTypes.map((treeType) => (
                   <label
                     key={treeType}
                     className="flex cursor-pointer items-center gap-2 text-sm text-[var(--color-on-surface)]"
@@ -103,22 +113,9 @@ export function Tree() {
                         setTreeTypeEnabled(treeType, event.target.checked);
                       }}
                     />
-                    {toTitleCase(treeType)} ({treeTypeCounts.get(treeType) ?? 0})
+                    {formatTreeTypeLabel(treeType)} ({treeTypeCounts.get(treeType) ?? 0})
                   </label>
                 ))}
-                {hasUnknownTreeTypes ? (
-                  <label className="flex cursor-pointer items-center gap-2 text-sm text-[var(--color-on-surface)]">
-                    <input
-                      type="checkbox"
-                      style={{ accentColor: 'var(--color-primary)' }}
-                      checked={isUnknownTreeTypeEnabled}
-                      onChange={(event) => {
-                        setUnknownTreeTypeEnabled(event.target.checked);
-                      }}
-                    />
-                    Unknown ({unknownCount})
-                  </label>
-                ) : null}
               </div>
             </>
           )}
