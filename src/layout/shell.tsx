@@ -22,7 +22,7 @@ export function Shell({ sidebar, filtersPane, chartsPane, settingsPane, content 
           : null;
 
   return (
-    <div className="flex min-h-screen bg-[var(--color-surface)] text-[var(--color-on-surface-variant)]">
+    <div className="flex h-screen bg-[var(--color-surface)] text-[var(--color-on-surface-variant)]">
       <aside className="w-72 shrink-0 bg-[var(--color-surface-container-high)] p-4">
         {sidebar}
       </aside>

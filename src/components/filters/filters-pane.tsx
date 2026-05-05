@@ -25,9 +25,11 @@ export function FiltersPane() {
         }
         onClose={showMapPane}
       />
-      <Year />
-      <Tree />
-      <Zip />
+      <div className="flex-1 min-h-0 overflow-y-auto pb-2 pr-1">
+        <Year />
+        <Tree />
+        <Zip />
+      </div>
     </section>
   );
 }
