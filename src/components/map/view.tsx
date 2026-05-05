@@ -212,6 +212,7 @@ export function MapView() {
             pointId={selectedPoint.id}
             date={selectedPoint.date}
             recordType={selectedPoint.recordType}
+            treeTypes={selectedPoint.treeTypes}
             address={selectedPoint.address}
             x={projectedTooltip.x}
             y={projectedTooltip.y}

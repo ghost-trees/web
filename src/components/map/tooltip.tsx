@@ -4,16 +4,45 @@
  * Floating tooltip shown for the currently selected map point.
  */
 
+import { UNKNOWN_TREE_TYPE } from '../../state/data-store';
+
 type MapTooltipProps = {
   pointId: string;
   date: string;
   recordType: string;
+  treeTypes: string[];
   address: string;
   x: number;
   y: number;
 };
 
 const UNKNOWN_VALUE = 'Unknown';
+
+function toTitleCase(value: string): string {
+  return value
+    .split(' ')
+    .filter((part) => part.length > 0)
+    .map((part) => part.charAt(0).toUpperCase() + part.slice(1))
+    .join(' ');
+}
+
+function formatTreeTypeLabel(treeType: string): string {
+  const normalizedTreeType = treeType.trim().toLowerCase();
+  if (!normalizedTreeType || normalizedTreeType === UNKNOWN_TREE_TYPE) {
+    return UNKNOWN_VALUE;
+  }
+
+  return toTitleCase(normalizedTreeType);
+}
+
+function formatTreeTypeList(treeTypes: string[]): string {
+  if (treeTypes.length === 0) {
+    return UNKNOWN_VALUE;
+  }
+
+  const labels = [...new Set(treeTypes.map(formatTreeTypeLabel))];
+  return labels.length > 0 ? labels.join(', ') : UNKNOWN_VALUE;
+}
 
 function parseAddressDetails(address: string) {
   const normalizedAddress = address.trim();
@@ -30,8 +59,17 @@ function parseAddressDetails(address: string) {
   return { streetLine, zipCode };
 }
 
-export function MapTooltip({ pointId, date, recordType, address, x, y }: MapTooltipProps) {
+export function MapTooltip({
+  pointId,
+  date,
+  recordType,
+  treeTypes,
+  address,
+  x,
+  y,
+}: MapTooltipProps) {
   const { streetLine, zipCode } = parseAddressDetails(address);
+  const treeTypeLabel = formatTreeTypeList(treeTypes);
 
   return (
     <div
@@ -64,6 +102,12 @@ export function MapTooltip({ pointId, date, recordType, address, x, y }: MapTool
             <div className="flex items-center justify-between">
               <span className="text-xs text-on-surface-variant">Record Type</span>
               <span className="text-right text-xs font-semibold text-on-surface">{recordType}</span>
+            </div>
+            <div className="flex items-start justify-between gap-3">
+              <span className="text-xs text-on-surface-variant">Tree Type</span>
+              <span className="max-w-44 text-right text-xs font-semibold text-on-surface">
+                {treeTypeLabel}
+              </span>
             </div>
             <div className="flex items-start justify-between gap-3">
               <span className="text-xs text-on-surface-variant">Address</span>
