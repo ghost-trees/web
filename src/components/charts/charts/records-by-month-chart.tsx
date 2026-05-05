@@ -4,6 +4,7 @@ import ReactECharts from 'echarts-for-react';
 import { useFilterStore } from '../../../state/filter-store';
 import type { MapPoint } from '../../../state/data-store';
 import { useMapSelectionStore } from '../../../state/selection-store';
+import { rgbaFromTuple } from '../../../utils/color';
 import { POINT_FILL_COLOR_SELECTED } from '../../map/constants';
 import { ECHARTS_THEME_NAME } from '../echarts-theme';
 
@@ -66,14 +67,6 @@ type SeriesEvent = {
   seriesType?: string;
   dataIndex?: number;
 };
-
-function rgbaFromTuple(
-  [red, green, blue, alpha]: [number, number, number, number],
-  alphaOverride?: number,
-): string {
-  const resolvedAlpha = alphaOverride ?? alpha / 255;
-  return `rgba(${red}, ${green}, ${blue}, ${resolvedAlpha})`;
-}
 
 function getMonthPointIds(params: SeriesEvent, pointIdsByMonth: string[][]): string[] | null {
   if (params.seriesType !== 'bar') {

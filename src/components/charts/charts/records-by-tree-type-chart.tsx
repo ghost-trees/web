@@ -1,9 +1,10 @@
 import { useEffect, useMemo } from 'react';
 import type { EChartsOption } from 'echarts';
 import ReactECharts from 'echarts-for-react';
-import { UNKNOWN_TREE_TYPE } from '../../../state/data-store';
 import { useFilterStore } from '../../../state/filter-store';
 import { useMapSelectionStore } from '../../../state/selection-store';
+import { rgbaFromTuple } from '../../../utils/color';
+import { formatTreeTypeLabel } from '../../../utils/tree-type';
 import { POINT_FILL_COLOR_SELECTED } from '../../map/constants';
 import { ECHARTS_THEME_NAME } from '../echarts-theme';
 
@@ -19,19 +20,6 @@ type PieSeriesEvent = {
     treeType?: string;
   };
 };
-
-function toTitleCase(value: string): string {
-  return value
-    .split(' ')
-    .filter((part) => part.length > 0)
-    .map((part) => part.charAt(0).toUpperCase() + part.slice(1))
-    .join(' ');
-}
-
-// Sentinel stays internal; charts should render a friendly Unknown label.
-function formatTreeTypeLabel(treeType: string): string {
-  return treeType === UNKNOWN_TREE_TYPE ? 'Unknown' : toTitleCase(treeType);
-}
 
 function buildTreeTypeBuckets(
   points: ReturnType<typeof useFilterStore.getState>['visiblePoints'],
@@ -49,14 +37,6 @@ function buildTreeTypeBuckets(
   return [...pointIdsByTreeType.entries()]
     .map(([treeType, pointIds]) => ({ treeType, pointIds }))
     .sort((a, b) => b.pointIds.length - a.pointIds.length || a.treeType.localeCompare(b.treeType));
-}
-
-function rgbaFromTuple(
-  [red, green, blue, alpha]: [number, number, number, number],
-  alphaOverride?: number,
-): string {
-  const resolvedAlpha = alphaOverride ?? alpha / 255;
-  return `rgba(${red}, ${green}, ${blue}, ${resolvedAlpha})`;
 }
 
 export function RecordsByTreeTypeChart() {

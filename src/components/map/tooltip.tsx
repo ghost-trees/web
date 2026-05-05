@@ -4,7 +4,7 @@
  * Floating tooltip shown for the currently selected map point.
  */
 
-import { UNKNOWN_TREE_TYPE } from '../../state/data-store';
+import { formatTreeTypeList, UNKNOWN_DISPLAY_VALUE } from '../../utils/tree-type';
 
 type MapTooltipProps = {
   pointId: string;
@@ -16,33 +16,7 @@ type MapTooltipProps = {
   y: number;
 };
 
-const UNKNOWN_VALUE = 'Unknown';
-
-function toTitleCase(value: string): string {
-  return value
-    .split(' ')
-    .filter((part) => part.length > 0)
-    .map((part) => part.charAt(0).toUpperCase() + part.slice(1))
-    .join(' ');
-}
-
-function formatTreeTypeLabel(treeType: string): string {
-  const normalizedTreeType = treeType.trim().toLowerCase();
-  if (!normalizedTreeType || normalizedTreeType === UNKNOWN_TREE_TYPE) {
-    return UNKNOWN_VALUE;
-  }
-
-  return toTitleCase(normalizedTreeType);
-}
-
-function formatTreeTypeList(treeTypes: string[]): string {
-  if (treeTypes.length === 0) {
-    return UNKNOWN_VALUE;
-  }
-
-  const labels = [...new Set(treeTypes.map(formatTreeTypeLabel))];
-  return labels.length > 0 ? labels.join(', ') : UNKNOWN_VALUE;
-}
+const UNKNOWN_VALUE = UNKNOWN_DISPLAY_VALUE;
 
 function parseAddressDetails(address: string) {
   const normalizedAddress = address.trim();

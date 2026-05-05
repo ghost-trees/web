@@ -1,19 +1,7 @@
 import { useMemo } from 'react';
 import { UNKNOWN_TREE_TYPE } from '../../state/data-store';
 import { useFilterStore } from '../../state/filter-store';
-
-function toTitleCase(value: string): string {
-  return value
-    .split(' ')
-    .filter((part) => part.length > 0)
-    .map((part) => part.charAt(0).toUpperCase() + part.slice(1))
-    .join(' ');
-}
-
-// Sentinel stays internal; UI should always render it as "Unknown".
-function formatTreeTypeLabel(treeType: string): string {
-  return treeType === UNKNOWN_TREE_TYPE ? 'Unknown' : toTitleCase(treeType);
-}
+import { formatTreeTypeLabel } from '../../utils/tree-type';
 
 export function Tree() {
   const allPoints = useFilterStore((state) => state.allPoints);
