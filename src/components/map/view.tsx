@@ -7,16 +7,86 @@
 
 import { MapboxOverlay } from '@deck.gl/mapbox';
 import { useEffect, useMemo, useRef, useState } from 'react';
+import type { FeatureCollection, GeoJsonProperties, Geometry } from 'geojson';
 import maplibregl, { ScaleControl } from 'maplibre-gl';
 import { useMapSelectionStore } from '../../state/selection-store';
 import { useDataStore, type MapPoint } from '../../state/data-store';
 import { useFilterStore } from '../../state/filter-store';
 import { useUiStore } from '../../state/ui-store';
-import { DEFAULT_STADIA_STYLE_URL, INITIAL_CENTER, INITIAL_ZOOM } from './constants';
+import { asset } from '../../utils/asset';
+import {
+  ATLANTA_BOUNDARY_LAYER_ID,
+  ATLANTA_BOUNDARY_LINE_WIDTH,
+  ATLANTA_BOUNDARY_SOURCE_ID,
+  DEFAULT_STADIA_STYLE_URL,
+  INITIAL_CENTER,
+  INITIAL_ZOOM,
+} from './constants';
 import { MapControls } from './controls';
 import { createPointLayer } from './point-layer';
 import { MapTooltip } from './tooltip';
 import { useMapInteractions } from './use-interactions';
+
+type BoundaryGeoJson = {
+  type: FeatureCollection<Geometry, GeoJsonProperties>['type'];
+  features: FeatureCollection<Geometry, GeoJsonProperties>['features'];
+};
+
+const getVisibilityValue = (isVisible: boolean): 'visible' | 'none' =>
+  isVisible ? 'visible' : 'none';
+
+function setAtlantaBoundaryVisibility(map: maplibregl.Map, isVisible: boolean): void {
+  if (!map.getLayer(ATLANTA_BOUNDARY_LAYER_ID)) {
+    return;
+  }
+
+  map.setLayoutProperty(ATLANTA_BOUNDARY_LAYER_ID, 'visibility', getVisibilityValue(isVisible));
+}
+
+function getAtlantaBoundaryLineColor(): string {
+  return getComputedStyle(document.documentElement).getPropertyValue('--color-primary').trim();
+}
+
+async function addAtlantaBoundaryLayer(map: maplibregl.Map, isVisible: boolean): Promise<void> {
+  const lineColor = getAtlantaBoundaryLineColor();
+
+  if (!map.getSource(ATLANTA_BOUNDARY_SOURCE_ID)) {
+    const response = await fetch(asset('atlanta.geojson'));
+    if (!response.ok) {
+      throw new Error(`Unable to load atlanta.geojson: ${response.status} ${response.statusText}`);
+    }
+
+    const data = (await response.json()) as BoundaryGeoJson;
+    if (!map.getStyle()) {
+      return;
+    }
+
+    map.addSource(ATLANTA_BOUNDARY_SOURCE_ID, {
+      type: 'geojson',
+      data,
+    });
+  }
+
+  if (!map.getLayer(ATLANTA_BOUNDARY_LAYER_ID)) {
+    map.addLayer({
+      id: ATLANTA_BOUNDARY_LAYER_ID,
+      type: 'line',
+      source: ATLANTA_BOUNDARY_SOURCE_ID,
+      layout: {
+        visibility: getVisibilityValue(isVisible),
+        'line-cap': 'round',
+        'line-join': 'round',
+      },
+      paint: {
+        'line-color': lineColor,
+        'line-width': ATLANTA_BOUNDARY_LINE_WIDTH,
+        'line-opacity': 0.9,
+      },
+    });
+  }
+
+  setAtlantaBoundaryVisibility(map, isVisible);
+}
 
 export function MapView() {
   const mapContainerRef = useRef<HTMLDivElement | null>(null);
@@ -29,6 +99,7 @@ export function MapView() {
   const loadPoints = useDataStore((state) => state.loadPoints);
   const filteredPoints = useFilterStore((state) => state.visiblePoints);
   const scalePointsByFee = useUiStore((state) => state.scalePointsByFee);
+  const showAtlantaBoundary = useUiStore((state) => state.showAtlantaBoundary);
   const selectedIds = useMapSelectionStore((state) => state.selectedIds);
   const hoveredIds = useMapSelectionStore((state) => state.hoveredIds);
   const replaceSelection = useMapSelectionStore((state) => state.replaceSelection);
@@ -96,6 +167,11 @@ export function MapView() {
 
     map.on('load', () => {
       setRenderMap(map);
+      void addAtlantaBoundaryLayer(map, useUiStore.getState().showAtlantaBoundary).catch(
+        (error) => {
+          console.error(error);
+        },
+      );
       updateLayers();
     });
     const cleanupMapInteractions = attachMapInteractions({
@@ -155,6 +231,15 @@ export function MapView() {
       replaceSelection(nextVisibleSelectedIds);
     }
   }, [selectedIds, visiblePointIds, replaceSelection]);
+
+  useEffect(() => {
+    const map = mapRef.current;
+    if (!map) {
+      return;
+    }
+
+    setAtlantaBoundaryVisibility(map, showAtlantaBoundary);
+  }, [showAtlantaBoundary]);
 
   useEffect(() => {
     if (!overlayRef.current) {
