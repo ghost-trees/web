@@ -20,8 +20,10 @@ export function ChartsPane() {
         }
         onClose={showMapPane}
       />
-      <ChartSelector value={selectedChart} onChange={setSelectedChart} />
-      <ChartViewport chartId={selectedChart} />
+      <div className="flex-1 min-h-0 overflow-y-auto pb-2 pr-1">
+        <ChartSelector value={selectedChart} onChange={setSelectedChart} />
+        <ChartViewport chartId={selectedChart} />
+      </div>
     </section>
   );
 }
