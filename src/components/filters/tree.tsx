@@ -1,4 +1,5 @@
 import { useMemo } from 'react';
+import { FilterMultiselect } from '../common/filter-multiselect';
 import { UNKNOWN_TREE_TYPE } from '../../state/data-store';
 import { useFilterStore } from '../../state/filter-store';
 import { formatTreeTypeLabel } from '../../utils/tree-type';
@@ -36,79 +37,17 @@ export function Tree() {
       }),
     [availableTreeTypes],
   );
-  const totalOptions = sortedTreeTypes.length;
-  const enabledOptions = enabledTreeTypes.length;
-  const summaryLabel =
-    totalOptions === 0
-      ? 'No tree types available'
-      : `${enabledOptions} of ${totalOptions} selected`;
 
   return (
-    <div className="mt-3 rounded-[var(--radius-round-four)] border border-[var(--color-outline-variant)] bg-[var(--color-surface-container-high)] p-4">
-      <p className="text-xs uppercase tracking-[var(--tracking-label-meta)] text-[var(--color-on-surface-variant)]">
-        Tree Type
-      </p>
-      <details className="mt-3 group">
-        <summary className="cursor-pointer list-none rounded-md border border-[var(--color-outline-variant)] bg-[var(--color-surface)] px-3 py-2 text-sm text-[var(--color-on-surface)]">
-          <span className="flex items-center justify-between gap-3">
-            <span>{summaryLabel}</span>
-            <span className="text-xs text-[var(--color-on-surface-variant)] group-open:hidden">
-              Open
-            </span>
-            <span className="hidden text-xs text-[var(--color-on-surface-variant)] group-open:inline">
-              Close
-            </span>
-          </span>
-        </summary>
-        <div className="mt-2 rounded-md border border-[var(--color-outline-variant)] bg-[var(--color-surface)] p-3">
-          {totalOptions === 0 ? (
-            <p className="text-xs text-[var(--color-on-surface-variant)]">
-              Tree types will appear here once records are loaded.
-            </p>
-          ) : (
-            <>
-              <div className="mb-3 flex items-center gap-2">
-                <button
-                  type="button"
-                  onClick={() => {
-                    setAllTreeTypesEnabled(true);
-                  }}
-                  className="rounded border border-[var(--color-outline-variant)] px-2 py-1 text-xs text-[var(--color-on-surface)] hover:bg-[var(--color-surface-container-high)]"
-                >
-                  Select all
-                </button>
-                <button
-                  type="button"
-                  onClick={() => {
-                    setAllTreeTypesEnabled(false);
-                  }}
-                  className="rounded border border-[var(--color-outline-variant)] px-2 py-1 text-xs text-[var(--color-on-surface)] hover:bg-[var(--color-surface-container-high)]"
-                >
-                  Clear all
-                </button>
-              </div>
-              <div className="max-h-56 space-y-2 overflow-y-auto pr-1">
-                {sortedTreeTypes.map((treeType) => (
-                  <label
-                    key={treeType}
-                    className="flex cursor-pointer items-center gap-2 text-sm text-[var(--color-on-surface)]"
-                  >
-                    <input
-                      type="checkbox"
-                      style={{ accentColor: 'var(--color-primary)' }}
-                      checked={enabledTreeTypeSet.has(treeType)}
-                      onChange={(event) => {
-                        setTreeTypeEnabled(treeType, event.target.checked);
-                      }}
-                    />
-                    {formatTreeTypeLabel(treeType)} ({treeTypeCounts.get(treeType) ?? 0})
-                  </label>
-                ))}
-              </div>
-            </>
-          )}
-        </div>
-      </details>
-    </div>
+    <FilterMultiselect
+      label="Tree Type"
+      options={sortedTreeTypes}
+      enabledOptions={enabledTreeTypeSet}
+      optionCounts={treeTypeCounts}
+      formatOptionLabel={formatTreeTypeLabel}
+      emptyMessage="Tree types will appear here once records are loaded."
+      onOptionEnabledChange={setTreeTypeEnabled}
+      onSetAllEnabled={setAllTreeTypesEnabled}
+    />
   );
 }

@@ -6,6 +6,7 @@ import {
 } from '../../state/filter-store';
 import { PaneHeader } from '../common/pane-header';
 import { Tree } from './tree';
+import { Zip } from './zip';
 import { Year } from './year';
 
 export function FiltersPane() {
@@ -26,6 +27,7 @@ export function FiltersPane() {
       />
       <Year />
       <Tree />
+      <Zip />
     </section>
   );
 }

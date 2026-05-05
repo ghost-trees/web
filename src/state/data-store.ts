@@ -1,8 +1,11 @@
 import { create } from 'zustand';
 import { asset } from '../utils/asset';
+import { extractZipCode } from '../utils/string';
 
 // Internal sentinel for missing/empty tree type values from source data.
 export const UNKNOWN_TREE_TYPE = '__unknown__';
+// Internal sentinel for missing/empty ZIP values from source data.
+export const UNKNOWN_ZIP_CODE = '__unknown__';
 
 type PointFeatureProperties = {
   record_number?: string;
@@ -33,6 +36,7 @@ export type MapPoint = {
   date: string;
   recordType: string;
   address: string;
+  zipCode: string;
   treeTypes: string[];
   feeTotal: number;
 };
@@ -71,6 +75,8 @@ function toMapPoints(data: DataGeoJson): MapPoint[] {
       const id = feature.properties?.record_number?.trim();
       const paid = toSafeNumber(feature.properties?.paid);
       const outstanding = toSafeNumber(feature.properties?.outstanding);
+      const address = feature.properties?.address?.trim() || 'Unknown';
+      const zipCode = extractZipCode(address) ?? UNKNOWN_ZIP_CODE;
       const normalizedTreeTypes = Array.isArray(feature.properties?.tree_types)
         ? feature.properties.tree_types
             .filter((treeType): treeType is string => typeof treeType === 'string')
@@ -85,7 +91,8 @@ function toMapPoints(data: DataGeoJson): MapPoint[] {
         coordinates: feature.geometry.coordinates,
         date: feature.properties?.date?.trim() || 'Unknown',
         recordType: feature.properties?.record_type?.trim() || 'Unknown',
-        address: feature.properties?.address?.trim() || 'Unknown',
+        address,
+        zipCode,
         treeTypes,
         feeTotal: paid + outstanding,
       };

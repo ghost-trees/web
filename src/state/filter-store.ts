@@ -14,11 +14,15 @@ export type FilterStoreState = {
   maxYear: number;
   availableTreeTypes: string[];
   enabledTreeTypes: string[];
+  availableZipCodes: string[];
+  enabledZipCodes: string[];
   setSourcePoints: (points: MapPoint[]) => void;
   setMinYear: (year: number) => void;
   setMaxYear: (year: number) => void;
   setTreeTypeEnabled: (treeType: string, enabled: boolean) => void;
   setAllTreeTypesEnabled: (enabled: boolean) => void;
+  setZipCodeEnabled: (zipCode: string, enabled: boolean) => void;
+  setAllZipCodesEnabled: (enabled: boolean) => void;
 };
 
 function parsePointYear(date: string): number | null {
@@ -104,11 +108,22 @@ function deriveAvailableTreeTypes(points: MapPoint[]): string[] {
   return [...treeTypeSet].sort((a, b) => a.localeCompare(b));
 }
 
+function deriveAvailableZipCodes(points: MapPoint[]): string[] {
+  const zipCodeSet = new Set<string>();
+
+  for (const point of points) {
+    zipCodeSet.add(point.zipCode);
+  }
+
+  return [...zipCodeSet].sort((a, b) => a.localeCompare(b));
+}
+
 function buildVisiblePoints(
   points: MapPoint[],
   minYear: number,
   maxYear: number,
   enabledTreeTypes: Set<string>,
+  enabledZipCodes: Set<string>,
 ): MapPoint[] {
   return points.filter((point) => {
     const year = parsePointYear(point.date);
@@ -116,7 +131,12 @@ function buildVisiblePoints(
       return false;
     }
 
-    return point.treeTypes.some((treeType) => enabledTreeTypes.has(treeType));
+    const matchesTreeType = point.treeTypes.some((treeType) => enabledTreeTypes.has(treeType));
+    if (!matchesTreeType) {
+      return false;
+    }
+
+    return enabledZipCodes.has(point.zipCode);
   });
 }
 
@@ -130,18 +150,32 @@ export const useFilterStore = create<FilterStoreState>((set, get) => ({
   maxYear: FALLBACK_YEAR,
   availableTreeTypes: [],
   enabledTreeTypes: [],
+  availableZipCodes: [],
+  enabledZipCodes: [],
   setSourcePoints: (points) => {
     const { hasAvailableYears, minAvailableYear, maxAvailableYear } = deriveAvailableYears(points);
     const availableTreeTypes = deriveAvailableTreeTypes(points);
+    const availableZipCodes = deriveAvailableZipCodes(points);
     const state = get();
     const previousAvailableTreeTypes = new Set(state.availableTreeTypes);
     const previousEnabledTreeTypes = new Set(state.enabledTreeTypes);
-    const isFirstSourceLoad = state.allPoints.length === 0 && state.availableTreeTypes.length === 0;
+    const previousAvailableZipCodes = new Set(state.availableZipCodes);
+    const previousEnabledZipCodes = new Set(state.enabledZipCodes);
+    const isFirstSourceLoad =
+      state.allPoints.length === 0 &&
+      state.availableTreeTypes.length === 0 &&
+      state.availableZipCodes.length === 0;
     const nextEnabledTreeTypes = isFirstSourceLoad
       ? availableTreeTypes
       : availableTreeTypes.filter(
           (treeType) =>
             previousEnabledTreeTypes.has(treeType) || !previousAvailableTreeTypes.has(treeType),
+        );
+    const nextEnabledZipCodes = isFirstSourceLoad
+      ? availableZipCodes
+      : availableZipCodes.filter(
+          (zipCode) =>
+            previousEnabledZipCodes.has(zipCode) || !previousAvailableZipCodes.has(zipCode),
         );
 
     const nextRange = hasAvailableYears
@@ -160,6 +194,7 @@ export const useFilterStore = create<FilterStoreState>((set, get) => ({
         nextRange.minYear,
         nextRange.maxYear,
         new Set(nextEnabledTreeTypes),
+        new Set(nextEnabledZipCodes),
       ),
       hasAvailableYears,
       minAvailableYear,
@@ -168,6 +203,8 @@ export const useFilterStore = create<FilterStoreState>((set, get) => ({
       maxYear: nextRange.maxYear,
       availableTreeTypes,
       enabledTreeTypes: nextEnabledTreeTypes,
+      availableZipCodes,
+      enabledZipCodes: nextEnabledZipCodes,
     });
   },
   setMinYear: (year) => {
@@ -191,6 +228,7 @@ export const useFilterStore = create<FilterStoreState>((set, get) => ({
         nextRange.minYear,
         nextRange.maxYear,
         new Set(state.enabledTreeTypes),
+        new Set(state.enabledZipCodes),
       ),
     });
   },
@@ -215,6 +253,7 @@ export const useFilterStore = create<FilterStoreState>((set, get) => ({
         nextRange.minYear,
         nextRange.maxYear,
         new Set(state.enabledTreeTypes),
+        new Set(state.enabledZipCodes),
       ),
     });
   },
@@ -237,6 +276,7 @@ export const useFilterStore = create<FilterStoreState>((set, get) => ({
         state.minYear,
         state.maxYear,
         new Set(nextEnabledTreeTypes),
+        new Set(state.enabledZipCodes),
       ),
     });
   },
@@ -250,6 +290,44 @@ export const useFilterStore = create<FilterStoreState>((set, get) => ({
         state.minYear,
         state.maxYear,
         new Set(nextEnabledTreeTypes),
+        new Set(state.enabledZipCodes),
+      ),
+    });
+  },
+  setZipCodeEnabled: (zipCode, enabled) => {
+    const state = get();
+    const enabledZipCodeSet = new Set(state.enabledZipCodes);
+    if (enabled) {
+      enabledZipCodeSet.add(zipCode);
+    } else {
+      enabledZipCodeSet.delete(zipCode);
+    }
+
+    const nextEnabledZipCodes = state.availableZipCodes.filter((value) =>
+      enabledZipCodeSet.has(value),
+    );
+    set({
+      enabledZipCodes: nextEnabledZipCodes,
+      visiblePoints: buildVisiblePoints(
+        state.allPoints,
+        state.minYear,
+        state.maxYear,
+        new Set(state.enabledTreeTypes),
+        new Set(nextEnabledZipCodes),
+      ),
+    });
+  },
+  setAllZipCodesEnabled: (enabled) => {
+    const state = get();
+    const nextEnabledZipCodes = enabled ? state.availableZipCodes : [];
+    set({
+      enabledZipCodes: nextEnabledZipCodes,
+      visiblePoints: buildVisiblePoints(
+        state.allPoints,
+        state.minYear,
+        state.maxYear,
+        new Set(state.enabledTreeTypes),
+        new Set(nextEnabledZipCodes),
       ),
     });
   },
