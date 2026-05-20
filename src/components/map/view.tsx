@@ -14,6 +14,7 @@ import { useDataStore, type MapPoint } from '../../state/data-store';
 import { useFilterStore } from '../../state/filter-store';
 import { useUiStore } from '../../state/ui-store';
 import { asset } from '../../utils/asset';
+import { parseYearMonth, toYearMonthKey } from '../../utils/date';
 import {
   ATLANTA_BOUNDARY_LAYER_ID,
   ATLANTA_BOUNDARY_LINE_WIDTH,
@@ -98,6 +99,10 @@ export function MapView() {
   const pointsById = useDataStore((state) => state.pointsById);
   const loadPoints = useDataStore((state) => state.loadPoints);
   const filteredPoints = useFilterStore((state) => state.visiblePoints);
+  const playbackPoints = useFilterStore((state) => state.playbackPoints);
+  const playbackMonths = useFilterStore((state) => state.playbackMonths);
+  const appMode = useUiStore((state) => state.appMode);
+  const playbackMonthIndex = useUiStore((state) => state.playbackMonthIndex);
   const scalePointsByFee = useUiStore((state) => state.scalePointsByFee);
   const showAtlantaBoundary = useUiStore((state) => state.showAtlantaBoundary);
   const selectedIds = useMapSelectionStore((state) => state.selectedIds);
@@ -106,6 +111,29 @@ export function MapView() {
   const addSelection = useMapSelectionStore((state) => state.addSelection);
   const toggleSelection = useMapSelectionStore((state) => state.toggleSelection);
   const setHovered = useMapSelectionStore((state) => state.setHovered);
+  const maxPlaybackMonthIndex = Math.max(0, playbackMonths.length - 1);
+  const clampedPlaybackProgress = Math.min(Math.max(playbackMonthIndex, 0), maxPlaybackMonthIndex);
+  const playbackMonthBaseIndex = Math.floor(clampedPlaybackProgress);
+  const playbackMonthNextIndex = Math.min(playbackMonthBaseIndex + 1, maxPlaybackMonthIndex);
+  const playbackInterpolation = clampedPlaybackProgress - playbackMonthBaseIndex;
+  const playbackMonth = playbackMonths[playbackMonthBaseIndex] ?? null;
+  const playbackNextMonth = playbackMonths[playbackMonthNextIndex] ?? null;
+  const playbackMonthKey =
+    playbackMonth && playbackNextMonth
+      ? playbackMonth.key + (playbackNextMonth.key - playbackMonth.key) * playbackInterpolation
+      : playbackMonth?.key ?? null;
+  const pointsForLayer = useMemo(() => {
+    if (appMode !== 'playback' || playbackMonthKey === null) {
+      return filteredPoints;
+    }
+    return playbackPoints.filter((point) => {
+      const yearMonth = parseYearMonth(point.date);
+      if (!yearMonth) {
+        return false;
+      }
+      return toYearMonthKey(yearMonth) <= playbackMonthKey + 1;
+    });
+  }, [appMode, filteredPoints, playbackMonthKey, playbackPoints]);
   const attachMapInteractions = useMapInteractions({
     replaceSelection,
     addSelection,
@@ -113,8 +141,8 @@ export function MapView() {
     setHovered,
   });
   const visiblePointIds = useMemo(
-    () => new Set(filteredPoints.map((point) => point.id)),
-    [filteredPoints],
+    () => new Set(pointsForLayer.map((point) => point.id)),
+    [pointsForLayer],
   );
   const visibleSelectedIds = useMemo(() => {
     return new Set([...selectedIds].filter((id) => visiblePointIds.has(id)));
@@ -156,6 +184,29 @@ export function MapView() {
             useMapSelectionStore.getState().selectedIds,
             useMapSelectionStore.getState().hoveredIds,
             useUiStore.getState().scalePointsByFee,
+            {
+              enabled: useUiStore.getState().appMode === 'playback',
+              currentMonthKey: (() => {
+                const statePlaybackMonths = useFilterStore.getState().playbackMonths;
+                const stateMaxIndex = Math.max(0, statePlaybackMonths.length - 1);
+                const stateProgress = Math.min(
+                  Math.max(useUiStore.getState().playbackMonthIndex, 0),
+                  stateMaxIndex,
+                );
+                const stateBaseIndex = Math.floor(stateProgress);
+                const stateNextIndex = Math.min(stateBaseIndex + 1, stateMaxIndex);
+                const stateBaseMonth = statePlaybackMonths[stateBaseIndex];
+                const stateNextMonth = statePlaybackMonths[stateNextIndex];
+                if (!stateBaseMonth || !stateNextMonth) {
+                  return stateBaseMonth?.key ?? null;
+                }
+                const stateInterpolation = stateProgress - stateBaseIndex;
+                return (
+                  stateBaseMonth.key +
+                  (stateNextMonth.key - stateBaseMonth.key) * stateInterpolation
+                );
+              })(),
+            },
           ),
         ],
       });
@@ -195,7 +246,7 @@ export function MapView() {
   }, [loadPoints]);
 
   useEffect(() => {
-    pointsRef.current = filteredPoints;
+    pointsRef.current = pointsForLayer;
     if (!overlayRef.current) {
       return;
     }
@@ -207,10 +258,14 @@ export function MapView() {
           useMapSelectionStore.getState().selectedIds,
           useMapSelectionStore.getState().hoveredIds,
           scalePointsByFee,
+          {
+            enabled: appMode === 'playback',
+            currentMonthKey: playbackMonthKey,
+          },
         ),
       ],
     });
-  }, [filteredPoints, scalePointsByFee]);
+  }, [appMode, playbackMonthKey, pointsForLayer, scalePointsByFee]);
 
   useEffect(() => {
     if (selectedIds.size === 0) {
@@ -253,10 +308,14 @@ export function MapView() {
           visibleSelectedIds,
           visibleHoveredIds,
           scalePointsByFee,
+          {
+            enabled: appMode === 'playback',
+            currentMonthKey: playbackMonthKey,
+          },
         ),
       ],
     });
-  }, [visibleHoveredIds, visibleSelectedIds, scalePointsByFee]);
+  }, [appMode, playbackMonthKey, visibleHoveredIds, visibleSelectedIds, scalePointsByFee]);
 
   const selectedPointId =
     visibleSelectedIds.size === 1 ? visibleSelectedIds.values().next().value : null;
@@ -287,12 +346,14 @@ export function MapView() {
     >
       <div className="relative h-full w-full">
         <div ref={mapContainerRef} className="h-full w-full" />
-        <MapControls
-          onZoomIn={handleZoomIn}
-          onZoomOut={handleZoomOut}
-          onResetView={handleResetView}
-        />
-        {selectedPoint && projectedTooltip ? (
+        {appMode !== 'playback' ? (
+          <MapControls
+            onZoomIn={handleZoomIn}
+            onZoomOut={handleZoomOut}
+            onResetView={handleResetView}
+          />
+        ) : null}
+        {appMode !== 'playback' && selectedPoint && projectedTooltip ? (
           <MapTooltip
             pointId={selectedPoint.id}
             date={selectedPoint.date}

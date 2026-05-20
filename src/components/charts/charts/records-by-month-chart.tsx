@@ -5,44 +5,13 @@ import { useFilterStore } from '../../../state/filter-store';
 import type { MapPoint } from '../../../state/data-store';
 import { useMapSelectionStore } from '../../../state/selection-store';
 import { rgbaFromTuple } from '../../../utils/color';
+import { MONTH_LABELS, parseYearMonth } from '../../../utils/date';
 import { POINT_FILL_COLOR_SELECTED } from '../../map/constants';
 import { ECHARTS_THEME_NAME } from '../echarts-theme';
 
-const MONTH_LABELS = [
-  'Jan',
-  'Feb',
-  'Mar',
-  'Apr',
-  'May',
-  'Jun',
-  'Jul',
-  'Aug',
-  'Sep',
-  'Oct',
-  'Nov',
-  'Dec',
-];
-
 function parseMonthIndex(dateValue: string): number | null {
-  const parsedDate = new Date(dateValue);
-  if (!Number.isNaN(parsedDate.getTime())) {
-    return parsedDate.getMonth();
-  }
-
-  const monthMatch = dateValue.match(
-    /\b(0?[1-9]|1[0-2])[/-](\d{2,4})\b|\b(\d{2,4})[/-](0?[1-9]|1[0-2])\b/,
-  );
-  if (!monthMatch) {
-    return null;
-  }
-
-  const month = monthMatch[1] ?? monthMatch[4];
-  if (!month) {
-    return null;
-  }
-
-  const monthIndex = Number(month) - 1;
-  return monthIndex >= 0 && monthIndex < 12 ? monthIndex : null;
+  const yearMonth = parseYearMonth(dateValue);
+  return yearMonth?.monthIndex ?? null;
 }
 
 function buildMonthlyBuckets(points: MapPoint[]): {
@@ -162,7 +131,7 @@ export function RecordsByMonthChart() {
       },
       xAxis: {
         type: 'category',
-        data: MONTH_LABELS,
+        data: [...MONTH_LABELS],
       },
       yAxis: {
         type: 'value',

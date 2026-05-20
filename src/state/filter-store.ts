@@ -1,12 +1,27 @@
 import { create } from 'zustand';
 import { useDataStore } from './data-store';
 import type { MapPoint } from './data-store';
+import {
+  formatYearMonthLabel,
+  parsePointYear as parsePointYearFromDate,
+  parseYearMonth,
+  toYearMonthKey,
+} from '../utils/date';
 
 const FALLBACK_YEAR = new Date().getFullYear();
 
 export type FilterStoreState = {
   allPoints: MapPoint[];
   visiblePoints: MapPoint[];
+  playbackPoints: MapPoint[];
+  playbackMonths: {
+    key: number;
+    year: number;
+    monthIndex: number;
+    label: string;
+    count: number;
+    cumulativeCount: number;
+  }[];
   hasAvailableYears: boolean;
   minAvailableYear: number;
   maxAvailableYear: number;
@@ -25,21 +40,6 @@ export type FilterStoreState = {
   setAllZipCodesEnabled: (enabled: boolean) => void;
 };
 
-function parsePointYear(date: string): number | null {
-  const dateYearMatch = date.match(/\b(\d{4})\b/);
-  if (dateYearMatch) {
-    const year = Number(dateYearMatch[1]);
-    return Number.isFinite(year) ? year : null;
-  }
-
-  const parsedDate = new Date(date);
-  if (Number.isNaN(parsedDate.getTime())) {
-    return null;
-  }
-
-  return parsedDate.getFullYear();
-}
-
 function clampToBounds(year: number, minYear: number, maxYear: number): number {
   return Math.max(minYear, Math.min(maxYear, year));
 }
@@ -50,7 +50,7 @@ function deriveAvailableYears(points: MapPoint[]): {
   maxAvailableYear: number;
 } {
   const years = points
-    .map((point) => parsePointYear(point.date))
+    .map((point) => parsePointYearFromDate(point.date))
     .filter((year): year is number => year !== null);
 
   if (years.length === 0) {
@@ -118,6 +118,19 @@ function deriveAvailableZipCodes(points: MapPoint[]): string[] {
   return [...zipCodeSet].sort((a, b) => a.localeCompare(b));
 }
 
+function pointMatchesTreeTypeAndZip(
+  point: MapPoint,
+  enabledTreeTypes: Set<string>,
+  enabledZipCodes: Set<string>,
+): boolean {
+  const matchesTreeType = point.treeTypes.some((treeType) => enabledTreeTypes.has(treeType));
+  if (!matchesTreeType) {
+    return false;
+  }
+
+  return enabledZipCodes.has(point.zipCode);
+}
+
 function buildVisiblePoints(
   points: MapPoint[],
   minYear: number,
@@ -126,23 +139,82 @@ function buildVisiblePoints(
   enabledZipCodes: Set<string>,
 ): MapPoint[] {
   return points.filter((point) => {
-    const year = parsePointYear(point.date);
+    const year = parsePointYearFromDate(point.date);
     if (year === null || year < minYear || year > maxYear) {
       return false;
     }
 
-    const matchesTreeType = point.treeTypes.some((treeType) => enabledTreeTypes.has(treeType));
-    if (!matchesTreeType) {
+    return pointMatchesTreeTypeAndZip(point, enabledTreeTypes, enabledZipCodes);
+  });
+}
+
+function buildPlaybackPoints(
+  points: MapPoint[],
+  enabledTreeTypes: Set<string>,
+  enabledZipCodes: Set<string>,
+): MapPoint[] {
+  return points.filter((point) => {
+    if (!pointMatchesTreeTypeAndZip(point, enabledTreeTypes, enabledZipCodes)) {
       return false;
     }
 
-    return enabledZipCodes.has(point.zipCode);
+    return parseYearMonth(point.date) !== null;
   });
+}
+
+function buildPlaybackMonths(points: MapPoint[]): FilterStoreState['playbackMonths'] {
+  const countsByMonth = new Map<number, number>();
+
+  for (const point of points) {
+    const yearMonth = parseYearMonth(point.date);
+    if (!yearMonth) {
+      continue;
+    }
+
+    const monthKey = toYearMonthKey(yearMonth);
+    countsByMonth.set(monthKey, (countsByMonth.get(monthKey) ?? 0) + 1);
+  }
+
+  const orderedMonthKeys = [...countsByMonth.keys()].sort((left, right) => left - right);
+  let runningTotal = 0;
+  return orderedMonthKeys.map((monthKey) => {
+    const count = countsByMonth.get(monthKey) ?? 0;
+    const year = Math.floor(monthKey / 12);
+    const monthIndex = monthKey - year * 12;
+    runningTotal += count;
+    return {
+      key: monthKey,
+      year,
+      monthIndex,
+      label: formatYearMonthLabel({ year, monthIndex }),
+      count,
+      cumulativeCount: runningTotal,
+    };
+  });
+}
+
+function deriveFilteredState(
+  points: MapPoint[],
+  minYear: number,
+  maxYear: number,
+  enabledTreeTypes: string[],
+  enabledZipCodes: string[],
+): Pick<FilterStoreState, 'visiblePoints' | 'playbackPoints' | 'playbackMonths'> {
+  const enabledTreeTypeSet = new Set(enabledTreeTypes);
+  const enabledZipCodeSet = new Set(enabledZipCodes);
+  const playbackPoints = buildPlaybackPoints(points, enabledTreeTypeSet, enabledZipCodeSet);
+  return {
+    visiblePoints: buildVisiblePoints(points, minYear, maxYear, enabledTreeTypeSet, enabledZipCodeSet),
+    playbackPoints,
+    playbackMonths: buildPlaybackMonths(playbackPoints),
+  };
 }
 
 export const useFilterStore = create<FilterStoreState>((set, get) => ({
   allPoints: [],
   visiblePoints: [],
+  playbackPoints: [],
+  playbackMonths: [],
   hasAvailableYears: false,
   minAvailableYear: FALLBACK_YEAR,
   maxAvailableYear: FALLBACK_YEAR,
@@ -187,15 +259,19 @@ export const useFilterStore = create<FilterStoreState>((set, get) => ({
         })
       : { minYear: minAvailableYear, maxYear: maxAvailableYear };
 
+    const derivedState = deriveFilteredState(
+      points,
+      nextRange.minYear,
+      nextRange.maxYear,
+      nextEnabledTreeTypes,
+      nextEnabledZipCodes,
+    );
+
     set({
       allPoints: points,
-      visiblePoints: buildVisiblePoints(
-        points,
-        nextRange.minYear,
-        nextRange.maxYear,
-        new Set(nextEnabledTreeTypes),
-        new Set(nextEnabledZipCodes),
-      ),
+      visiblePoints: derivedState.visiblePoints,
+      playbackPoints: derivedState.playbackPoints,
+      playbackMonths: derivedState.playbackMonths,
       hasAvailableYears,
       minAvailableYear,
       maxAvailableYear,
@@ -220,16 +296,19 @@ export const useFilterStore = create<FilterStoreState>((set, get) => ({
       maxAvailableYear: state.maxAvailableYear,
     });
 
+    const derivedState = deriveFilteredState(
+      state.allPoints,
+      nextRange.minYear,
+      nextRange.maxYear,
+      state.enabledTreeTypes,
+      state.enabledZipCodes,
+    );
     set({
       minYear: nextRange.minYear,
       maxYear: nextRange.maxYear,
-      visiblePoints: buildVisiblePoints(
-        state.allPoints,
-        nextRange.minYear,
-        nextRange.maxYear,
-        new Set(state.enabledTreeTypes),
-        new Set(state.enabledZipCodes),
-      ),
+      visiblePoints: derivedState.visiblePoints,
+      playbackPoints: derivedState.playbackPoints,
+      playbackMonths: derivedState.playbackMonths,
     });
   },
   setMaxYear: (year) => {
@@ -245,16 +324,19 @@ export const useFilterStore = create<FilterStoreState>((set, get) => ({
       maxAvailableYear: state.maxAvailableYear,
     });
 
+    const derivedState = deriveFilteredState(
+      state.allPoints,
+      nextRange.minYear,
+      nextRange.maxYear,
+      state.enabledTreeTypes,
+      state.enabledZipCodes,
+    );
     set({
       minYear: nextRange.minYear,
       maxYear: nextRange.maxYear,
-      visiblePoints: buildVisiblePoints(
-        state.allPoints,
-        nextRange.minYear,
-        nextRange.maxYear,
-        new Set(state.enabledTreeTypes),
-        new Set(state.enabledZipCodes),
-      ),
+      visiblePoints: derivedState.visiblePoints,
+      playbackPoints: derivedState.playbackPoints,
+      playbackMonths: derivedState.playbackMonths,
     });
   },
   setTreeTypeEnabled: (treeType, enabled) => {
@@ -269,29 +351,35 @@ export const useFilterStore = create<FilterStoreState>((set, get) => ({
     const nextEnabledTreeTypes = state.availableTreeTypes.filter((type) =>
       enabledTreeTypeSet.has(type),
     );
+    const derivedState = deriveFilteredState(
+      state.allPoints,
+      state.minYear,
+      state.maxYear,
+      nextEnabledTreeTypes,
+      state.enabledZipCodes,
+    );
     set({
       enabledTreeTypes: nextEnabledTreeTypes,
-      visiblePoints: buildVisiblePoints(
-        state.allPoints,
-        state.minYear,
-        state.maxYear,
-        new Set(nextEnabledTreeTypes),
-        new Set(state.enabledZipCodes),
-      ),
+      visiblePoints: derivedState.visiblePoints,
+      playbackPoints: derivedState.playbackPoints,
+      playbackMonths: derivedState.playbackMonths,
     });
   },
   setAllTreeTypesEnabled: (enabled) => {
     const state = get();
     const nextEnabledTreeTypes = enabled ? state.availableTreeTypes : [];
+    const derivedState = deriveFilteredState(
+      state.allPoints,
+      state.minYear,
+      state.maxYear,
+      nextEnabledTreeTypes,
+      state.enabledZipCodes,
+    );
     set({
       enabledTreeTypes: nextEnabledTreeTypes,
-      visiblePoints: buildVisiblePoints(
-        state.allPoints,
-        state.minYear,
-        state.maxYear,
-        new Set(nextEnabledTreeTypes),
-        new Set(state.enabledZipCodes),
-      ),
+      visiblePoints: derivedState.visiblePoints,
+      playbackPoints: derivedState.playbackPoints,
+      playbackMonths: derivedState.playbackMonths,
     });
   },
   setZipCodeEnabled: (zipCode, enabled) => {
@@ -306,29 +394,35 @@ export const useFilterStore = create<FilterStoreState>((set, get) => ({
     const nextEnabledZipCodes = state.availableZipCodes.filter((value) =>
       enabledZipCodeSet.has(value),
     );
+    const derivedState = deriveFilteredState(
+      state.allPoints,
+      state.minYear,
+      state.maxYear,
+      state.enabledTreeTypes,
+      nextEnabledZipCodes,
+    );
     set({
       enabledZipCodes: nextEnabledZipCodes,
-      visiblePoints: buildVisiblePoints(
-        state.allPoints,
-        state.minYear,
-        state.maxYear,
-        new Set(state.enabledTreeTypes),
-        new Set(nextEnabledZipCodes),
-      ),
+      visiblePoints: derivedState.visiblePoints,
+      playbackPoints: derivedState.playbackPoints,
+      playbackMonths: derivedState.playbackMonths,
     });
   },
   setAllZipCodesEnabled: (enabled) => {
     const state = get();
     const nextEnabledZipCodes = enabled ? state.availableZipCodes : [];
+    const derivedState = deriveFilteredState(
+      state.allPoints,
+      state.minYear,
+      state.maxYear,
+      state.enabledTreeTypes,
+      nextEnabledZipCodes,
+    );
     set({
       enabledZipCodes: nextEnabledZipCodes,
-      visiblePoints: buildVisiblePoints(
-        state.allPoints,
-        state.minYear,
-        state.maxYear,
-        new Set(state.enabledTreeTypes),
-        new Set(nextEnabledZipCodes),
-      ),
+      visiblePoints: derivedState.visiblePoints,
+      playbackPoints: derivedState.playbackPoints,
+      playbackMonths: derivedState.playbackMonths,
     });
   },
 }));

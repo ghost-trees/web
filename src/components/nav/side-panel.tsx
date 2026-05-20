@@ -7,6 +7,7 @@ import {
   useDataStore,
 } from '../../state/data-store';
 import { useUiStore } from '../../state/ui-store';
+import { useFilterStore } from '../../state/filter-store';
 import { asset } from '../../utils/asset';
 
 export function SidePanel() {
@@ -19,6 +20,18 @@ export function SidePanel() {
   const activePane = useUiStore((state) => state.activePane);
   const showMapPane = useUiStore((state) => state.showMapPane);
   const togglePane = useUiStore((state) => state.togglePane);
+  const enterPlayback = useUiStore((state) => state.enterPlayback);
+  const setPlaybackMonthIndex = useUiStore((state) => state.setPlaybackMonthIndex);
+  const setPlaybackPlaying = useUiStore((state) => state.setPlaybackPlaying);
+  const playbackMonthCount = useFilterStore((state) => state.playbackMonths.length);
+
+  const handleStartTimeline = () => {
+    if (playbackMonthCount > 0) {
+      setPlaybackMonthIndex(0);
+    }
+    setPlaybackPlaying(true);
+    enterPlayback();
+  };
 
   return (
     <div className="flex h-full flex-col gap-6">
@@ -57,6 +70,14 @@ export function SidePanel() {
               isActive={activePane === 'charts'}
               onClick={() => togglePane('charts')}
               aria-pressed={activePane === 'charts'}
+            />
+          </li>
+          <li>
+            <SidePanelButton
+              label="Timeline"
+              icon="movie"
+              onClick={handleStartTimeline}
+              disabled={playbackMonthCount === 0}
             />
           </li>
           <li>

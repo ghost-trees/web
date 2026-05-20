@@ -1,5 +1,6 @@
 import type { ReactNode } from 'react';
 import { useUiStore } from '../state/ui-store';
+import { PlaybackOverlay } from '../components/playback/playback-overlay';
 
 type ShellProps = {
   sidebar: ReactNode;
@@ -11,6 +12,8 @@ type ShellProps = {
 
 export function Shell({ sidebar, filtersPane, chartsPane, settingsPane, content }: ShellProps) {
   const activePane = useUiStore((state) => state.activePane);
+  const appMode = useUiStore((state) => state.appMode);
+  const isPlaybackMode = appMode === 'playback';
   const isAuxiliaryPaneOpen = activePane !== 'map';
   const auxiliaryPane =
     activePane === 'filters'
@@ -22,11 +25,11 @@ export function Shell({ sidebar, filtersPane, chartsPane, settingsPane, content 
           : null;
 
   return (
-    <div className="flex h-screen bg-[var(--color-surface)] text-[var(--color-on-surface-variant)]">
-      <aside className="w-72 shrink-0 bg-[var(--color-surface-container-high)] p-4">
-        {sidebar}
-      </aside>
-      {filtersPane || chartsPane || settingsPane ? (
+    <div className="relative flex h-screen bg-[var(--color-surface)] text-[var(--color-on-surface-variant)]">
+      {!isPlaybackMode ? (
+        <aside className="w-72 shrink-0 bg-[var(--color-surface-container-high)] p-4">{sidebar}</aside>
+      ) : null}
+      {!isPlaybackMode && (filtersPane || chartsPane || settingsPane) ? (
         <section
           aria-label="Inline detail panel"
           className={`min-h-0 shrink-0 overflow-hidden bg-[var(--color-surface-container-low)] ${
@@ -47,6 +50,7 @@ export function Shell({ sidebar, filtersPane, chartsPane, settingsPane, content 
       <main className="min-w-0 flex min-h-0 flex-1 flex-col bg-[var(--color-surface-container-lowest)] p-0">
         {content}
       </main>
+      <PlaybackOverlay />
     </div>
   );
 }
