@@ -17,19 +17,21 @@ type UseMapInteractionsArgs = {
   setHovered: (id: string | null) => void;
 };
 
-type AttachMapInteractionsArgs = {
+export type AttachMapInteractionsArgs = {
   map: maplibregl.Map;
   overlay: MapboxOverlay;
   mapContainerElement: HTMLDivElement;
   onMapViewChange: () => void;
 };
 
+export type AttachMapInteractions = (args: AttachMapInteractionsArgs) => () => void;
+
 export function useMapInteractions({
   replaceSelection,
   addSelection,
   toggleSelection,
   setHovered,
-}: UseMapInteractionsArgs) {
+}: UseMapInteractionsArgs): AttachMapInteractions {
   const brushStartRef = useRef<maplibregl.Point | null>(null);
   const brushAdditiveRef = useRef(false);
   const brushBoxRef = useRef<HTMLDivElement | null>(null);

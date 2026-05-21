@@ -6,94 +6,24 @@
  */
 
 import { MapboxOverlay } from '@deck.gl/mapbox';
-import { useEffect, useMemo, useRef, useState } from 'react';
-import type { FeatureCollection, GeoJsonProperties, Geometry } from 'geojson';
-import maplibregl, { ScaleControl } from 'maplibre-gl';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import maplibregl from 'maplibre-gl';
 import { useMapSelectionStore } from '../../state/selection-store';
-import { useDataStore, type MapPoint } from '../../state/data-store';
+import { useDataStore } from '../../state/data-store';
 import { useFilterStore } from '../../state/filter-store';
 import { useUiStore } from '../../state/ui-store';
-import { asset } from '../../utils/asset';
-import { parseYearMonth, toYearMonthKey } from '../../utils/date';
-import {
-  ATLANTA_BOUNDARY_LAYER_ID,
-  ATLANTA_BOUNDARY_LINE_WIDTH,
-  ATLANTA_BOUNDARY_SOURCE_ID,
-  DEFAULT_STADIA_STYLE_URL,
-  INITIAL_CENTER,
-  INITIAL_ZOOM,
-} from './constants';
+import { derivePlaybackMonthKey, filterIdsByVisibility, selectPointsForLayer } from './playback';
+import { INITIAL_CENTER, INITIAL_ZOOM } from './constants';
 import { MapControls } from './controls';
-import { createPointLayer } from './point-layer';
 import { MapTooltip } from './tooltip';
 import { useMapInteractions } from './use-interactions';
-
-type BoundaryGeoJson = {
-  type: FeatureCollection<Geometry, GeoJsonProperties>['type'];
-  features: FeatureCollection<Geometry, GeoJsonProperties>['features'];
-};
-
-const getVisibilityValue = (isVisible: boolean): 'visible' | 'none' =>
-  isVisible ? 'visible' : 'none';
-
-function setAtlantaBoundaryVisibility(map: maplibregl.Map, isVisible: boolean): void {
-  if (!map.getLayer(ATLANTA_BOUNDARY_LAYER_ID)) {
-    return;
-  }
-
-  map.setLayoutProperty(ATLANTA_BOUNDARY_LAYER_ID, 'visibility', getVisibilityValue(isVisible));
-}
-
-function getAtlantaBoundaryLineColor(): string {
-  return getComputedStyle(document.documentElement).getPropertyValue('--color-primary').trim();
-}
-
-async function addAtlantaBoundaryLayer(map: maplibregl.Map, isVisible: boolean): Promise<void> {
-  const lineColor = getAtlantaBoundaryLineColor();
-
-  if (!map.getSource(ATLANTA_BOUNDARY_SOURCE_ID)) {
-    const response = await fetch(asset('atlanta.geojson'));
-    if (!response.ok) {
-      throw new Error(`Unable to load atlanta.geojson: ${response.status} ${response.statusText}`);
-    }
-
-    const data = (await response.json()) as BoundaryGeoJson;
-    if (!map.getStyle()) {
-      return;
-    }
-
-    map.addSource(ATLANTA_BOUNDARY_SOURCE_ID, {
-      type: 'geojson',
-      data,
-    });
-  }
-
-  if (!map.getLayer(ATLANTA_BOUNDARY_LAYER_ID)) {
-    map.addLayer({
-      id: ATLANTA_BOUNDARY_LAYER_ID,
-      type: 'line',
-      source: ATLANTA_BOUNDARY_SOURCE_ID,
-      layout: {
-        visibility: getVisibilityValue(isVisible),
-        'line-cap': 'round',
-        'line-join': 'round',
-      },
-      paint: {
-        'line-color': lineColor,
-        'line-width': ATLANTA_BOUNDARY_LINE_WIDTH,
-        'line-opacity': 0.9,
-      },
-    });
-  }
-
-  setAtlantaBoundaryVisibility(map, isVisible);
-}
+import { useMapInstance } from './use-map-instance';
+import { usePointLayerSync } from './use-point-layer-sync';
 
 export function MapView() {
   const mapContainerRef = useRef<HTMLDivElement | null>(null);
   const mapRef = useRef<maplibregl.Map | null>(null);
   const overlayRef = useRef<MapboxOverlay | null>(null);
-  const pointsRef = useRef<MapPoint[]>([]);
   const [renderMap, setRenderMap] = useState<maplibregl.Map | null>(null);
   const [, setMapViewVersion] = useState(0);
   const pointsById = useDataStore((state) => state.pointsById);
@@ -111,27 +41,13 @@ export function MapView() {
   const addSelection = useMapSelectionStore((state) => state.addSelection);
   const toggleSelection = useMapSelectionStore((state) => state.toggleSelection);
   const setHovered = useMapSelectionStore((state) => state.setHovered);
-  const maxPlaybackMonthIndex = Math.max(0, playbackMonths.length - 1);
-  const clampedPlaybackProgress = Math.min(Math.max(playbackMonthIndex, 0), maxPlaybackMonthIndex);
-  const playbackMonthBaseIndex = Math.floor(clampedPlaybackProgress);
-  const playbackMonthNextIndex = Math.min(playbackMonthBaseIndex + 1, maxPlaybackMonthIndex);
-  const playbackInterpolation = clampedPlaybackProgress - playbackMonthBaseIndex;
-  const playbackMonth = playbackMonths[playbackMonthBaseIndex] ?? null;
-  const playbackNextMonth = playbackMonths[playbackMonthNextIndex] ?? null;
-  const playbackMonthKey =
-    playbackMonth && playbackNextMonth
-      ? playbackMonth.key + (playbackNextMonth.key - playbackMonth.key) * playbackInterpolation
-      : playbackMonth?.key ?? null;
+  const playbackMonthKey = derivePlaybackMonthKey(playbackMonths, playbackMonthIndex);
   const pointsForLayer = useMemo(() => {
-    if (appMode !== 'playback' || playbackMonthKey === null) {
-      return filteredPoints;
-    }
-    return playbackPoints.filter((point) => {
-      const yearMonth = parseYearMonth(point.date);
-      if (!yearMonth) {
-        return false;
-      }
-      return toYearMonthKey(yearMonth) <= playbackMonthKey + 1;
+    return selectPointsForLayer({
+      appMode,
+      filteredPoints,
+      playbackPoints,
+      playbackMonthKey,
     });
   }, [appMode, filteredPoints, playbackMonthKey, playbackPoints]);
   const attachMapInteractions = useMapInteractions({
@@ -144,128 +60,54 @@ export function MapView() {
     () => new Set(pointsForLayer.map((point) => point.id)),
     [pointsForLayer],
   );
-  const visibleSelectedIds = useMemo(() => {
-    return new Set([...selectedIds].filter((id) => visiblePointIds.has(id)));
-  }, [selectedIds, visiblePointIds]);
-  const visibleHoveredIds = useMemo(() => {
-    return new Set([...hoveredIds].filter((id) => visiblePointIds.has(id)));
-  }, [hoveredIds, visiblePointIds]);
-
-  useEffect(() => {
-    const mapContainerElement = mapContainerRef.current;
-    if (!mapContainerElement || mapRef.current) {
-      return;
-    }
-
-    const map = new maplibregl.Map({
-      container: mapContainerElement,
-      style: import.meta.env.VITE_STADIA_STYLE_URL ?? DEFAULT_STADIA_STYLE_URL,
-      center: INITIAL_CENTER,
-      zoom: INITIAL_ZOOM,
-    });
-
-    map.addControl(new ScaleControl({ unit: 'imperial' }), 'bottom-right');
-    map.dragRotate.disable();
-    map.touchZoomRotate.disableRotation();
-    mapRef.current = map;
-
-    const overlay = new MapboxOverlay({
-      interleaved: false,
-      layers: [],
-    });
-    map.addControl(overlay);
-    overlayRef.current = overlay;
-
-    const updateLayers = () => {
-      overlay.setProps({
-        layers: [
-          createPointLayer(
-            pointsRef.current,
-            useMapSelectionStore.getState().selectedIds,
-            useMapSelectionStore.getState().hoveredIds,
-            useUiStore.getState().scalePointsByFee,
-            {
-              enabled: useUiStore.getState().appMode === 'playback',
-              currentMonthKey: (() => {
-                const statePlaybackMonths = useFilterStore.getState().playbackMonths;
-                const stateMaxIndex = Math.max(0, statePlaybackMonths.length - 1);
-                const stateProgress = Math.min(
-                  Math.max(useUiStore.getState().playbackMonthIndex, 0),
-                  stateMaxIndex,
-                );
-                const stateBaseIndex = Math.floor(stateProgress);
-                const stateNextIndex = Math.min(stateBaseIndex + 1, stateMaxIndex);
-                const stateBaseMonth = statePlaybackMonths[stateBaseIndex];
-                const stateNextMonth = statePlaybackMonths[stateNextIndex];
-                if (!stateBaseMonth || !stateNextMonth) {
-                  return stateBaseMonth?.key ?? null;
-                }
-                const stateInterpolation = stateProgress - stateBaseIndex;
-                return (
-                  stateBaseMonth.key +
-                  (stateNextMonth.key - stateBaseMonth.key) * stateInterpolation
-                );
-              })(),
-            },
-          ),
-        ],
-      });
-    };
-
-    const handleMapViewChange = () => {
-      setMapViewVersion((version) => version + 1);
-    };
-
-    map.on('load', () => {
+  const visibleSelectedIds = useMemo(
+    () => filterIdsByVisibility(selectedIds, visiblePointIds),
+    [selectedIds, visiblePointIds],
+  );
+  const visibleHoveredIds = useMemo(
+    () => filterIdsByVisibility(hoveredIds, visiblePointIds),
+    [hoveredIds, visiblePointIds],
+  );
+  const { syncCurrentLayer } = usePointLayerSync({
+    overlayRef,
+    pointsForLayer,
+    selectedIds: visibleSelectedIds,
+    hoveredIds: visibleHoveredIds,
+    scalePointsByFee,
+    appMode,
+    playbackMonthKey,
+  });
+  const handleMapViewChange = useCallback(() => {
+    setMapViewVersion((version) => version + 1);
+  }, []);
+  const handleOverlayReady = useCallback(() => {
+    syncCurrentLayer(useMapSelectionStore.getState().selectedIds, useMapSelectionStore.getState().hoveredIds);
+  }, [syncCurrentLayer]);
+  const handleMapLoad = useCallback(
+    (map: maplibregl.Map) => {
       setRenderMap(map);
-      void addAtlantaBoundaryLayer(map, useUiStore.getState().showAtlantaBoundary).catch(
-        (error) => {
-          console.error(error);
-        },
+      syncCurrentLayer(
+        useMapSelectionStore.getState().selectedIds,
+        useMapSelectionStore.getState().hoveredIds,
       );
-      updateLayers();
-    });
-    const cleanupMapInteractions = attachMapInteractions({
-      map,
-      overlay,
-      mapContainerElement,
-      onMapViewChange: handleMapViewChange,
-    });
+    },
+    [syncCurrentLayer],
+  );
 
-    return () => {
-      cleanupMapInteractions();
-      overlay.finalize();
-      overlayRef.current = null;
-      map.remove();
-      mapRef.current = null;
-    };
-  }, [attachMapInteractions]);
+  useMapInstance({
+    mapContainerRef,
+    mapRef,
+    overlayRef,
+    attachMapInteractions,
+    onMapViewChange: handleMapViewChange,
+    showAtlantaBoundary,
+    onMapLoad: handleMapLoad,
+    onOverlayReady: handleOverlayReady,
+  });
 
   useEffect(() => {
     void loadPoints();
   }, [loadPoints]);
-
-  useEffect(() => {
-    pointsRef.current = pointsForLayer;
-    if (!overlayRef.current) {
-      return;
-    }
-
-    overlayRef.current.setProps({
-      layers: [
-        createPointLayer(
-          pointsRef.current,
-          useMapSelectionStore.getState().selectedIds,
-          useMapSelectionStore.getState().hoveredIds,
-          scalePointsByFee,
-          {
-            enabled: appMode === 'playback',
-            currentMonthKey: playbackMonthKey,
-          },
-        ),
-      ],
-    });
-  }, [appMode, playbackMonthKey, pointsForLayer, scalePointsByFee]);
 
   useEffect(() => {
     if (selectedIds.size === 0) {
@@ -286,36 +128,6 @@ export function MapView() {
       replaceSelection(nextVisibleSelectedIds);
     }
   }, [selectedIds, visiblePointIds, replaceSelection]);
-
-  useEffect(() => {
-    const map = mapRef.current;
-    if (!map) {
-      return;
-    }
-
-    setAtlantaBoundaryVisibility(map, showAtlantaBoundary);
-  }, [showAtlantaBoundary]);
-
-  useEffect(() => {
-    if (!overlayRef.current) {
-      return;
-    }
-
-    overlayRef.current.setProps({
-      layers: [
-        createPointLayer(
-          pointsRef.current,
-          visibleSelectedIds,
-          visibleHoveredIds,
-          scalePointsByFee,
-          {
-            enabled: appMode === 'playback',
-            currentMonthKey: playbackMonthKey,
-          },
-        ),
-      ],
-    });
-  }, [appMode, playbackMonthKey, visibleHoveredIds, visibleSelectedIds, scalePointsByFee]);
 
   const selectedPointId =
     visibleSelectedIds.size === 1 ? visibleSelectedIds.values().next().value : null;

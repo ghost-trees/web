@@ -210,6 +210,23 @@ function deriveFilteredState(
   };
 }
 
+type FilterDerivationInputState = Pick<
+  FilterStoreState,
+  'allPoints' | 'minYear' | 'maxYear' | 'enabledTreeTypes' | 'enabledZipCodes'
+>;
+
+function deriveFilteredSlicesFromState(
+  state: FilterDerivationInputState,
+): Pick<FilterStoreState, 'visiblePoints' | 'playbackPoints' | 'playbackMonths'> {
+  return deriveFilteredState(
+    state.allPoints,
+    state.minYear,
+    state.maxYear,
+    state.enabledTreeTypes,
+    state.enabledZipCodes,
+  );
+}
+
 export const useFilterStore = create<FilterStoreState>((set, get) => ({
   allPoints: [],
   visiblePoints: [],
@@ -259,13 +276,14 @@ export const useFilterStore = create<FilterStoreState>((set, get) => ({
         })
       : { minYear: minAvailableYear, maxYear: maxAvailableYear };
 
-    const derivedState = deriveFilteredState(
-      points,
-      nextRange.minYear,
-      nextRange.maxYear,
-      nextEnabledTreeTypes,
-      nextEnabledZipCodes,
-    );
+    const nextFilterState: FilterDerivationInputState = {
+      allPoints: points,
+      minYear: nextRange.minYear,
+      maxYear: nextRange.maxYear,
+      enabledTreeTypes: nextEnabledTreeTypes,
+      enabledZipCodes: nextEnabledZipCodes,
+    };
+    const derivedState = deriveFilteredSlicesFromState(nextFilterState);
 
     set({
       allPoints: points,
@@ -296,13 +314,13 @@ export const useFilterStore = create<FilterStoreState>((set, get) => ({
       maxAvailableYear: state.maxAvailableYear,
     });
 
-    const derivedState = deriveFilteredState(
-      state.allPoints,
-      nextRange.minYear,
-      nextRange.maxYear,
-      state.enabledTreeTypes,
-      state.enabledZipCodes,
-    );
+    const derivedState = deriveFilteredSlicesFromState({
+      allPoints: state.allPoints,
+      minYear: nextRange.minYear,
+      maxYear: nextRange.maxYear,
+      enabledTreeTypes: state.enabledTreeTypes,
+      enabledZipCodes: state.enabledZipCodes,
+    });
     set({
       minYear: nextRange.minYear,
       maxYear: nextRange.maxYear,
@@ -324,13 +342,13 @@ export const useFilterStore = create<FilterStoreState>((set, get) => ({
       maxAvailableYear: state.maxAvailableYear,
     });
 
-    const derivedState = deriveFilteredState(
-      state.allPoints,
-      nextRange.minYear,
-      nextRange.maxYear,
-      state.enabledTreeTypes,
-      state.enabledZipCodes,
-    );
+    const derivedState = deriveFilteredSlicesFromState({
+      allPoints: state.allPoints,
+      minYear: nextRange.minYear,
+      maxYear: nextRange.maxYear,
+      enabledTreeTypes: state.enabledTreeTypes,
+      enabledZipCodes: state.enabledZipCodes,
+    });
     set({
       minYear: nextRange.minYear,
       maxYear: nextRange.maxYear,
@@ -351,13 +369,13 @@ export const useFilterStore = create<FilterStoreState>((set, get) => ({
     const nextEnabledTreeTypes = state.availableTreeTypes.filter((type) =>
       enabledTreeTypeSet.has(type),
     );
-    const derivedState = deriveFilteredState(
-      state.allPoints,
-      state.minYear,
-      state.maxYear,
-      nextEnabledTreeTypes,
-      state.enabledZipCodes,
-    );
+    const derivedState = deriveFilteredSlicesFromState({
+      allPoints: state.allPoints,
+      minYear: state.minYear,
+      maxYear: state.maxYear,
+      enabledTreeTypes: nextEnabledTreeTypes,
+      enabledZipCodes: state.enabledZipCodes,
+    });
     set({
       enabledTreeTypes: nextEnabledTreeTypes,
       visiblePoints: derivedState.visiblePoints,
@@ -368,13 +386,13 @@ export const useFilterStore = create<FilterStoreState>((set, get) => ({
   setAllTreeTypesEnabled: (enabled) => {
     const state = get();
     const nextEnabledTreeTypes = enabled ? state.availableTreeTypes : [];
-    const derivedState = deriveFilteredState(
-      state.allPoints,
-      state.minYear,
-      state.maxYear,
-      nextEnabledTreeTypes,
-      state.enabledZipCodes,
-    );
+    const derivedState = deriveFilteredSlicesFromState({
+      allPoints: state.allPoints,
+      minYear: state.minYear,
+      maxYear: state.maxYear,
+      enabledTreeTypes: nextEnabledTreeTypes,
+      enabledZipCodes: state.enabledZipCodes,
+    });
     set({
       enabledTreeTypes: nextEnabledTreeTypes,
       visiblePoints: derivedState.visiblePoints,
@@ -394,13 +412,13 @@ export const useFilterStore = create<FilterStoreState>((set, get) => ({
     const nextEnabledZipCodes = state.availableZipCodes.filter((value) =>
       enabledZipCodeSet.has(value),
     );
-    const derivedState = deriveFilteredState(
-      state.allPoints,
-      state.minYear,
-      state.maxYear,
-      state.enabledTreeTypes,
-      nextEnabledZipCodes,
-    );
+    const derivedState = deriveFilteredSlicesFromState({
+      allPoints: state.allPoints,
+      minYear: state.minYear,
+      maxYear: state.maxYear,
+      enabledTreeTypes: state.enabledTreeTypes,
+      enabledZipCodes: nextEnabledZipCodes,
+    });
     set({
       enabledZipCodes: nextEnabledZipCodes,
       visiblePoints: derivedState.visiblePoints,
@@ -411,13 +429,13 @@ export const useFilterStore = create<FilterStoreState>((set, get) => ({
   setAllZipCodesEnabled: (enabled) => {
     const state = get();
     const nextEnabledZipCodes = enabled ? state.availableZipCodes : [];
-    const derivedState = deriveFilteredState(
-      state.allPoints,
-      state.minYear,
-      state.maxYear,
-      state.enabledTreeTypes,
-      nextEnabledZipCodes,
-    );
+    const derivedState = deriveFilteredSlicesFromState({
+      allPoints: state.allPoints,
+      minYear: state.minYear,
+      maxYear: state.maxYear,
+      enabledTreeTypes: state.enabledTreeTypes,
+      enabledZipCodes: nextEnabledZipCodes,
+    });
     set({
       enabledZipCodes: nextEnabledZipCodes,
       visiblePoints: derivedState.visiblePoints,
