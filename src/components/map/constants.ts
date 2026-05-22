@@ -17,6 +17,6 @@ export const POINT_LINE_COLOR_DEFAULT: [number, number, number, number] = [104, 
 export const POINT_LINE_COLOR_SELECTED: [number, number, number, number] = [255, 244, 153, 255];
 export const POINT_LINE_WIDTH_DEFAULT = 1;
 export const POINT_LINE_WIDTH_SELECTED = 2;
-export const INITIAL_CENTER: [number, number] = [-84.388, 33.749];
+export const INITIAL_CENTER: [number, number] = [-84.388, 33.80];
 export const INITIAL_ZOOM = 10;
 export const ATLANTA_BOUNDARY_LINE_WIDTH = 2;
