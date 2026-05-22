@@ -27,7 +27,8 @@ export function PlaybackOverlay() {
   const hasPlaybackData = monthCount > 0;
   const maxMonthIndex = Math.max(0, monthCount - 1);
   const clampedProgressIndex = Math.min(Math.max(playbackMonthIndex, 0), maxMonthIndex);
-  const isAtPlaybackEnd = hasPlaybackData && !isPlaybackPlaying && clampedProgressIndex >= maxMonthIndex;
+  const isAtPlaybackEnd =
+    hasPlaybackData && !isPlaybackPlaying && clampedProgressIndex >= maxMonthIndex;
   const activeMonth = hasPlaybackData ? playbackMonths[Math.floor(clampedProgressIndex)] : null;
   const activeMonthLabel = activeMonth
     ? fullMonthFormatter.format(new Date(activeMonth.year, activeMonth.monthIndex, 1))
@@ -83,7 +84,10 @@ export function PlaybackOverlay() {
       }
       const tickMs = 50;
       const monthProgressPerTick = tickMs / Math.max(state.playbackStepMs, 1);
-      const nextProgress = Math.min(maxLatestMonthIndex, state.playbackMonthIndex + monthProgressPerTick);
+      const nextProgress = Math.min(
+        maxLatestMonthIndex,
+        state.playbackMonthIndex + monthProgressPerTick,
+      );
       state.setPlaybackMonthIndex(nextProgress);
     }, 50);
 
@@ -136,7 +140,11 @@ export function PlaybackOverlay() {
     : isAtPlaybackEnd
       ? 'Replay timeline'
       : 'Resume playback';
-  const playbackControlIcon = isPlaybackPlaying ? 'pause' : isAtPlaybackEnd ? 'replay' : 'play_arrow';
+  const playbackControlIcon = isPlaybackPlaying
+    ? 'pause'
+    : isAtPlaybackEnd
+      ? 'replay'
+      : 'play_arrow';
 
   return (
     <div className="pointer-events-none absolute inset-0 z-40">

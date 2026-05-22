@@ -103,8 +103,8 @@ export function createPointLayer(
       }
       const baseColor =
         isHoverFocusEnabled && hoveredIds.has(point.id)
-        ? POINT_FILL_COLOR_SELECTED
-        : POINT_FILL_COLOR_DEFAULT;
+          ? POINT_FILL_COLOR_SELECTED
+          : POINT_FILL_COLOR_DEFAULT;
       if (!isPlaybackMode) {
         return baseColor;
       }
@@ -120,8 +120,8 @@ export function createPointLayer(
       }
       const baseColor =
         isHoverFocusEnabled && hoveredIds.has(point.id)
-        ? POINT_LINE_COLOR_SELECTED
-        : POINT_LINE_COLOR_DEFAULT;
+          ? POINT_LINE_COLOR_SELECTED
+          : POINT_LINE_COLOR_DEFAULT;
       if (!isPlaybackMode) {
         return baseColor;
       }

@@ -204,7 +204,13 @@ function deriveFilteredState(
   const enabledZipCodeSet = new Set(enabledZipCodes);
   const playbackPoints = buildPlaybackPoints(points, enabledTreeTypeSet, enabledZipCodeSet);
   return {
-    visiblePoints: buildVisiblePoints(points, minYear, maxYear, enabledTreeTypeSet, enabledZipCodeSet),
+    visiblePoints: buildVisiblePoints(
+      points,
+      minYear,
+      maxYear,
+      enabledTreeTypeSet,
+      enabledZipCodeSet,
+    ),
     playbackPoints,
     playbackMonths: buildPlaybackMonths(playbackPoints),
   };

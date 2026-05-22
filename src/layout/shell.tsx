@@ -27,7 +27,9 @@ export function Shell({ sidebar, filtersPane, chartsPane, settingsPane, content 
   return (
     <div className="relative flex h-screen bg-[var(--color-surface)] text-[var(--color-on-surface-variant)]">
       {!isPlaybackMode ? (
-        <aside className="w-72 shrink-0 bg-[var(--color-surface-container-high)] p-4">{sidebar}</aside>
+        <aside className="w-72 shrink-0 bg-[var(--color-surface-container-high)] p-4">
+          {sidebar}
+        </aside>
       ) : null}
       {!isPlaybackMode && (filtersPane || chartsPane || settingsPane) ? (
         <section

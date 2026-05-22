@@ -52,9 +52,6 @@ export function selectPointsForLayer({
   });
 }
 
-export function filterIdsByVisibility(
-  ids: Set<string>,
-  visiblePointIds: Set<string>,
-): Set<string> {
+export function filterIdsByVisibility(ids: Set<string>, visiblePointIds: Set<string>): Set<string> {
   return new Set([...ids].filter((id) => visiblePointIds.has(id)));
 }

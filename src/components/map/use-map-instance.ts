@@ -167,11 +167,7 @@ export function useMapInstance({
       map.remove();
       mapRef.current = null;
     };
-  }, [
-    mapContainerRef,
-    mapRef,
-    overlayRef,
-  ]);
+  }, [mapContainerRef, mapRef, overlayRef]);
 
   useEffect(() => {
     const map = mapRef.current;

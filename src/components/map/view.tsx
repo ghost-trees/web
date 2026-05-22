@@ -81,7 +81,10 @@ export function MapView() {
     setMapViewVersion((version) => version + 1);
   }, []);
   const handleOverlayReady = useCallback(() => {
-    syncCurrentLayer(useMapSelectionStore.getState().selectedIds, useMapSelectionStore.getState().hoveredIds);
+    syncCurrentLayer(
+      useMapSelectionStore.getState().selectedIds,
+      useMapSelectionStore.getState().hoveredIds,
+    );
   }, [syncCurrentLayer]);
   const handleMapLoad = useCallback(
     (map: maplibregl.Map) => {

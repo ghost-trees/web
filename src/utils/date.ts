@@ -38,13 +38,7 @@ export function parseYearMonth(dateValue: string): YearMonth | null {
   if (slashOrDashMatch) {
     const month = Number(slashOrDashMatch[1]);
     const year = normalizeTwoDigitYear(Number(slashOrDashMatch[3]));
-    if (
-      Number.isFinite(month) &&
-      Number.isFinite(year) &&
-      month >= 1 &&
-      month <= 12 &&
-      year > 0
-    ) {
+    if (Number.isFinite(month) && Number.isFinite(year) && month >= 1 && month <= 12 && year > 0) {
       return { year, monthIndex: month - 1 };
     }
   }
