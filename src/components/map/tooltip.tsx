@@ -5,7 +5,7 @@
  */
 
 import { formatTreeTypeList, UNKNOWN_DISPLAY_VALUE } from '../../utils/tree-type';
-import { extractZipCode } from '../../utils/string';
+import { extractStreetLine, extractZipCode } from '../../utils/string';
 
 type MapTooltipProps = {
   pointId: string;
@@ -26,8 +26,7 @@ function parseAddressDetails(address: string) {
     return { streetLine: UNKNOWN_VALUE, zipCode: UNKNOWN_VALUE };
   }
 
-  const [firstLineCandidate] = normalizedAddress.split(',');
-  const streetLine = firstLineCandidate?.trim() || UNKNOWN_VALUE;
+  const streetLine = extractStreetLine(normalizedAddress) ?? UNKNOWN_VALUE;
   const zipCode = extractZipCode(normalizedAddress) ?? UNKNOWN_VALUE;
 
   return { streetLine, zipCode };
