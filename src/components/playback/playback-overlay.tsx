@@ -148,7 +148,7 @@ export function PlaybackOverlay() {
 
   return (
     <div className="pointer-events-none absolute inset-0 z-40">
-      <div className="pointer-events-auto absolute left-1/2 top-6 w-[min(680px,calc(100%-4rem))] -translate-x-1/2 rounded-[var(--radius-round-four)] border border-[var(--color-outline-variant)] bg-[var(--color-surface-container-high)] p-4 shadow-ambient backdrop-blur-[var(--blur-glass)]">
+      <div className="pointer-events-auto absolute left-1/2 top-6 w-[min(680px,calc(100%-4rem))] -translate-x-1/2 rounded-[var(--radius-round-four)] border border-[var(--color-outline-variant)] bg-[color-mix(in_oklab,var(--color-surface-container-high)_75%,transparent)] p-4 shadow-ambient">
         <button
           type="button"
           onClick={exitPlayback}
