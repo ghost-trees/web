@@ -12,12 +12,7 @@ export function ChartsPane() {
     <section aria-label="Charts" className="flex h-full min-h-0 flex-col">
       <PaneHeader
         title="Charts"
-        description={
-          <>
-            {/* TODO: Update this description. */}
-            Chart views.
-          </>
-        }
+        description=""
         onClose={showMapPane}
       />
       <div className="flex-1 min-h-0 overflow-y-auto pb-2 pr-1">
