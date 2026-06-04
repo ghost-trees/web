@@ -9,8 +9,8 @@ type SyncPointLayerArgs = {
   selectedIds: Set<string>;
   hoveredIds: Set<string>;
   scalePointsByFee: boolean;
-  appMode: 'explore' | 'playback';
-  playbackMonthKey: number | null;
+  appMode: 'explore' | 'timeline';
+  timelineMonthKey: number | null;
 };
 
 export function syncPointLayer({
@@ -20,13 +20,13 @@ export function syncPointLayer({
   hoveredIds,
   scalePointsByFee,
   appMode,
-  playbackMonthKey,
+  timelineMonthKey,
 }: SyncPointLayerArgs): void {
   overlay.setProps({
     layers: [
       createPointLayer(points, selectedIds, hoveredIds, scalePointsByFee, {
-        enabled: appMode === 'playback',
-        currentMonthKey: playbackMonthKey,
+        enabled: appMode === 'timeline',
+        currentMonthKey: timelineMonthKey,
       }),
     ],
   });
@@ -38,8 +38,8 @@ type UsePointLayerSyncArgs = {
   selectedIds: Set<string>;
   hoveredIds: Set<string>;
   scalePointsByFee: boolean;
-  appMode: 'explore' | 'playback';
-  playbackMonthKey: number | null;
+  appMode: 'explore' | 'timeline';
+  timelineMonthKey: number | null;
 };
 
 export function usePointLayerSync({
@@ -49,7 +49,7 @@ export function usePointLayerSync({
   hoveredIds,
   scalePointsByFee,
   appMode,
-  playbackMonthKey,
+  timelineMonthKey,
 }: UsePointLayerSyncArgs) {
   const pointsRef = useRef<MapPoint[]>([]);
   const selectedIdsRef = useRef(selectedIds);
@@ -74,10 +74,10 @@ export function usePointLayerSync({
         hoveredIds: hoveredIdSet ?? hoveredIdsRef.current,
         scalePointsByFee,
         appMode,
-        playbackMonthKey,
+        timelineMonthKey,
       });
     },
-    [appMode, overlayRef, playbackMonthKey, scalePointsByFee],
+    [appMode, overlayRef, timelineMonthKey, scalePointsByFee],
   );
 
   useEffect(() => {

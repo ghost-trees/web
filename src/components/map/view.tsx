@@ -12,7 +12,7 @@ import { useMapSelectionStore } from '../../state/selection-store';
 import { useDataStore } from '../../state/data-store';
 import { useFilterStore } from '../../state/filter-store';
 import { useUiStore } from '../../state/ui-store';
-import { derivePlaybackMonthKey, filterIdsByVisibility, selectPointsForLayer } from './playback';
+import { deriveTimelineMonthKey, filterIdsByVisibility, selectPointsForLayer } from './timeline';
 import { INITIAL_CENTER, INITIAL_ZOOM } from './constants';
 import { MapControls } from './controls';
 import { MapTooltip } from './tooltip';
@@ -29,11 +29,11 @@ export function MapView() {
   const pointsById = useDataStore((state) => state.pointsById);
   const loadPoints = useDataStore((state) => state.loadPoints);
   const filteredPoints = useFilterStore((state) => state.visiblePoints);
-  const playbackPoints = useFilterStore((state) => state.playbackPoints);
-  const playbackMonths = useFilterStore((state) => state.playbackMonths);
+  const timelinePoints = useFilterStore((state) => state.timelinePoints);
+  const timelineMonths = useFilterStore((state) => state.timelineMonths);
   const appMode = useUiStore((state) => state.appMode);
   const mainView = useUiStore((state) => state.mainView);
-  const playbackMonthIndex = useUiStore((state) => state.playbackMonthIndex);
+  const timelineMonthIndex = useUiStore((state) => state.timelineMonthIndex);
   const scalePointsByFee = useUiStore((state) => state.scalePointsByFee);
   const showAtlantaBoundary = useUiStore((state) => state.showAtlantaBoundary);
   const selectedIds = useMapSelectionStore((state) => state.selectedIds);
@@ -42,15 +42,15 @@ export function MapView() {
   const addSelection = useMapSelectionStore((state) => state.addSelection);
   const toggleSelection = useMapSelectionStore((state) => state.toggleSelection);
   const setHovered = useMapSelectionStore((state) => state.setHovered);
-  const playbackMonthKey = derivePlaybackMonthKey(playbackMonths, playbackMonthIndex);
+  const timelineMonthKey = deriveTimelineMonthKey(timelineMonths, timelineMonthIndex);
   const pointsForLayer = useMemo(() => {
     return selectPointsForLayer({
       appMode,
       filteredPoints,
-      playbackPoints,
-      playbackMonthKey,
+      timelinePoints,
+      timelineMonthKey,
     });
-  }, [appMode, filteredPoints, playbackMonthKey, playbackPoints]);
+  }, [appMode, filteredPoints, timelineMonthKey, timelinePoints]);
   const attachMapInteractions = useMapInteractions({
     replaceSelection,
     addSelection,
@@ -76,7 +76,7 @@ export function MapView() {
     hoveredIds: visibleHoveredIds,
     scalePointsByFee,
     appMode,
-    playbackMonthKey,
+    timelineMonthKey,
   });
   const handleMapViewChange = useCallback(() => {
     setMapViewVersion((version) => version + 1);
@@ -173,14 +173,14 @@ export function MapView() {
     >
       <div className="relative h-full w-full">
         <div ref={mapContainerRef} className="h-full w-full" />
-        {appMode !== 'playback' ? (
+        {appMode !== 'timeline' ? (
           <MapControls
             onZoomIn={handleZoomIn}
             onZoomOut={handleZoomOut}
             onResetView={handleResetView}
           />
         ) : null}
-        {appMode !== 'playback' && selectedPoint && projectedTooltip ? (
+        {appMode !== 'timeline' && selectedPoint && projectedTooltip ? (
           <MapTooltip
             pointId={selectedPoint.id}
             date={selectedPoint.date}

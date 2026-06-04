@@ -23,17 +23,17 @@ export function SidePanel() {
   const showGalleryView = useUiStore((state) => state.showGalleryView);
   const showAboutView = useUiStore((state) => state.showAboutView);
   const togglePane = useUiStore((state) => state.togglePane);
-  const enterPlayback = useUiStore((state) => state.enterPlayback);
-  const setPlaybackMonthIndex = useUiStore((state) => state.setPlaybackMonthIndex);
-  const setPlaybackPlaying = useUiStore((state) => state.setPlaybackPlaying);
-  const playbackMonthCount = useFilterStore((state) => state.playbackMonths.length);
+  const enterTimeline = useUiStore((state) => state.enterTimeline);
+  const setTimelineMonthIndex = useUiStore((state) => state.setTimelineMonthIndex);
+  const setTimelinePlaying = useUiStore((state) => state.setTimelinePlaying);
+  const timelineMonthCount = useFilterStore((state) => state.timelineMonths.length);
 
   const handleStartTimeline = () => {
-    if (playbackMonthCount > 0) {
-      setPlaybackMonthIndex(0);
+    if (timelineMonthCount > 0) {
+      setTimelineMonthIndex(0);
     }
-    setPlaybackPlaying(true);
-    enterPlayback();
+    setTimelinePlaying(true);
+    enterTimeline();
   };
   const isMapView = mainView === 'map';
 
@@ -89,7 +89,7 @@ export function SidePanel() {
               label="Timeline"
               icon="movie"
               onClick={handleStartTimeline}
-              disabled={playbackMonthCount === 0}
+              disabled={timelineMonthCount === 0}
             />
           </li>
           <li>

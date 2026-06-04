@@ -1,6 +1,6 @@
 import type { ReactNode } from 'react';
 import { useUiStore } from '../state/ui-store';
-import { PlaybackOverlay } from '../components/playback/overlay';
+import { TimelineOverlay } from '../components/timeline/overlay';
 
 type ShellProps = {
   sidebar: ReactNode;
@@ -24,7 +24,7 @@ export function Shell({
   const mainView = useUiStore((state) => state.mainView);
   const activePane = useUiStore((state) => state.activePane);
   const appMode = useUiStore((state) => state.appMode);
-  const isPlaybackMode = appMode === 'playback';
+  const isTimelineMode = appMode === 'timeline';
   const isMapMainView = mainView === 'map';
   const isAuxiliaryPaneOpen = isMapMainView && activePane !== 'map';
   const auxiliaryPane =
@@ -38,12 +38,12 @@ export function Shell({
 
   return (
     <div className="relative flex h-screen bg-[var(--color-surface)] text-[var(--color-on-surface-variant)]">
-      {!isPlaybackMode ? (
+      {!isTimelineMode ? (
         <aside className="w-72 shrink-0 bg-[var(--color-surface-container-high)] p-4">
           {sidebar}
         </aside>
       ) : null}
-      {!isPlaybackMode && isMapMainView && (filtersPane || chartsPane || settingsPane) ? (
+      {!isTimelineMode && isMapMainView && (filtersPane || chartsPane || settingsPane) ? (
         <section
           aria-label="Inline detail panel"
           className={`min-h-0 shrink-0 overflow-hidden bg-[var(--color-surface-container-low)] ${
@@ -87,7 +87,7 @@ export function Shell({
           {aboutContent}
         </div>
       </main>
-      <PlaybackOverlay />
+      <TimelineOverlay />
     </div>
   );
 }

@@ -3,28 +3,28 @@ import type { ChartId } from '../components/charts/definitions';
 
 export type UiPane = 'map' | 'filters' | 'charts' | 'settings';
 export type MainView = 'map' | 'gallery' | 'about';
-export type AppMode = 'explore' | 'playback';
+export type AppMode = 'explore' | 'timeline';
 
 type UiStoreState = {
   appMode: AppMode;
   mainView: MainView;
-  mainViewBeforePlayback: MainView;
+  mainViewBeforeTimeline: MainView;
   activePane: UiPane;
-  paneBeforePlayback: UiPane;
+  paneBeforeTimeline: UiPane;
   selectedChart: ChartId;
   scalePointsByFee: boolean;
   showAtlantaBoundary: boolean;
-  isPlaybackPlaying: boolean;
-  playbackMonthIndex: number;
-  playbackStepMs: number;
-  hasPlaybackAutoStarted: boolean;
-  enterPlayback: () => void;
-  exitPlayback: () => void;
-  setPlaybackPlaying: (next: boolean) => void;
-  togglePlaybackPlaying: () => void;
-  setPlaybackMonthIndex: (monthIndex: number) => void;
-  setPlaybackStepMs: (stepMs: number) => void;
-  markPlaybackAutoStarted: () => void;
+  isTimelinePlaying: boolean;
+  timelineMonthIndex: number;
+  timelineStepMs: number;
+  hasTimelineAutoStarted: boolean;
+  enterTimeline: () => void;
+  exitTimeline: () => void;
+  setTimelinePlaying: (next: boolean) => void;
+  toggleTimelinePlaying: () => void;
+  setTimelineMonthIndex: (monthIndex: number) => void;
+  setTimelineStepMs: (stepMs: number) => void;
+  markTimelineAutoStarted: () => void;
   setMainView: (view: MainView) => void;
   showGalleryView: () => void;
   showAboutView: () => void;
@@ -39,40 +39,40 @@ type UiStoreState = {
 export const useUiStore = create<UiStoreState>((set) => ({
   appMode: 'explore',
   mainView: 'map',
-  mainViewBeforePlayback: 'map',
+  mainViewBeforeTimeline: 'map',
   activePane: 'map',
-  paneBeforePlayback: 'map',
+  paneBeforeTimeline: 'map',
   selectedChart: 'records-by-month',
   scalePointsByFee: false,
   showAtlantaBoundary: true,
-  isPlaybackPlaying: true,
-  playbackMonthIndex: 0,
-  playbackStepMs: 1000,
-  hasPlaybackAutoStarted: false,
-  enterPlayback: () =>
+  isTimelinePlaying: true,
+  timelineMonthIndex: 0,
+  timelineStepMs: 1000,
+  hasTimelineAutoStarted: false,
+  enterTimeline: () =>
     set((state) => ({
-      appMode: 'playback',
-      mainViewBeforePlayback: state.mainView,
-      paneBeforePlayback: state.activePane,
+      appMode: 'timeline',
+      mainViewBeforeTimeline: state.mainView,
+      paneBeforeTimeline: state.activePane,
       mainView: 'map',
       activePane: 'map',
-      isPlaybackPlaying: true,
+      isTimelinePlaying: true,
     })),
-  exitPlayback: () =>
+  exitTimeline: () =>
     set((state) => ({
       appMode: 'explore',
-      mainView: state.mainViewBeforePlayback,
-      activePane: state.paneBeforePlayback,
-      isPlaybackPlaying: false,
+      mainView: state.mainViewBeforeTimeline,
+      activePane: state.paneBeforeTimeline,
+      isTimelinePlaying: false,
     })),
-  setPlaybackPlaying: (next) => set({ isPlaybackPlaying: next }),
-  togglePlaybackPlaying: () =>
+  setTimelinePlaying: (next) => set({ isTimelinePlaying: next }),
+  toggleTimelinePlaying: () =>
     set((state) => ({
-      isPlaybackPlaying: !state.isPlaybackPlaying,
+      isTimelinePlaying: !state.isTimelinePlaying,
     })),
-  setPlaybackMonthIndex: (monthIndex) => set({ playbackMonthIndex: Math.max(0, monthIndex) }),
-  setPlaybackStepMs: (stepMs) => set({ playbackStepMs: Math.max(300, stepMs) }),
-  markPlaybackAutoStarted: () => set({ hasPlaybackAutoStarted: true }),
+  setTimelineMonthIndex: (monthIndex) => set({ timelineMonthIndex: Math.max(0, monthIndex) }),
+  setTimelineStepMs: (stepMs) => set({ timelineStepMs: Math.max(300, stepMs) }),
+  markTimelineAutoStarted: () => set({ hasTimelineAutoStarted: true }),
   setMainView: (view) =>
     set({
       mainView: view,

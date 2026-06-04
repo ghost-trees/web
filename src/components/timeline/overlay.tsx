@@ -8,87 +8,87 @@ const fullMonthFormatter = new Intl.DateTimeFormat('en-US', {
   year: 'numeric',
 });
 
-export function PlaybackOverlay() {
+export function TimelineOverlay() {
   const hasLoaded = useDataStore((state) => state.hasLoaded);
   const appMode = useUiStore((state) => state.appMode);
-  const playbackMonthIndex = useUiStore((state) => state.playbackMonthIndex);
-  const isPlaybackPlaying = useUiStore((state) => state.isPlaybackPlaying);
-  const playbackStepMs = useUiStore((state) => state.playbackStepMs);
-  const hasPlaybackAutoStarted = useUiStore((state) => state.hasPlaybackAutoStarted);
-  const enterPlayback = useUiStore((state) => state.enterPlayback);
-  const exitPlayback = useUiStore((state) => state.exitPlayback);
-  const setPlaybackPlaying = useUiStore((state) => state.setPlaybackPlaying);
-  const togglePlaybackPlaying = useUiStore((state) => state.togglePlaybackPlaying);
-  const setPlaybackMonthIndex = useUiStore((state) => state.setPlaybackMonthIndex);
-  const markPlaybackAutoStarted = useUiStore((state) => state.markPlaybackAutoStarted);
-  const playbackMonths = useFilterStore((state) => state.playbackMonths);
+  const timelineMonthIndex = useUiStore((state) => state.timelineMonthIndex);
+  const isTimelinePlaying = useUiStore((state) => state.isTimelinePlaying);
+  const timelineStepMs = useUiStore((state) => state.timelineStepMs);
+  const hasTimelineAutoStarted = useUiStore((state) => state.hasTimelineAutoStarted);
+  const enterTimeline = useUiStore((state) => state.enterTimeline);
+  const exitTimeline = useUiStore((state) => state.exitTimeline);
+  const setTimelinePlaying = useUiStore((state) => state.setTimelinePlaying);
+  const toggleTimelinePlaying = useUiStore((state) => state.toggleTimelinePlaying);
+  const setTimelineMonthIndex = useUiStore((state) => state.setTimelineMonthIndex);
+  const markTimelineAutoStarted = useUiStore((state) => state.markTimelineAutoStarted);
+  const timelineMonths = useFilterStore((state) => state.timelineMonths);
 
-  const monthCount = playbackMonths.length;
-  const hasPlaybackData = monthCount > 0;
+  const monthCount = timelineMonths.length;
+  const hasTimelineData = monthCount > 0;
   const maxMonthIndex = Math.max(0, monthCount - 1);
-  const clampedProgressIndex = Math.min(Math.max(playbackMonthIndex, 0), maxMonthIndex);
-  const isAtPlaybackEnd =
-    hasPlaybackData && !isPlaybackPlaying && clampedProgressIndex >= maxMonthIndex;
-  const activeMonth = hasPlaybackData ? playbackMonths[Math.floor(clampedProgressIndex)] : null;
+  const clampedProgressIndex = Math.min(Math.max(timelineMonthIndex, 0), maxMonthIndex);
+  const isAtTimelineEnd =
+    hasTimelineData && !isTimelinePlaying && clampedProgressIndex >= maxMonthIndex;
+  const activeMonth = hasTimelineData ? timelineMonths[Math.floor(clampedProgressIndex)] : null;
   const activeMonthLabel = activeMonth
     ? fullMonthFormatter.format(new Date(activeMonth.year, activeMonth.monthIndex, 1))
     : 'No dated records available';
 
   useEffect(() => {
-    if (playbackMonthIndex !== clampedProgressIndex) {
-      setPlaybackMonthIndex(clampedProgressIndex);
+    if (timelineMonthIndex !== clampedProgressIndex) {
+      setTimelineMonthIndex(clampedProgressIndex);
     }
-  }, [clampedProgressIndex, playbackMonthIndex, setPlaybackMonthIndex]);
+  }, [clampedProgressIndex, timelineMonthIndex, setTimelineMonthIndex]);
 
   useEffect(() => {
-    if (!hasLoaded || hasPlaybackAutoStarted) {
+    if (!hasLoaded || hasTimelineAutoStarted) {
       return;
     }
 
-    markPlaybackAutoStarted();
-    if (!hasPlaybackData) {
+    markTimelineAutoStarted();
+    if (!hasTimelineData) {
       return;
     }
-    setPlaybackMonthIndex(0);
-    enterPlayback();
+    setTimelineMonthIndex(0);
+    enterTimeline();
   }, [
-    enterPlayback,
+    enterTimeline,
     hasLoaded,
-    hasPlaybackAutoStarted,
-    hasPlaybackData,
-    markPlaybackAutoStarted,
-    setPlaybackMonthIndex,
+    hasTimelineAutoStarted,
+    hasTimelineData,
+    markTimelineAutoStarted,
+    setTimelineMonthIndex,
   ]);
 
   useEffect(() => {
-    if (appMode !== 'playback' || !hasPlaybackData || !isPlaybackPlaying) {
+    if (appMode !== 'timeline' || !hasTimelineData || !isTimelinePlaying) {
       return;
     }
 
     if (clampedProgressIndex >= monthCount - 1) {
-      setPlaybackPlaying(false);
+      setTimelinePlaying(false);
       return;
     }
 
     const timerId = window.setInterval(() => {
       const state = useUiStore.getState();
-      const latestMonthCount = useFilterStore.getState().playbackMonths.length;
+      const latestMonthCount = useFilterStore.getState().timelineMonths.length;
       const maxLatestMonthIndex = Math.max(0, latestMonthCount - 1);
       if (latestMonthCount === 0) {
-        state.setPlaybackPlaying(false);
+        state.setTimelinePlaying(false);
         return;
       }
-      if (state.playbackMonthIndex >= maxLatestMonthIndex) {
-        state.setPlaybackPlaying(false);
+      if (state.timelineMonthIndex >= maxLatestMonthIndex) {
+        state.setTimelinePlaying(false);
         return;
       }
       const tickMs = 50;
-      const monthProgressPerTick = tickMs / Math.max(state.playbackStepMs, 1);
+      const monthProgressPerTick = tickMs / Math.max(state.timelineStepMs, 1);
       const nextProgress = Math.min(
         maxLatestMonthIndex,
-        state.playbackMonthIndex + monthProgressPerTick,
+        state.timelineMonthIndex + monthProgressPerTick,
       );
-      state.setPlaybackMonthIndex(nextProgress);
+      state.setTimelineMonthIndex(nextProgress);
     }, 50);
 
     return () => {
@@ -97,15 +97,15 @@ export function PlaybackOverlay() {
   }, [
     appMode,
     clampedProgressIndex,
-    hasPlaybackData,
-    isPlaybackPlaying,
+    hasTimelineData,
+    isTimelinePlaying,
     monthCount,
-    playbackStepMs,
-    setPlaybackPlaying,
+    timelineStepMs,
+    setTimelinePlaying,
   ]);
 
   useEffect(() => {
-    if (appMode !== 'playback') {
+    if (appMode !== 'timeline') {
       return;
     }
 
@@ -114,35 +114,35 @@ export function PlaybackOverlay() {
         return;
       }
       event.preventDefault();
-      exitPlayback();
+      exitTimeline();
     };
     window.addEventListener('keydown', onKeyDown);
     return () => {
       window.removeEventListener('keydown', onKeyDown);
     };
-  }, [appMode, exitPlayback]);
+  }, [appMode, exitTimeline]);
 
-  if (appMode !== 'playback') {
+  if (appMode !== 'timeline') {
     return null;
   }
 
-  const handlePlaybackControlClick = () => {
-    if (isAtPlaybackEnd) {
-      setPlaybackMonthIndex(0);
-      setPlaybackPlaying(true);
+  const handleTimelineControlClick = () => {
+    if (isAtTimelineEnd) {
+      setTimelineMonthIndex(0);
+      setTimelinePlaying(true);
       return;
     }
-    togglePlaybackPlaying();
+    toggleTimelinePlaying();
   };
 
-  const playbackControlAriaLabel = isPlaybackPlaying
-    ? 'Pause playback'
-    : isAtPlaybackEnd
+  const timelineControlAriaLabel = isTimelinePlaying
+    ? 'Pause timeline'
+    : isAtTimelineEnd
       ? 'Replay timeline'
-      : 'Resume playback';
-  const playbackControlIcon = isPlaybackPlaying
+      : 'Resume timeline';
+  const timelineControlIcon = isTimelinePlaying
     ? 'pause'
-    : isAtPlaybackEnd
+    : isAtTimelineEnd
       ? 'replay'
       : 'play_arrow';
 
@@ -151,7 +151,7 @@ export function PlaybackOverlay() {
       <div className="pointer-events-auto absolute left-1/2 top-6 w-[min(680px,calc(100%-4rem))] -translate-x-1/2 rounded-[var(--radius-round-four)] border border-[var(--color-outline-variant)] bg-[color-mix(in_oklab,var(--color-surface-container-high)_75%,transparent)] p-4 shadow-ambient">
         <button
           type="button"
-          onClick={exitPlayback}
+          onClick={exitTimeline}
           aria-label="Exit timeline"
           className="absolute right-3 top-3 inline-flex h-8 w-8 items-center justify-center rounded-[var(--radius-round-four)] border border-[var(--color-outline-variant)] text-[var(--color-on-surface)] transition hover:bg-[var(--color-surface-container-highest)]"
         >
@@ -168,13 +168,13 @@ export function PlaybackOverlay() {
         <div className="mt-4 flex items-center gap-2">
           <button
             type="button"
-            onClick={handlePlaybackControlClick}
-            disabled={!hasPlaybackData}
+            onClick={handleTimelineControlClick}
+            disabled={!hasTimelineData}
             className="inline-flex h-9 w-9 items-center justify-center rounded-[var(--radius-round-four)] border border-[var(--color-outline-variant)] text-[var(--color-on-surface)] transition hover:bg-[var(--color-surface-container-highest)] disabled:cursor-not-allowed disabled:opacity-50"
-            aria-label={playbackControlAriaLabel}
+            aria-label={timelineControlAriaLabel}
           >
             <span className="material-symbols-outlined text-[20px] leading-none" aria-hidden="true">
-              {playbackControlIcon}
+              {timelineControlIcon}
             </span>
           </button>
           <input
@@ -183,10 +183,10 @@ export function PlaybackOverlay() {
             max={Math.max(0, monthCount - 1)}
             step={0.01}
             value={clampedProgressIndex}
-            disabled={!hasPlaybackData}
+            disabled={!hasTimelineData}
             onChange={(event) => {
-              setPlaybackPlaying(false);
-              setPlaybackMonthIndex(Number(event.target.value));
+              setTimelinePlaying(false);
+              setTimelineMonthIndex(Number(event.target.value));
             }}
             className="h-2 flex-1 accent-[var(--color-primary)] disabled:opacity-50"
             aria-label="Timeline month slider"

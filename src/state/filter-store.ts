@@ -13,8 +13,8 @@ const FALLBACK_YEAR = new Date().getFullYear();
 export type FilterStoreState = {
   allPoints: MapPoint[];
   visiblePoints: MapPoint[];
-  playbackPoints: MapPoint[];
-  playbackMonths: {
+  timelinePoints: MapPoint[];
+  timelineMonths: {
     key: number;
     year: number;
     monthIndex: number;
@@ -148,7 +148,7 @@ function buildVisiblePoints(
   });
 }
 
-function buildPlaybackPoints(
+function buildTimelinePoints(
   points: MapPoint[],
   enabledTreeTypes: Set<string>,
   enabledZipCodes: Set<string>,
@@ -162,7 +162,7 @@ function buildPlaybackPoints(
   });
 }
 
-function buildPlaybackMonths(points: MapPoint[]): FilterStoreState['playbackMonths'] {
+function buildTimelineMonths(points: MapPoint[]): FilterStoreState['timelineMonths'] {
   const countsByMonth = new Map<number, number>();
 
   for (const point of points) {
@@ -199,10 +199,10 @@ function deriveFilteredState(
   maxYear: number,
   enabledTreeTypes: string[],
   enabledZipCodes: string[],
-): Pick<FilterStoreState, 'visiblePoints' | 'playbackPoints' | 'playbackMonths'> {
+): Pick<FilterStoreState, 'visiblePoints' | 'timelinePoints' | 'timelineMonths'> {
   const enabledTreeTypeSet = new Set(enabledTreeTypes);
   const enabledZipCodeSet = new Set(enabledZipCodes);
-  const playbackPoints = buildPlaybackPoints(points, enabledTreeTypeSet, enabledZipCodeSet);
+  const timelinePoints = buildTimelinePoints(points, enabledTreeTypeSet, enabledZipCodeSet);
   return {
     visiblePoints: buildVisiblePoints(
       points,
@@ -211,8 +211,8 @@ function deriveFilteredState(
       enabledTreeTypeSet,
       enabledZipCodeSet,
     ),
-    playbackPoints,
-    playbackMonths: buildPlaybackMonths(playbackPoints),
+    timelinePoints,
+    timelineMonths: buildTimelineMonths(timelinePoints),
   };
 }
 
@@ -223,7 +223,7 @@ type FilterDerivationInputState = Pick<
 
 function deriveFilteredSlicesFromState(
   state: FilterDerivationInputState,
-): Pick<FilterStoreState, 'visiblePoints' | 'playbackPoints' | 'playbackMonths'> {
+): Pick<FilterStoreState, 'visiblePoints' | 'timelinePoints' | 'timelineMonths'> {
   return deriveFilteredState(
     state.allPoints,
     state.minYear,
@@ -236,8 +236,8 @@ function deriveFilteredSlicesFromState(
 export const useFilterStore = create<FilterStoreState>((set, get) => ({
   allPoints: [],
   visiblePoints: [],
-  playbackPoints: [],
-  playbackMonths: [],
+  timelinePoints: [],
+  timelineMonths: [],
   hasAvailableYears: false,
   minAvailableYear: FALLBACK_YEAR,
   maxAvailableYear: FALLBACK_YEAR,
@@ -294,8 +294,8 @@ export const useFilterStore = create<FilterStoreState>((set, get) => ({
     set({
       allPoints: points,
       visiblePoints: derivedState.visiblePoints,
-      playbackPoints: derivedState.playbackPoints,
-      playbackMonths: derivedState.playbackMonths,
+      timelinePoints: derivedState.timelinePoints,
+      timelineMonths: derivedState.timelineMonths,
       hasAvailableYears,
       minAvailableYear,
       maxAvailableYear,
@@ -331,8 +331,8 @@ export const useFilterStore = create<FilterStoreState>((set, get) => ({
       minYear: nextRange.minYear,
       maxYear: nextRange.maxYear,
       visiblePoints: derivedState.visiblePoints,
-      playbackPoints: derivedState.playbackPoints,
-      playbackMonths: derivedState.playbackMonths,
+      timelinePoints: derivedState.timelinePoints,
+      timelineMonths: derivedState.timelineMonths,
     });
   },
   setMaxYear: (year) => {
@@ -359,8 +359,8 @@ export const useFilterStore = create<FilterStoreState>((set, get) => ({
       minYear: nextRange.minYear,
       maxYear: nextRange.maxYear,
       visiblePoints: derivedState.visiblePoints,
-      playbackPoints: derivedState.playbackPoints,
-      playbackMonths: derivedState.playbackMonths,
+      timelinePoints: derivedState.timelinePoints,
+      timelineMonths: derivedState.timelineMonths,
     });
   },
   setTreeTypeEnabled: (treeType, enabled) => {
@@ -385,8 +385,8 @@ export const useFilterStore = create<FilterStoreState>((set, get) => ({
     set({
       enabledTreeTypes: nextEnabledTreeTypes,
       visiblePoints: derivedState.visiblePoints,
-      playbackPoints: derivedState.playbackPoints,
-      playbackMonths: derivedState.playbackMonths,
+      timelinePoints: derivedState.timelinePoints,
+      timelineMonths: derivedState.timelineMonths,
     });
   },
   setAllTreeTypesEnabled: (enabled) => {
@@ -402,8 +402,8 @@ export const useFilterStore = create<FilterStoreState>((set, get) => ({
     set({
       enabledTreeTypes: nextEnabledTreeTypes,
       visiblePoints: derivedState.visiblePoints,
-      playbackPoints: derivedState.playbackPoints,
-      playbackMonths: derivedState.playbackMonths,
+      timelinePoints: derivedState.timelinePoints,
+      timelineMonths: derivedState.timelineMonths,
     });
   },
   setZipCodeEnabled: (zipCode, enabled) => {
@@ -428,8 +428,8 @@ export const useFilterStore = create<FilterStoreState>((set, get) => ({
     set({
       enabledZipCodes: nextEnabledZipCodes,
       visiblePoints: derivedState.visiblePoints,
-      playbackPoints: derivedState.playbackPoints,
-      playbackMonths: derivedState.playbackMonths,
+      timelinePoints: derivedState.timelinePoints,
+      timelineMonths: derivedState.timelineMonths,
     });
   },
   setAllZipCodesEnabled: (enabled) => {
@@ -445,8 +445,8 @@ export const useFilterStore = create<FilterStoreState>((set, get) => ({
     set({
       enabledZipCodes: nextEnabledZipCodes,
       visiblePoints: derivedState.visiblePoints,
-      playbackPoints: derivedState.playbackPoints,
-      playbackMonths: derivedState.playbackMonths,
+      timelinePoints: derivedState.timelinePoints,
+      timelineMonths: derivedState.timelineMonths,
     });
   },
 }));

@@ -18,11 +18,11 @@ import {
   POINT_RADIUS_DEFAULT,
 } from './constants';
 
-const PLAYBACK_FADE_MONTH_WINDOW = 8;
-const PLAYBACK_MIN_FILL_ALPHA = 18;
-const PLAYBACK_MIN_LINE_ALPHA = 28;
+const TIMELINE_FADE_MONTH_WINDOW = 8;
+const TIMELINE_MIN_FILL_ALPHA = 18;
+const TIMELINE_MIN_LINE_ALPHA = 28;
 
-type PlaybackLayerOptions = {
+type TimelineLayerOptions = {
   enabled: boolean;
   currentMonthKey: number | null;
 };
@@ -34,7 +34,7 @@ function withAlpha(
   return [color[0], color[1], color[2], alpha];
 }
 
-function getPlaybackAlpha(
+function getTimelineAlpha(
   point: MapPoint,
   currentMonthKey: number | null,
   fullAlpha: number,
@@ -59,11 +59,11 @@ function getPlaybackAlpha(
   if (ageInMonths === 0) {
     return fullAlpha;
   }
-  if (ageInMonths >= PLAYBACK_FADE_MONTH_WINDOW) {
+  if (ageInMonths >= TIMELINE_FADE_MONTH_WINDOW) {
     return minAlpha;
   }
 
-  const fadeProgress = ageInMonths / PLAYBACK_FADE_MONTH_WINDOW;
+  const fadeProgress = ageInMonths / TIMELINE_FADE_MONTH_WINDOW;
   return Math.round(fullAlpha - (fullAlpha - minAlpha) * fadeProgress);
 }
 
@@ -72,10 +72,10 @@ export function createPointLayer(
   selectedIds: Set<string>,
   hoveredIds: Set<string>,
   scalePointsByFee: boolean,
-  playbackOptions?: PlaybackLayerOptions,
+  timelineOptions?: TimelineLayerOptions,
 ) {
-  const isPlaybackMode = playbackOptions?.enabled ?? false;
-  const playbackMonthKey = playbackOptions?.currentMonthKey ?? null;
+  const isTimelineMode = timelineOptions?.enabled ?? false;
+  const timelineMonthKey = timelineOptions?.currentMonthKey ?? null;
   const isHoverFocusEnabled = selectedIds.size === 0;
   const feeMax = scalePointsByFee
     ? points.reduce((maxFeeTotal, point) => Math.max(maxFeeTotal, point.feeTotal), 0)
@@ -105,12 +105,12 @@ export function createPointLayer(
         isHoverFocusEnabled && hoveredIds.has(point.id)
           ? POINT_FILL_COLOR_SELECTED
           : POINT_FILL_COLOR_DEFAULT;
-      if (!isPlaybackMode) {
+      if (!isTimelineMode) {
         return baseColor;
       }
       return withAlpha(
         baseColor,
-        getPlaybackAlpha(point, playbackMonthKey, baseColor[3], PLAYBACK_MIN_FILL_ALPHA),
+        getTimelineAlpha(point, timelineMonthKey, baseColor[3], TIMELINE_MIN_FILL_ALPHA),
       );
     },
     stroked: true,
@@ -122,12 +122,12 @@ export function createPointLayer(
         isHoverFocusEnabled && hoveredIds.has(point.id)
           ? POINT_LINE_COLOR_SELECTED
           : POINT_LINE_COLOR_DEFAULT;
-      if (!isPlaybackMode) {
+      if (!isTimelineMode) {
         return baseColor;
       }
       return withAlpha(
         baseColor,
-        getPlaybackAlpha(point, playbackMonthKey, baseColor[3], PLAYBACK_MIN_LINE_ALPHA),
+        getTimelineAlpha(point, timelineMonthKey, baseColor[3], TIMELINE_MIN_LINE_ALPHA),
       );
     },
     getLineWidth: (point) => {
@@ -141,8 +141,8 @@ export function createPointLayer(
     lineWidthUnits: 'pixels',
     updateTriggers: {
       getRadius: [scalePointsByFee, feeMax],
-      getFillColor: [selectedIds, hoveredIds, isPlaybackMode, playbackMonthKey],
-      getLineColor: [selectedIds, hoveredIds, isPlaybackMode, playbackMonthKey],
+      getFillColor: [selectedIds, hoveredIds, isTimelineMode, timelineMonthKey],
+      getLineColor: [selectedIds, hoveredIds, isTimelineMode, timelineMonthKey],
       getLineWidth: [selectedIds, hoveredIds],
     },
   });
