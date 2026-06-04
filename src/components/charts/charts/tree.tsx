@@ -113,6 +113,9 @@ export function TreeChart() {
       xAxis: {
         type: 'value',
         minInterval: 1,
+        axisLabel: {
+          formatter: (value: number, index: number) => (index % 2 === 0 ? `${value}` : ''),
+        },
       },
       yAxis: {
         type: 'category',
