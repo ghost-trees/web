@@ -39,7 +39,7 @@ function buildTreeTypeBuckets(
     .sort((a, b) => b.pointIds.length - a.pointIds.length || a.treeType.localeCompare(b.treeType));
 }
 
-export function RecordsByTreeTypeChart() {
+export function TreePieChart() {
   const visiblePoints = useFilterStore((state) => state.visiblePoints);
   const selectedIds = useMapSelectionStore((state) => state.selectedIds);
   const replaceSelection = useMapSelectionStore((state) => state.replaceSelection);
@@ -171,10 +171,12 @@ export function RecordsByTreeTypeChart() {
 
   return (
     <section
-      aria-label="Records by Tree Type chart"
+      aria-label="Records by Tree Type (Pie) chart"
       className="rounded-[var(--radius-round-four)] border border-[var(--color-outline-variant)] bg-[var(--color-surface-container-high)] p-4"
     >
-      <h3 className="text-sm font-semibold text-[var(--color-on-surface)]">Records by Tree Type</h3>
+      <h3 className="text-sm font-semibold text-[var(--color-on-surface)]">
+        Records by Tree Type (Pie)
+      </h3>
       {hasTreeTypeData ? (
         <ReactECharts
           option={chartOption}

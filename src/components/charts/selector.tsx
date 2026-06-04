@@ -1,4 +1,4 @@
-import { CHART_DEFINITIONS, type ChartId } from './chart-definitions';
+import { CHART_DEFINITIONS, type ChartId } from './definitions';
 
 type ChartSelectorProps = {
   value: ChartId;

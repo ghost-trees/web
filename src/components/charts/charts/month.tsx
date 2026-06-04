@@ -49,7 +49,7 @@ function getMonthPointIds(params: SeriesEvent, pointIdsByMonth: string[][]): str
   return pointIdsByMonth[monthIndex];
 }
 
-export function RecordsByMonthChart() {
+export function MonthChart() {
   const visiblePoints = useFilterStore((state) => state.visiblePoints);
   const selectedIds = useMapSelectionStore((state) => state.selectedIds);
   const replaceSelection = useMapSelectionStore((state) => state.replaceSelection);

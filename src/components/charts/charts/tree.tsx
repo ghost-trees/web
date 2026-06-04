@@ -52,7 +52,7 @@ function getTreeTypePointIds(
   return treeTypeBuckets[bucketIndex]?.pointIds ?? null;
 }
 
-export function RecordsByTreeTypeBarChart() {
+export function TreeChart() {
   const visiblePoints = useFilterStore((state) => state.visiblePoints);
   const selectedIds = useMapSelectionStore((state) => state.selectedIds);
   const replaceSelection = useMapSelectionStore((state) => state.replaceSelection);
@@ -178,12 +178,10 @@ export function RecordsByTreeTypeBarChart() {
 
   return (
     <section
-      aria-label="Records by Tree Type (Bar) chart"
+      aria-label="Records by Tree Type chart"
       className="rounded-[var(--radius-round-four)] border border-[var(--color-outline-variant)] bg-[var(--color-surface-container-high)] p-4"
     >
-      <h3 className="text-sm font-semibold text-[var(--color-on-surface)]">
-        Records by Tree Type (Bar)
-      </h3>
+      <h3 className="text-sm font-semibold text-[var(--color-on-surface)]">Records by Tree Type</h3>
       {hasTreeTypeData ? (
         <ReactECharts
           option={chartOption}

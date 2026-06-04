@@ -1,7 +1,7 @@
 import { useUiStore } from '../../state/ui-store';
 import { PaneHeader } from '../common/pane-header';
-import { ChartSelector } from './chart-selector';
-import { ChartViewport } from './chart-viewport';
+import { ChartSelector } from './selector';
+import { ChartViewport } from './viewport';
 
 export function ChartsPane() {
   const showMapPane = useUiStore((state) => state.showMapPane);

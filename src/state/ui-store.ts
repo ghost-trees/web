@@ -1,5 +1,5 @@
 import { create } from 'zustand';
-import type { ChartId } from '../components/charts/chart-definitions';
+import type { ChartId } from '../components/charts/definitions';
 
 export type UiPane = 'map' | 'filters' | 'charts' | 'settings';
 export type AppMode = 'explore' | 'playback';

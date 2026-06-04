@@ -1,6 +1,6 @@
 import type { ReactNode } from 'react';
 import { useUiStore } from '../state/ui-store';
-import { PlaybackOverlay } from '../components/playback/playback-overlay';
+import { PlaybackOverlay } from '../components/playback/overlay';
 
 type ShellProps = {
   sidebar: ReactNode;

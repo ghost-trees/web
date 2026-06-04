@@ -4,8 +4,8 @@ import { createRoot } from 'react-dom/client';
 import { Shell } from './layout/shell';
 import { MapView } from './components/map/view';
 import { SidePanel } from './components/nav/side-panel';
-import { FiltersPane } from './components/filters/filters-pane';
-import { ChartsPane } from './components/charts/charts-pane';
+import { FiltersPane } from './components/filters/pane';
+import { ChartsPane } from './components/charts/pane';
 import { SettingsPane } from './components/settings/settings-pane';
 import { registerEchartsTheme } from './components/charts/echarts-theme';
 
