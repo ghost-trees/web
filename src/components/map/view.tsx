@@ -32,6 +32,7 @@ export function MapView() {
   const playbackPoints = useFilterStore((state) => state.playbackPoints);
   const playbackMonths = useFilterStore((state) => state.playbackMonths);
   const appMode = useUiStore((state) => state.appMode);
+  const mainView = useUiStore((state) => state.mainView);
   const playbackMonthIndex = useUiStore((state) => state.playbackMonthIndex);
   const scalePointsByFee = useUiStore((state) => state.scalePointsByFee);
   const showAtlantaBoundary = useUiStore((state) => state.showAtlantaBoundary);
@@ -131,6 +132,17 @@ export function MapView() {
       replaceSelection(nextVisibleSelectedIds);
     }
   }, [selectedIds, visiblePointIds, replaceSelection]);
+
+  useEffect(() => {
+    if (mainView !== 'map' || !mapRef.current) {
+      return;
+    }
+
+    // Recalculate map dimensions after becoming visible again.
+    requestAnimationFrame(() => {
+      mapRef.current?.resize();
+    });
+  }, [mainView]);
 
   const selectedPointId =
     visibleSelectedIds.size === 1 ? visibleSelectedIds.values().next().value : null;

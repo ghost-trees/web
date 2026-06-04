@@ -3,6 +3,8 @@ import 'maplibre-gl/dist/maplibre-gl.css';
 import { createRoot } from 'react-dom/client';
 import { Shell } from './layout/shell';
 import { MapView } from './components/map/view';
+import { GalleryView } from './components/gallery/view';
+import { AboutView } from './components/about/view';
 import { SidePanel } from './components/nav/side-panel';
 import { FiltersPane } from './components/filters/pane';
 import { ChartsPane } from './components/charts/pane';
@@ -23,6 +25,8 @@ createRoot(rootElement).render(
     filtersPane={<FiltersPane />}
     chartsPane={<ChartsPane />}
     settingsPane={<SettingsPane />}
-    content={<MapView />}
+    mapContent={<MapView />}
+    galleryContent={<GalleryView />}
+    aboutContent={<AboutView />}
   />,
 );

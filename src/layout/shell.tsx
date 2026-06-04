@@ -7,14 +7,26 @@ type ShellProps = {
   filtersPane?: ReactNode;
   chartsPane?: ReactNode;
   settingsPane?: ReactNode;
-  content: ReactNode;
+  mapContent: ReactNode;
+  galleryContent?: ReactNode;
+  aboutContent?: ReactNode;
 };
 
-export function Shell({ sidebar, filtersPane, chartsPane, settingsPane, content }: ShellProps) {
+export function Shell({
+  sidebar,
+  filtersPane,
+  chartsPane,
+  settingsPane,
+  mapContent,
+  galleryContent,
+  aboutContent,
+}: ShellProps) {
+  const mainView = useUiStore((state) => state.mainView);
   const activePane = useUiStore((state) => state.activePane);
   const appMode = useUiStore((state) => state.appMode);
   const isPlaybackMode = appMode === 'playback';
-  const isAuxiliaryPaneOpen = activePane !== 'map';
+  const isMapMainView = mainView === 'map';
+  const isAuxiliaryPaneOpen = isMapMainView && activePane !== 'map';
   const auxiliaryPane =
     activePane === 'filters'
       ? filtersPane
@@ -31,7 +43,7 @@ export function Shell({ sidebar, filtersPane, chartsPane, settingsPane, content 
           {sidebar}
         </aside>
       ) : null}
-      {!isPlaybackMode && (filtersPane || chartsPane || settingsPane) ? (
+      {!isPlaybackMode && isMapMainView && (filtersPane || chartsPane || settingsPane) ? (
         <section
           aria-label="Inline detail panel"
           className={`min-h-0 shrink-0 overflow-hidden bg-[var(--color-surface-container-low)] ${
@@ -49,8 +61,31 @@ export function Shell({ sidebar, filtersPane, chartsPane, settingsPane, content 
           </div>
         </section>
       ) : null}
-      <main className="min-w-0 flex min-h-0 flex-1 flex-col bg-[var(--color-surface-container-lowest)] p-0">
-        {content}
+      <main className="relative min-w-0 flex min-h-0 flex-1 bg-[var(--color-surface-container-lowest)] p-0">
+        <div
+          className={`absolute inset-0 min-h-0 min-w-0 ${
+            mainView === 'map' ? 'flex' : 'pointer-events-none hidden'
+          }`}
+          aria-hidden={mainView !== 'map'}
+        >
+          {mapContent}
+        </div>
+        <div
+          className={`absolute inset-0 min-h-0 min-w-0 ${
+            mainView === 'gallery' ? 'flex' : 'pointer-events-none hidden'
+          }`}
+          aria-hidden={mainView !== 'gallery'}
+        >
+          {galleryContent}
+        </div>
+        <div
+          className={`absolute inset-0 min-h-0 min-w-0 ${
+            mainView === 'about' ? 'flex' : 'pointer-events-none hidden'
+          }`}
+          aria-hidden={mainView !== 'about'}
+        >
+          {aboutContent}
+        </div>
       </main>
       <PlaybackOverlay />
     </div>

@@ -11,6 +11,7 @@ import { useFilterStore } from '../../state/filter-store';
 import { asset } from '../../utils/asset';
 
 export function SidePanel() {
+  const mainView = useUiStore((state) => state.mainView);
   const selectedCount = useMapSelectionStore((state) => state.selectedIds.size);
   const hoveredId = useMapSelectionStore((state) => state.hoveredId);
   const clearSelection = useMapSelectionStore((state) => state.clearSelection);
@@ -19,6 +20,8 @@ export function SidePanel() {
   const dataError = useDataStore(selectDataError);
   const activePane = useUiStore((state) => state.activePane);
   const showMapPane = useUiStore((state) => state.showMapPane);
+  const showGalleryView = useUiStore((state) => state.showGalleryView);
+  const showAboutView = useUiStore((state) => state.showAboutView);
   const togglePane = useUiStore((state) => state.togglePane);
   const enterPlayback = useUiStore((state) => state.enterPlayback);
   const setPlaybackMonthIndex = useUiStore((state) => state.setPlaybackMonthIndex);
@@ -32,6 +35,7 @@ export function SidePanel() {
     setPlaybackPlaying(true);
     enterPlayback();
   };
+  const isMapView = mainView === 'map';
 
   return (
     <div className="flex h-full flex-col gap-6">
@@ -50,7 +54,7 @@ export function SidePanel() {
             <SidePanelButton
               label="Map"
               icon="map"
-              isActive={activePane === 'map'}
+              isActive={isMapView && activePane === 'map'}
               onClick={showMapPane}
             />
           </li>
@@ -58,18 +62,26 @@ export function SidePanel() {
             <SidePanelButton
               label="Filters"
               icon="filter_alt"
-              isActive={activePane === 'filters'}
+              isActive={isMapView && activePane === 'filters'}
               onClick={() => togglePane('filters')}
-              aria-pressed={activePane === 'filters'}
+              aria-pressed={isMapView && activePane === 'filters'}
             />
           </li>
           <li>
             <SidePanelButton
               label="Charts"
               icon="bar_chart"
-              isActive={activePane === 'charts'}
+              isActive={isMapView && activePane === 'charts'}
               onClick={() => togglePane('charts')}
-              aria-pressed={activePane === 'charts'}
+              aria-pressed={isMapView && activePane === 'charts'}
+            />
+          </li>
+          <li>
+            <SidePanelButton
+              label="Gallery"
+              icon="photo_library"
+              isActive={mainView === 'gallery'}
+              onClick={showGalleryView}
             />
           </li>
           <li>
@@ -84,9 +96,17 @@ export function SidePanel() {
             <SidePanelButton
               label="Settings"
               icon="settings"
-              isActive={activePane === 'settings'}
+              isActive={isMapView && activePane === 'settings'}
               onClick={() => togglePane('settings')}
-              aria-pressed={activePane === 'settings'}
+              aria-pressed={isMapView && activePane === 'settings'}
+            />
+          </li>
+          <li>
+            <SidePanelButton
+              label="About"
+              icon="info"
+              isActive={mainView === 'about'}
+              onClick={showAboutView}
             />
           </li>
         </ul>
