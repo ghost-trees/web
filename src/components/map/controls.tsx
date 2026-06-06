@@ -15,7 +15,7 @@ const mapControlButtonClass =
 
 export function MapControls({ onZoomIn, onZoomOut, onResetView }: MapControlsProps) {
   return (
-    <div className="pointer-events-none absolute right-6 top-6 z-30 flex flex-col gap-2">
+    <div className="flex flex-col gap-2">
       <div className="pointer-events-auto rounded-[var(--radius-round-four)] bg-[var(--color-surface-container-high)] p-1 shadow-ambient backdrop-blur-[var(--blur-glass)]">
         <button
           type="button"

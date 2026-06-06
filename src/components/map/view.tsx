@@ -15,6 +15,7 @@ import { useUiStore } from '../../state/ui-store';
 import { deriveTimelineMonthKey, filterIdsByVisibility, selectPointsForLayer } from './timeline';
 import { INITIAL_CENTER, INITIAL_ZOOM } from './constants';
 import { MapControls } from './controls';
+import { MapSelectionCounter } from './selection-counter';
 import { MapTooltip } from './tooltip';
 import { useMapInteractions } from './use-interactions';
 import { useMapInstance } from './use-map-instance';
@@ -174,11 +175,18 @@ export function MapView() {
       <div className="relative h-full w-full">
         <div ref={mapContainerRef} className="h-full w-full" />
         {appMode !== 'timeline' ? (
-          <MapControls
-            onZoomIn={handleZoomIn}
-            onZoomOut={handleZoomOut}
-            onResetView={handleResetView}
-          />
+          <>
+            <div className="pointer-events-none absolute left-6 top-6 z-30">
+              <MapSelectionCounter />
+            </div>
+            <div className="pointer-events-none absolute right-6 top-6 z-30">
+              <MapControls
+                onZoomIn={handleZoomIn}
+                onZoomOut={handleZoomOut}
+                onResetView={handleResetView}
+              />
+            </div>
+          </>
         ) : null}
         {appMode !== 'timeline' && selectedPoint && projectedTooltip ? (
           <MapTooltip
