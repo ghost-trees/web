@@ -1,9 +1,20 @@
+import { CloseButton } from '../common/close-button';
+import { useUiStore } from '../../state/ui-store';
+
 export function AboutView() {
+  const showMapPane = useUiStore((state) => state.showMapPane);
+
   return (
     <section
       aria-label="About View"
-      className="flex min-h-0 w-full flex-1 overflow-y-auto bg-[var(--color-surface-container-low)] p-8"
+      className="relative flex min-h-0 w-full flex-1 overflow-y-auto bg-[var(--color-surface-container-low)] p-8"
     >
+      <CloseButton
+        ariaLabel="Close about"
+        onClick={showMapPane}
+        size="compact"
+        className="absolute right-6 top-6"
+      />
       <div className="w-full max-w-4xl">
         <h2 className="text-xl font-semibold text-[var(--color-on-surface)]">About</h2>
         <div className="mt-4 space-y-4 text-sm leading-6 text-[var(--color-on-surface-variant)]">

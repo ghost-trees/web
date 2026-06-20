@@ -5,6 +5,7 @@
  */
 
 import { useMapSelectionStore } from '../../state/selection-store';
+import { CloseButton } from '../common/close-button';
 
 export function MapSelectionCounter() {
   const selectedCount = useMapSelectionStore((state) => state.selectedIds.size);
@@ -19,16 +20,12 @@ export function MapSelectionCounter() {
   return (
     <div className="pointer-events-auto" aria-live="polite" aria-label={label}>
       <div className="relative rounded-[var(--radius-round-four)] bg-[var(--color-surface-container-high)] py-2 pl-3 pr-8 shadow-ambient backdrop-blur-[var(--blur-glass)]">
-        <button
-          type="button"
+        <CloseButton
           onClick={clearSelection}
-          aria-label="Clear selection"
-          className="absolute right-1 top-1 inline-flex h-6 w-6 items-center justify-center rounded-[var(--radius-round-four)] text-[var(--color-on-surface-variant)] transition-colors hover:bg-[var(--color-surface-container-highest)] hover:text-[var(--color-on-surface)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-primary)]"
-        >
-          <span className="material-symbols-outlined text-[16px] leading-none" aria-hidden="true">
-            close
-          </span>
-        </button>
+          ariaLabel="Clear selection"
+          size="compact"
+          className="absolute right-1 top-1"
+        />
         <p className="text-[11px] uppercase tracking-[var(--tracking-label-meta)] text-[var(--color-on-surface-variant)]">
           Selected
         </p>

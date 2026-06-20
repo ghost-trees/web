@@ -2,6 +2,7 @@ import { useEffect } from 'react';
 import { useDataStore } from '../../state/data-store';
 import { useFilterStore } from '../../state/filter-store';
 import { useUiStore } from '../../state/ui-store';
+import { CloseButton } from '../common/close-button';
 
 const fullMonthFormatter = new Intl.DateTimeFormat('en-US', {
   month: 'long',
@@ -149,16 +150,12 @@ export function TimelineOverlay() {
   return (
     <div className="pointer-events-none absolute inset-0 z-40">
       <div className="pointer-events-auto absolute left-1/2 top-6 w-[min(680px,calc(100%-4rem))] -translate-x-1/2 rounded-[var(--radius-round-four)] border border-[var(--color-outline-variant)] bg-[color-mix(in_oklab,var(--color-surface-container-high)_75%,transparent)] p-4 shadow-ambient">
-        <button
-          type="button"
+        <CloseButton
           onClick={exitTimeline}
-          aria-label="Exit timeline"
-          className="absolute right-3 top-3 inline-flex h-8 w-8 items-center justify-center rounded-[var(--radius-round-four)] border border-[var(--color-outline-variant)] text-[var(--color-on-surface)] transition hover:bg-[var(--color-surface-container-highest)]"
-        >
-          <span className="material-symbols-outlined text-[18px] leading-none" aria-hidden="true">
-            close
-          </span>
-        </button>
+          ariaLabel="Exit timeline"
+          size="regular"
+          className="absolute right-3 top-3"
+        />
         <p className="text-center text-[11px] uppercase tracking-[var(--tracking-label-meta)] text-[var(--color-on-surface-variant)]">
           Timeline
         </p>
