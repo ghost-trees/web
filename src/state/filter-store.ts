@@ -10,6 +10,8 @@ import {
 
 const FALLBACK_YEAR = new Date().getFullYear();
 
+export type YearFilterMode = 'range' | 'through';
+
 export type FilterStoreState = {
   allPoints: MapPoint[];
   visiblePoints: MapPoint[];
@@ -27,6 +29,7 @@ export type FilterStoreState = {
   maxAvailableYear: number;
   minYear: number;
   maxYear: number;
+  yearFilterMode: YearFilterMode;
   availableTreeTypes: string[];
   enabledTreeTypes: string[];
   availableZipCodes: string[];
@@ -34,6 +37,7 @@ export type FilterStoreState = {
   setSourcePoints: (points: MapPoint[]) => void;
   setMinYear: (year: number) => void;
   setMaxYear: (year: number) => void;
+  setYearFilterMode: (mode: YearFilterMode) => void;
   setTreeTypeEnabled: (treeType: string, enabled: boolean) => void;
   setAllTreeTypesEnabled: (enabled: boolean) => void;
   setZipCodeEnabled: (zipCode: string, enabled: boolean) => void;
@@ -131,16 +135,34 @@ function pointMatchesTreeTypeAndZip(
   return enabledZipCodes.has(point.zipCode);
 }
 
+function pointMatchesYearFilter(
+  year: number | null,
+  minYear: number,
+  maxYear: number,
+  yearFilterMode: YearFilterMode,
+): boolean {
+  if (year === null) {
+    return false;
+  }
+
+  if (yearFilterMode === 'through') {
+    return year <= maxYear;
+  }
+
+  return year >= minYear && year <= maxYear;
+}
+
 function buildVisiblePoints(
   points: MapPoint[],
   minYear: number,
   maxYear: number,
+  yearFilterMode: YearFilterMode,
   enabledTreeTypes: Set<string>,
   enabledZipCodes: Set<string>,
 ): MapPoint[] {
   return points.filter((point) => {
     const year = parsePointYearFromDate(point.date);
-    if (year === null || year < minYear || year > maxYear) {
+    if (!pointMatchesYearFilter(year, minYear, maxYear, yearFilterMode)) {
       return false;
     }
 
@@ -197,6 +219,7 @@ function deriveFilteredState(
   points: MapPoint[],
   minYear: number,
   maxYear: number,
+  yearFilterMode: YearFilterMode,
   enabledTreeTypes: string[],
   enabledZipCodes: string[],
 ): Pick<FilterStoreState, 'visiblePoints' | 'timelinePoints' | 'timelineMonths'> {
@@ -208,6 +231,7 @@ function deriveFilteredState(
       points,
       minYear,
       maxYear,
+      yearFilterMode,
       enabledTreeTypeSet,
       enabledZipCodeSet,
     ),
@@ -218,7 +242,7 @@ function deriveFilteredState(
 
 type FilterDerivationInputState = Pick<
   FilterStoreState,
-  'allPoints' | 'minYear' | 'maxYear' | 'enabledTreeTypes' | 'enabledZipCodes'
+  'allPoints' | 'minYear' | 'maxYear' | 'yearFilterMode' | 'enabledTreeTypes' | 'enabledZipCodes'
 >;
 
 function deriveFilteredSlicesFromState(
@@ -228,6 +252,7 @@ function deriveFilteredSlicesFromState(
     state.allPoints,
     state.minYear,
     state.maxYear,
+    state.yearFilterMode,
     state.enabledTreeTypes,
     state.enabledZipCodes,
   );
@@ -243,6 +268,7 @@ export const useFilterStore = create<FilterStoreState>((set, get) => ({
   maxAvailableYear: FALLBACK_YEAR,
   minYear: FALLBACK_YEAR,
   maxYear: FALLBACK_YEAR,
+  yearFilterMode: 'range',
   availableTreeTypes: [],
   enabledTreeTypes: [],
   availableZipCodes: [],
@@ -286,6 +312,7 @@ export const useFilterStore = create<FilterStoreState>((set, get) => ({
       allPoints: points,
       minYear: nextRange.minYear,
       maxYear: nextRange.maxYear,
+      yearFilterMode: state.yearFilterMode,
       enabledTreeTypes: nextEnabledTreeTypes,
       enabledZipCodes: nextEnabledZipCodes,
     };
@@ -309,7 +336,7 @@ export const useFilterStore = create<FilterStoreState>((set, get) => ({
   },
   setMinYear: (year) => {
     const state = get();
-    if (!state.hasAvailableYears) {
+    if (!state.hasAvailableYears || state.yearFilterMode === 'through') {
       return;
     }
 
@@ -324,6 +351,7 @@ export const useFilterStore = create<FilterStoreState>((set, get) => ({
       allPoints: state.allPoints,
       minYear: nextRange.minYear,
       maxYear: nextRange.maxYear,
+      yearFilterMode: state.yearFilterMode,
       enabledTreeTypes: state.enabledTreeTypes,
       enabledZipCodes: state.enabledZipCodes,
     });
@@ -341,6 +369,29 @@ export const useFilterStore = create<FilterStoreState>((set, get) => ({
       return;
     }
 
+    if (state.yearFilterMode === 'through') {
+      const nextMaxYear = clampToBounds(
+        year,
+        state.minAvailableYear,
+        state.maxAvailableYear,
+      );
+      const derivedState = deriveFilteredSlicesFromState({
+        allPoints: state.allPoints,
+        minYear: state.minYear,
+        maxYear: nextMaxYear,
+        yearFilterMode: state.yearFilterMode,
+        enabledTreeTypes: state.enabledTreeTypes,
+        enabledZipCodes: state.enabledZipCodes,
+      });
+      set({
+        maxYear: nextMaxYear,
+        visiblePoints: derivedState.visiblePoints,
+        timelinePoints: derivedState.timelinePoints,
+        timelineMonths: derivedState.timelineMonths,
+      });
+      return;
+    }
+
     const nextRange = normalizeRange({
       proposedMinYear: state.minYear,
       proposedMaxYear: year,
@@ -352,12 +403,45 @@ export const useFilterStore = create<FilterStoreState>((set, get) => ({
       allPoints: state.allPoints,
       minYear: nextRange.minYear,
       maxYear: nextRange.maxYear,
+      yearFilterMode: state.yearFilterMode,
       enabledTreeTypes: state.enabledTreeTypes,
       enabledZipCodes: state.enabledZipCodes,
     });
     set({
       minYear: nextRange.minYear,
       maxYear: nextRange.maxYear,
+      visiblePoints: derivedState.visiblePoints,
+      timelinePoints: derivedState.timelinePoints,
+      timelineMonths: derivedState.timelineMonths,
+    });
+  },
+  setYearFilterMode: (mode) => {
+    const state = get();
+    if (state.yearFilterMode === mode) {
+      return;
+    }
+
+    const nextMinYear =
+      mode === 'through'
+        ? state.minAvailableYear
+        : normalizeRange({
+            proposedMinYear: state.minYear,
+            proposedMaxYear: state.maxYear,
+            minAvailableYear: state.minAvailableYear,
+            maxAvailableYear: state.maxAvailableYear,
+          }).minYear;
+
+    const derivedState = deriveFilteredSlicesFromState({
+      allPoints: state.allPoints,
+      minYear: nextMinYear,
+      maxYear: state.maxYear,
+      yearFilterMode: mode,
+      enabledTreeTypes: state.enabledTreeTypes,
+      enabledZipCodes: state.enabledZipCodes,
+    });
+    set({
+      yearFilterMode: mode,
+      minYear: nextMinYear,
       visiblePoints: derivedState.visiblePoints,
       timelinePoints: derivedState.timelinePoints,
       timelineMonths: derivedState.timelineMonths,
@@ -379,6 +463,7 @@ export const useFilterStore = create<FilterStoreState>((set, get) => ({
       allPoints: state.allPoints,
       minYear: state.minYear,
       maxYear: state.maxYear,
+      yearFilterMode: state.yearFilterMode,
       enabledTreeTypes: nextEnabledTreeTypes,
       enabledZipCodes: state.enabledZipCodes,
     });
@@ -396,6 +481,7 @@ export const useFilterStore = create<FilterStoreState>((set, get) => ({
       allPoints: state.allPoints,
       minYear: state.minYear,
       maxYear: state.maxYear,
+      yearFilterMode: state.yearFilterMode,
       enabledTreeTypes: nextEnabledTreeTypes,
       enabledZipCodes: state.enabledZipCodes,
     });
@@ -422,6 +508,7 @@ export const useFilterStore = create<FilterStoreState>((set, get) => ({
       allPoints: state.allPoints,
       minYear: state.minYear,
       maxYear: state.maxYear,
+      yearFilterMode: state.yearFilterMode,
       enabledTreeTypes: state.enabledTreeTypes,
       enabledZipCodes: nextEnabledZipCodes,
     });
@@ -439,6 +526,7 @@ export const useFilterStore = create<FilterStoreState>((set, get) => ({
       allPoints: state.allPoints,
       minYear: state.minYear,
       maxYear: state.maxYear,
+      yearFilterMode: state.yearFilterMode,
       enabledTreeTypes: state.enabledTreeTypes,
       enabledZipCodes: nextEnabledZipCodes,
     });
