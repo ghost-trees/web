@@ -8,7 +8,12 @@ type PaneHeaderProps = {
   closeAriaLabel?: string;
 };
 
-export function PaneHeader({ title, description, onClose, closeAriaLabel = 'Close panel' }: PaneHeaderProps) {
+export function PaneHeader({
+  title,
+  description,
+  onClose,
+  closeAriaLabel = 'Close panel',
+}: PaneHeaderProps) {
   return (
     <header className="mb-4 flex items-start justify-between gap-3">
       <div>

@@ -370,11 +370,7 @@ export const useFilterStore = create<FilterStoreState>((set, get) => ({
     }
 
     if (state.yearFilterMode === 'through') {
-      const nextMaxYear = clampToBounds(
-        year,
-        state.minAvailableYear,
-        state.maxAvailableYear,
-      );
+      const nextMaxYear = clampToBounds(year, state.minAvailableYear, state.maxAvailableYear);
       const derivedState = deriveFilteredSlicesFromState({
         allPoints: state.allPoints,
         minYear: state.minYear,

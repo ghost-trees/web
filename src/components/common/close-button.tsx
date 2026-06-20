@@ -20,7 +20,12 @@ const sizeClasses: Record<CloseButtonSize, { button: string; icon: string }> = {
   },
 };
 
-export function CloseButton({ ariaLabel, size = 'compact', className, ...buttonProps }: CloseButtonProps) {
+export function CloseButton({
+  ariaLabel,
+  size = 'compact',
+  className,
+  ...buttonProps
+}: CloseButtonProps) {
   const selectedSizeClasses = sizeClasses[size];
   const classes = [
     'inline-flex items-center justify-center text-[var(--color-icon-button-fg)] transition-colors hover:bg-[var(--color-icon-button-hover-bg)] hover:text-[var(--color-icon-button-hover-fg)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-primary)]',
