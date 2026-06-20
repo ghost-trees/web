@@ -10,20 +10,20 @@ type CloseButtonProps = Omit<ComponentProps<'button'>, 'aria-label' | 'children'
 const sizeClasses: Record<CloseButtonSize, { button: string; icon: string }> = {
   compact: {
     button:
-      'h-[var(--size-close-button-compact)] w-[var(--size-close-button-compact)] rounded-[var(--radius-close-button)]',
-    icon: 'text-[length:var(--size-close-icon-compact)]',
+      'h-[var(--size-icon-button-compact)] w-[var(--size-icon-button-compact)] rounded-[var(--radius-icon-button)]',
+    icon: 'text-[length:var(--size-icon-button-symbol-compact)]',
   },
   regular: {
     button:
-      'h-[var(--size-close-button-regular)] w-[var(--size-close-button-regular)] rounded-[var(--radius-close-button)]',
-    icon: 'text-[length:var(--size-close-icon-regular)]',
+      'h-[var(--size-icon-button-regular)] w-[var(--size-icon-button-regular)] rounded-[var(--radius-icon-button)]',
+    icon: 'text-[length:var(--size-icon-button-symbol-regular)]',
   },
 };
 
 export function CloseButton({ ariaLabel, size = 'compact', className, ...buttonProps }: CloseButtonProps) {
   const selectedSizeClasses = sizeClasses[size];
   const classes = [
-    'inline-flex items-center justify-center text-[var(--color-close-fg)] transition-colors hover:bg-[var(--color-close-hover-bg)] hover:text-[var(--color-close-hover-fg)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-primary)]',
+    'inline-flex items-center justify-center text-[var(--color-icon-button-fg)] transition-colors hover:bg-[var(--color-icon-button-hover-bg)] hover:text-[var(--color-icon-button-hover-fg)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-primary)]',
     selectedSizeClasses.button,
     className,
   ]

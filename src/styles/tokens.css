@@ -26,11 +26,15 @@
   --spacing-list-item-gap: 4px;
   --tracking-display-tight: -0.02em;
   --tracking-label-meta: 0.05em;
-  --size-close-button-compact: 1.5rem;
-  --size-close-button-regular: 2rem;
-  --size-close-icon-compact: 1rem;
-  --size-close-icon-regular: 1.125rem;
-  --radius-close-button: var(--radius-round-four);
+  /* Icon button controls */
+  --size-icon-button-compact: 1.5rem;
+  --size-icon-button-regular: 2rem;
+  --size-icon-button-symbol-compact: 1rem;
+  --size-icon-button-symbol-regular: 1.125rem;
+  --radius-icon-button: var(--radius-round-four);
+  --color-icon-button-fg: var(--color-on-surface-variant);
+  --color-icon-button-hover-fg: var(--color-on-surface);
+  --color-icon-button-hover-bg: var(--color-surface-container-highest);
 
   /* Depth, effects, and compositional tokens */
   --blur-glass: 20px;
@@ -41,7 +45,4 @@
   --shadow-ambient: 0 0 32px -4px rgb(0 0 0 / 40%);
   --shadow-focus-ring-primary: 0 0 0 2px #a4d393;
   --background-image-button-primary: linear-gradient(135deg, #a4d393, #254d1c);
-  --color-close-fg: var(--color-on-surface-variant);
-  --color-close-hover-fg: var(--color-on-surface);
-  --color-close-hover-bg: var(--color-surface-container-highest);
 }

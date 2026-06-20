@@ -32,14 +32,16 @@ export function FilterMultiselect({
         {label}
       </p>
       <details className="mt-3 group">
-        <summary className="cursor-pointer list-none rounded-md border border-[var(--color-outline-variant)] bg-[var(--color-surface)] px-3 py-2 text-sm text-[var(--color-on-surface)]">
+        <summary className="cursor-pointer list-none rounded-md border border-[var(--color-outline-variant)] bg-[var(--color-surface)] px-3 py-2 text-sm text-[var(--color-on-surface)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-primary)]">
           <span className="flex items-center justify-between gap-3">
             <span>{summaryLabel}</span>
-            <span className="text-xs text-[var(--color-on-surface-variant)] group-open:hidden">
-              Open
-            </span>
-            <span className="hidden text-xs text-[var(--color-on-surface-variant)] group-open:inline">
-              Close
+            <span className="inline-flex h-[var(--size-icon-button-compact)] w-[var(--size-icon-button-compact)] shrink-0 items-center justify-center rounded-[var(--radius-icon-button)] text-[var(--color-icon-button-fg)] transition-colors hover:bg-[var(--color-icon-button-hover-bg)] hover:text-[var(--color-icon-button-hover-fg)]">
+              <span
+                aria-hidden="true"
+                className="material-symbols-outlined text-[18px] leading-none transition-transform group-open:rotate-180"
+              >
+                expand_more
+              </span>
             </span>
           </span>
         </summary>
