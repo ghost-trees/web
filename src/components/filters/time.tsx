@@ -1,29 +1,29 @@
 import { formatYearMonthLabel, fromYearMonthKey, toYearMonthKey } from '../../utils/date';
-import { useFilterStore, type YearFilterMode } from '../../state/filter-store';
+import { useFilterStore, type TimeFilterMode } from '../../state/filter-store';
 
-const yearModeOptions: { mode: YearFilterMode; label: string; title: string }[] = [
+const timeModeOptions: { mode: TimeFilterMode; label: string; title: string }[] = [
   {
     mode: 'range',
     label: 'Range',
-    title: 'Filter between a start and end year',
+    title: 'Filter between a start and end month',
   },
   {
     mode: 'through',
     label: 'Through',
-    title: 'Show all data recorded through the selected year',
+    title: 'Show all data recorded through the selected month',
   },
 ];
 
-export function Year() {
+export function Time() {
   const minAvailableMonthKey = useFilterStore((state) => state.minAvailableMonthKey);
   const maxAvailableMonthKey = useFilterStore((state) => state.maxAvailableMonthKey);
   const minMonthKey = useFilterStore((state) => state.minMonthKey);
   const maxMonthKey = useFilterStore((state) => state.maxMonthKey);
-  const yearFilterMode = useFilterStore((state) => state.yearFilterMode);
+  const timeFilterMode = useFilterStore((state) => state.timeFilterMode);
   const hasAvailableMonths = useFilterStore((state) => state.hasAvailableMonths);
   const setMinMonthKey = useFilterStore((state) => state.setMinMonthKey);
   const setMaxMonthKey = useFilterStore((state) => state.setMaxMonthKey);
-  const setYearFilterMode = useFilterStore((state) => state.setYearFilterMode);
+  const setTimeFilterMode = useFilterStore((state) => state.setTimeFilterMode);
   // The timeline is drawn one tick past the real data so we can show a
   // decorative year marker at the very end. It is rendered through the same
   // tick/label path as every other year, but the slider cannot select it.
@@ -40,7 +40,7 @@ export function Year() {
   const leftForMonthKey = (monthKey: number) =>
     `calc(${THUMB_SIZE / 2}px + ${percentForMonthKey(monthKey) / 100} * (100% - ${THUMB_SIZE}px))`;
   const isSliderDisabled = !hasAvailableMonths || minAvailableMonthKey === maxAvailableMonthKey;
-  const isRangeMode = yearFilterMode === 'range';
+  const isRangeMode = timeFilterMode === 'range';
   const liveRangeLabel = hasAvailableMonths
     ? isRangeMode
       ? `${formatYearMonthLabel(fromYearMonthKey(minMonthKey))} - ${formatYearMonthLabel(
@@ -63,15 +63,15 @@ export function Year() {
     <div className="rounded-[var(--radius-round-four)] border border-[var(--color-outline-variant)] bg-[var(--color-surface-container-high)] p-4">
       <div className="flex items-start justify-between gap-3">
         <p className="text-xs uppercase tracking-[var(--tracking-label-meta)] text-[var(--color-on-surface-variant)]">
-          Year
+          Time
         </p>
         <div
           className="flex shrink-0 rounded-md border border-[var(--color-outline-variant)] bg-[var(--color-surface)] p-0.5"
           role="group"
-          aria-label="Year filter mode"
+          aria-label="Time filter mode"
         >
-          {yearModeOptions.map(({ mode, label, title }) => {
-            const isActive = yearFilterMode === mode;
+          {timeModeOptions.map(({ mode, label, title }) => {
+            const isActive = timeFilterMode === mode;
             return (
               <button
                 key={mode}
@@ -79,7 +79,7 @@ export function Year() {
                 title={title}
                 aria-pressed={isActive}
                 onClick={() => {
-                  setYearFilterMode(mode);
+                  setTimeFilterMode(mode);
                 }}
                 className={[
                   'rounded px-2 py-0.5 text-[11px] font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-primary)]',
@@ -98,7 +98,7 @@ export function Year() {
         <p className="text-center text-sm font-semibold text-[var(--color-on-surface)]">
           {liveRangeLabel}
         </p>
-        <div className="year-range relative mt-3 h-10">
+        <div className="time-range relative mt-3 h-10">
           <div
             className="absolute top-1/2 h-px -translate-y-1/2 bg-[var(--color-outline-variant)]"
             style={{ left: `${THUMB_SIZE / 2}px`, right: `${THUMB_SIZE / 2}px` }}
@@ -136,7 +136,7 @@ export function Year() {
                   const nextMinMonthKey = Math.min(Number(event.target.value), maxMonthKey - 1);
                   setMinMonthKey(nextMinMonthKey);
                 }}
-                className="year-range-input absolute left-0 top-1/2 h-10 w-full -translate-y-1/2"
+                className="time-range-input absolute left-0 top-1/2 h-10 w-full -translate-y-1/2"
               />
               <input
                 type="range"
@@ -152,7 +152,7 @@ export function Year() {
                   );
                   setMaxMonthKey(nextMaxMonthKey);
                 }}
-                className="year-range-input absolute left-0 top-1/2 h-10 w-full -translate-y-1/2"
+                className="time-range-input absolute left-0 top-1/2 h-10 w-full -translate-y-1/2"
               />
             </>
           ) : (
@@ -166,7 +166,7 @@ export function Year() {
               onChange={(event) => {
                 setMaxMonthKey(Math.min(Number(event.target.value), maxAvailableMonthKey));
               }}
-              className="year-range-input absolute left-0 top-1/2 h-10 w-full -translate-y-1/2"
+              className="time-range-input absolute left-0 top-1/2 h-10 w-full -translate-y-1/2"
             />
           )}
         </div>
@@ -194,13 +194,13 @@ export function Year() {
         </div>
       </div>
       <style>{`
-        .year-range-input {
+        .time-range-input {
           appearance: none;
           background: transparent;
           pointer-events: none;
         }
 
-        .year-range-input::-webkit-slider-thumb {
+        .time-range-input::-webkit-slider-thumb {
           appearance: none;
           pointer-events: auto;
           width: 16px;
@@ -212,11 +212,11 @@ export function Year() {
           cursor: pointer;
         }
 
-        .year-range-input::-moz-range-track {
+        .time-range-input::-moz-range-track {
           background: transparent;
         }
 
-        .year-range-input::-moz-range-thumb {
+        .time-range-input::-moz-range-thumb {
           pointer-events: auto;
           width: 16px;
           height: 16px;

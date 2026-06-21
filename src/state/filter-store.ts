@@ -10,7 +10,7 @@ import {
 
 const FALLBACK_MONTH_KEY = new Date().getFullYear() * 12;
 
-export type YearFilterMode = 'range' | 'through';
+export type TimeFilterMode = 'range' | 'through';
 
 export type FilterStoreState = {
   allPoints: MapPoint[];
@@ -29,7 +29,7 @@ export type FilterStoreState = {
   maxAvailableMonthKey: number;
   minMonthKey: number;
   maxMonthKey: number;
-  yearFilterMode: YearFilterMode;
+  timeFilterMode: TimeFilterMode;
   availableTreeTypes: string[];
   enabledTreeTypes: string[];
   availableZipCodes: string[];
@@ -37,7 +37,7 @@ export type FilterStoreState = {
   setSourcePoints: (points: MapPoint[]) => void;
   setMinMonthKey: (monthKey: number) => void;
   setMaxMonthKey: (monthKey: number) => void;
-  setYearFilterMode: (mode: YearFilterMode) => void;
+  setTimeFilterMode: (mode: TimeFilterMode) => void;
   setTreeTypeEnabled: (treeType: string, enabled: boolean) => void;
   setAllTreeTypesEnabled: (enabled: boolean) => void;
   setZipCodeEnabled: (zipCode: string, enabled: boolean) => void;
@@ -145,13 +145,13 @@ function pointMatchesMonthFilter(
   monthKey: number | null,
   minMonthKey: number,
   maxMonthKey: number,
-  yearFilterMode: YearFilterMode,
+  timeFilterMode: TimeFilterMode,
 ): boolean {
   if (monthKey === null) {
     return false;
   }
 
-  if (yearFilterMode === 'through') {
+  if (timeFilterMode === 'through') {
     return monthKey <= maxMonthKey;
   }
 
@@ -162,13 +162,13 @@ function buildVisiblePoints(
   points: MapPoint[],
   minMonthKey: number,
   maxMonthKey: number,
-  yearFilterMode: YearFilterMode,
+  timeFilterMode: TimeFilterMode,
   enabledTreeTypes: Set<string>,
   enabledZipCodes: Set<string>,
 ): MapPoint[] {
   return points.filter((point) => {
     const monthKey = parsePointMonthKey(point.date);
-    if (!pointMatchesMonthFilter(monthKey, minMonthKey, maxMonthKey, yearFilterMode)) {
+    if (!pointMatchesMonthFilter(monthKey, minMonthKey, maxMonthKey, timeFilterMode)) {
       return false;
     }
 
@@ -225,7 +225,7 @@ function deriveFilteredState(
   points: MapPoint[],
   minMonthKey: number,
   maxMonthKey: number,
-  yearFilterMode: YearFilterMode,
+  timeFilterMode: TimeFilterMode,
   enabledTreeTypes: string[],
   enabledZipCodes: string[],
 ): Pick<FilterStoreState, 'visiblePoints' | 'timelinePoints' | 'timelineMonths'> {
@@ -237,7 +237,7 @@ function deriveFilteredState(
       points,
       minMonthKey,
       maxMonthKey,
-      yearFilterMode,
+      timeFilterMode,
       enabledTreeTypeSet,
       enabledZipCodeSet,
     ),
@@ -251,7 +251,7 @@ type FilterDerivationInputState = Pick<
   | 'allPoints'
   | 'minMonthKey'
   | 'maxMonthKey'
-  | 'yearFilterMode'
+  | 'timeFilterMode'
   | 'enabledTreeTypes'
   | 'enabledZipCodes'
 >;
@@ -263,7 +263,7 @@ function deriveFilteredSlicesFromState(
     state.allPoints,
     state.minMonthKey,
     state.maxMonthKey,
-    state.yearFilterMode,
+    state.timeFilterMode,
     state.enabledTreeTypes,
     state.enabledZipCodes,
   );
@@ -279,7 +279,7 @@ export const useFilterStore = create<FilterStoreState>((set, get) => ({
   maxAvailableMonthKey: FALLBACK_MONTH_KEY,
   minMonthKey: FALLBACK_MONTH_KEY,
   maxMonthKey: FALLBACK_MONTH_KEY,
-  yearFilterMode: 'range',
+  timeFilterMode: 'range',
   availableTreeTypes: [],
   enabledTreeTypes: [],
   availableZipCodes: [],
@@ -324,7 +324,7 @@ export const useFilterStore = create<FilterStoreState>((set, get) => ({
       allPoints: points,
       minMonthKey: nextRange.minMonthKey,
       maxMonthKey: nextRange.maxMonthKey,
-      yearFilterMode: state.yearFilterMode,
+      timeFilterMode: state.timeFilterMode,
       enabledTreeTypes: nextEnabledTreeTypes,
       enabledZipCodes: nextEnabledZipCodes,
     };
@@ -348,7 +348,7 @@ export const useFilterStore = create<FilterStoreState>((set, get) => ({
   },
   setMinMonthKey: (monthKey) => {
     const state = get();
-    if (!state.hasAvailableMonths || state.yearFilterMode === 'through') {
+    if (!state.hasAvailableMonths || state.timeFilterMode === 'through') {
       return;
     }
 
@@ -363,7 +363,7 @@ export const useFilterStore = create<FilterStoreState>((set, get) => ({
       allPoints: state.allPoints,
       minMonthKey: nextRange.minMonthKey,
       maxMonthKey: nextRange.maxMonthKey,
-      yearFilterMode: state.yearFilterMode,
+      timeFilterMode: state.timeFilterMode,
       enabledTreeTypes: state.enabledTreeTypes,
       enabledZipCodes: state.enabledZipCodes,
     });
@@ -381,7 +381,7 @@ export const useFilterStore = create<FilterStoreState>((set, get) => ({
       return;
     }
 
-    if (state.yearFilterMode === 'through') {
+    if (state.timeFilterMode === 'through') {
       const nextMaxMonthKey = clampToBounds(
         monthKey,
         state.minAvailableMonthKey,
@@ -391,7 +391,7 @@ export const useFilterStore = create<FilterStoreState>((set, get) => ({
         allPoints: state.allPoints,
         minMonthKey: state.minMonthKey,
         maxMonthKey: nextMaxMonthKey,
-        yearFilterMode: state.yearFilterMode,
+        timeFilterMode: state.timeFilterMode,
         enabledTreeTypes: state.enabledTreeTypes,
         enabledZipCodes: state.enabledZipCodes,
       });
@@ -415,7 +415,7 @@ export const useFilterStore = create<FilterStoreState>((set, get) => ({
       allPoints: state.allPoints,
       minMonthKey: nextRange.minMonthKey,
       maxMonthKey: nextRange.maxMonthKey,
-      yearFilterMode: state.yearFilterMode,
+      timeFilterMode: state.timeFilterMode,
       enabledTreeTypes: state.enabledTreeTypes,
       enabledZipCodes: state.enabledZipCodes,
     });
@@ -427,9 +427,9 @@ export const useFilterStore = create<FilterStoreState>((set, get) => ({
       timelineMonths: derivedState.timelineMonths,
     });
   },
-  setYearFilterMode: (mode) => {
+  setTimeFilterMode: (mode) => {
     const state = get();
-    if (state.yearFilterMode === mode) {
+    if (state.timeFilterMode === mode) {
       return;
     }
 
@@ -447,12 +447,12 @@ export const useFilterStore = create<FilterStoreState>((set, get) => ({
       allPoints: state.allPoints,
       minMonthKey: nextMinMonthKey,
       maxMonthKey: state.maxMonthKey,
-      yearFilterMode: mode,
+      timeFilterMode: mode,
       enabledTreeTypes: state.enabledTreeTypes,
       enabledZipCodes: state.enabledZipCodes,
     });
     set({
-      yearFilterMode: mode,
+      timeFilterMode: mode,
       minMonthKey: nextMinMonthKey,
       visiblePoints: derivedState.visiblePoints,
       timelinePoints: derivedState.timelinePoints,
@@ -475,7 +475,7 @@ export const useFilterStore = create<FilterStoreState>((set, get) => ({
       allPoints: state.allPoints,
       minMonthKey: state.minMonthKey,
       maxMonthKey: state.maxMonthKey,
-      yearFilterMode: state.yearFilterMode,
+      timeFilterMode: state.timeFilterMode,
       enabledTreeTypes: nextEnabledTreeTypes,
       enabledZipCodes: state.enabledZipCodes,
     });
@@ -493,7 +493,7 @@ export const useFilterStore = create<FilterStoreState>((set, get) => ({
       allPoints: state.allPoints,
       minMonthKey: state.minMonthKey,
       maxMonthKey: state.maxMonthKey,
-      yearFilterMode: state.yearFilterMode,
+      timeFilterMode: state.timeFilterMode,
       enabledTreeTypes: nextEnabledTreeTypes,
       enabledZipCodes: state.enabledZipCodes,
     });
@@ -520,7 +520,7 @@ export const useFilterStore = create<FilterStoreState>((set, get) => ({
       allPoints: state.allPoints,
       minMonthKey: state.minMonthKey,
       maxMonthKey: state.maxMonthKey,
-      yearFilterMode: state.yearFilterMode,
+      timeFilterMode: state.timeFilterMode,
       enabledTreeTypes: state.enabledTreeTypes,
       enabledZipCodes: nextEnabledZipCodes,
     });
@@ -538,7 +538,7 @@ export const useFilterStore = create<FilterStoreState>((set, get) => ({
       allPoints: state.allPoints,
       minMonthKey: state.minMonthKey,
       maxMonthKey: state.maxMonthKey,
-      yearFilterMode: state.yearFilterMode,
+      timeFilterMode: state.timeFilterMode,
       enabledTreeTypes: state.enabledTreeTypes,
       enabledZipCodes: nextEnabledZipCodes,
     });

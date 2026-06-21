@@ -7,7 +7,7 @@ import {
 import { PaneHeader } from '../common/pane-header';
 import { Tree } from './tree';
 import { Zip } from './zip';
-import { Year } from './year';
+import { Time } from './time';
 
 export function FiltersPane() {
   const showMapPane = useUiStore((state) => state.showMapPane);
@@ -26,7 +26,7 @@ export function FiltersPane() {
         onClose={showMapPane}
       />
       <div className="flex-1 min-h-0 overflow-y-auto pb-2 pr-1">
-        <Year />
+        <Time />
         <Tree />
         <Zip />
       </div>
