@@ -5,31 +5,70 @@ import { useFilterStore } from '../../../state/filter-store';
 import type { MapPoint } from '../../../state/data-store';
 import { useMapSelectionStore } from '../../../state/selection-store';
 import { rgbaFromTuple } from '../../../utils/color';
-import { MONTH_LABELS, parseYearMonth } from '../../../utils/date';
+import { MONTH_LABELS, fromYearMonthKey, parseYearMonth, toYearMonthKey } from '../../../utils/date';
 import { POINT_FILL_COLOR_SELECTED } from '../../map/constants';
 import { ECHARTS_THEME_NAME } from '../echarts-theme';
 
-function parseMonthIndex(dateValue: string): number | null {
-  const yearMonth = parseYearMonth(dateValue);
-  return yearMonth?.monthIndex ?? null;
+type MonthBucket = {
+  key: number;
+  label: string;
+  count: number;
+  pointIds: string[];
+};
+
+function formatShortYearLabel(year: number): string {
+  return `${year % 100}`.padStart(2, '0');
 }
 
-function buildMonthlyBuckets(points: MapPoint[]): {
-  counts: number[];
-  pointIdsByMonth: string[][];
-} {
-  const counts = Array<number>(12).fill(0);
-  const pointIdsByMonth = Array.from({ length: 12 }, () => [] as string[]);
+function formatMonthLabel(monthKey: number): string {
+  const yearMonth = fromYearMonthKey(monthKey);
+  return `${MONTH_LABELS[yearMonth.monthIndex]} '${formatShortYearLabel(yearMonth.year)}`;
+}
+
+function formatMonthRangeLabel(monthKey: number): string {
+  const yearMonth = fromYearMonthKey(monthKey);
+  return `${MONTH_LABELS[yearMonth.monthIndex]} ${yearMonth.year}`;
+}
+
+function buildMonthlyBuckets(
+  points: MapPoint[],
+  rangeStartMonthKey: number,
+  rangeEndMonthKey: number,
+): MonthBucket[] {
+  const bucketMap = new Map<number, { count: number; pointIds: string[] }>();
 
   for (const point of points) {
-    const monthIndex = parseMonthIndex(point.date);
-    if (monthIndex !== null) {
-      counts[monthIndex] += 1;
-      pointIdsByMonth[monthIndex].push(point.id);
+    const yearMonth = parseYearMonth(point.date);
+    if (!yearMonth) {
+      continue;
     }
+
+    const monthKey = toYearMonthKey(yearMonth);
+    const existingBucket = bucketMap.get(monthKey);
+    if (existingBucket) {
+      existingBucket.count += 1;
+      existingBucket.pointIds.push(point.id);
+      continue;
+    }
+
+    bucketMap.set(monthKey, {
+      count: 1,
+      pointIds: [point.id],
+    });
   }
 
-  return { counts, pointIdsByMonth };
+  const monthlyBuckets: MonthBucket[] = [];
+  for (let monthKey = rangeStartMonthKey; monthKey <= rangeEndMonthKey; monthKey += 1) {
+    const bucket = bucketMap.get(monthKey);
+    monthlyBuckets.push({
+      key: monthKey,
+      label: formatMonthLabel(monthKey),
+      count: bucket?.count ?? 0,
+      pointIds: bucket?.pointIds ?? [],
+    });
+  }
+
+  return monthlyBuckets;
 }
 
 type SeriesEvent = {
@@ -37,37 +76,71 @@ type SeriesEvent = {
   dataIndex?: number;
 };
 
-function getMonthPointIds(params: SeriesEvent, pointIdsByMonth: string[][]): string[] | null {
-  if (params.seriesType !== 'bar') {
-    return null;
-  }
-  const monthIndex = params.dataIndex;
-  if (typeof monthIndex !== 'number' || monthIndex < 0 || monthIndex >= pointIdsByMonth.length) {
+function getMonthPointIds(params: SeriesEvent, monthlyBuckets: MonthBucket[]): string[] | null {
+  if (params.seriesType !== 'line' && params.seriesType !== 'scatter') {
     return null;
   }
 
-  return pointIdsByMonth[monthIndex];
+  const monthIndex = params.dataIndex;
+  if (typeof monthIndex !== 'number' || monthIndex < 0 || monthIndex >= monthlyBuckets.length) {
+    return null;
+  }
+
+  return monthlyBuckets[monthIndex]?.pointIds ?? null;
 }
 
 export function MonthChart() {
   const visiblePoints = useFilterStore((state) => state.visiblePoints);
+  const minMonthKey = useFilterStore((state) => state.minMonthKey);
+  const maxMonthKey = useFilterStore((state) => state.maxMonthKey);
+  const minAvailableMonthKey = useFilterStore((state) => state.minAvailableMonthKey);
+  const hasAvailableMonths = useFilterStore((state) => state.hasAvailableMonths);
+  const timeFilterMode = useFilterStore((state) => state.timeFilterMode);
   const selectedIds = useMapSelectionStore((state) => state.selectedIds);
   const replaceSelection = useMapSelectionStore((state) => state.replaceSelection);
   const setHoveredIds = useMapSelectionStore((state) => state.setHoveredIds);
   const selectedCount = selectedIds.size;
-  const monthlyBuckets = useMemo(() => buildMonthlyBuckets(visiblePoints), [visiblePoints]);
-  const monthlyCounts = monthlyBuckets.counts;
+  const monthlyBuckets = useMemo(() => {
+    if (!hasAvailableMonths) {
+      return [];
+    }
+
+    const rangeStartMonthKey = timeFilterMode === 'through' ? minAvailableMonthKey : minMonthKey;
+    if (rangeStartMonthKey > maxMonthKey) {
+      return [];
+    }
+
+    return buildMonthlyBuckets(visiblePoints, rangeStartMonthKey, maxMonthKey);
+  }, [hasAvailableMonths, maxMonthKey, minAvailableMonthKey, minMonthKey, timeFilterMode, visiblePoints]);
+  const chartTitle = useMemo(() => {
+    const baseTitle = 'Records by Month';
+    if (!hasAvailableMonths) {
+      return {
+        baseTitle,
+        rangeReadout: null as string | null,
+      };
+    }
+
+    const rangeStartMonthKey = timeFilterMode === 'through' ? minAvailableMonthKey : minMonthKey;
+    const rangeReadout = `${formatMonthRangeLabel(rangeStartMonthKey)} - ${formatMonthRangeLabel(maxMonthKey)}`;
+    return {
+      baseTitle,
+      rangeReadout,
+    };
+  }, [hasAvailableMonths, maxMonthKey, minAvailableMonthKey, minMonthKey, timeFilterMode]);
   const isMonthFullySelected = useMemo(() => {
-    return monthlyBuckets.pointIdsByMonth.map((monthPointIds) => {
+    return monthlyBuckets.map((bucket) => {
+      const monthPointIds = bucket.pointIds;
       if (monthPointIds.length === 0 || selectedIds.size !== monthPointIds.length) {
         return false;
       }
 
       return monthPointIds.every((pointId) => selectedIds.has(pointId));
     });
-  }, [monthlyBuckets.pointIdsByMonth, selectedIds]);
+  }, [monthlyBuckets, selectedIds]);
   const isMonthPartiallySelected = useMemo(() => {
-    return monthlyBuckets.pointIdsByMonth.map((monthPointIds, monthIndex) => {
+    return monthlyBuckets.map((bucket, monthIndex) => {
+      const monthPointIds = bucket.pointIds;
       if (monthPointIds.length === 0 || isMonthFullySelected[monthIndex]) {
         return false;
       }
@@ -81,57 +154,84 @@ export function MonthChart() {
 
       return intersectionCount > 0 && intersectionCount < monthPointIds.length;
     });
-  }, [isMonthFullySelected, monthlyBuckets.pointIdsByMonth, selectedIds]);
-  const hasMonthlyData = monthlyCounts.some((count) => count > 0);
-  const selectedBarFillColor = rgbaFromTuple(POINT_FILL_COLOR_SELECTED);
+  }, [isMonthFullySelected, monthlyBuckets, selectedIds]);
+  const hasMonthlyData = monthlyBuckets.length > 0;
+  const monthTickStep = 4;
+  const xAxisLabelRotation = 28;
+  const selectedScatterFillColor = rgbaFromTuple(POINT_FILL_COLOR_SELECTED);
   const partialSelectionBorderColor = rgbaFromTuple(POINT_FILL_COLOR_SELECTED, 0.62);
-  const monthlySeriesData = useMemo(
+  const monthlySeriesData = useMemo<
+    {
+      value: [number, number];
+      itemStyle: {
+        color?: string;
+        borderWidth?: number;
+        borderColor?: string;
+      };
+    }[]
+  >(
     () =>
-      monthlyCounts.map((count, monthIndex) => {
-        const itemStyle: {
-          color?: string;
-          borderWidth?: number;
-          borderColor?: string;
-        } = {};
+      monthlyBuckets.map((bucket, monthIndex) => {
+        const itemStyle: { color?: string; borderWidth?: number; borderColor?: string } = {};
 
         if (isMonthFullySelected[monthIndex]) {
-          itemStyle.color = selectedBarFillColor;
+          itemStyle.color = selectedScatterFillColor;
         } else if (isMonthPartiallySelected[monthIndex]) {
           itemStyle.borderWidth = 2;
           itemStyle.borderColor = partialSelectionBorderColor;
         }
 
         return {
-          value: count,
+          value: [monthIndex, bucket.count],
           itemStyle,
         };
       }),
     [
       isMonthFullySelected,
       isMonthPartiallySelected,
-      monthlyCounts,
+      monthlyBuckets,
       partialSelectionBorderColor,
-      selectedBarFillColor,
+      selectedScatterFillColor,
     ],
   );
 
   const chartOption = useMemo<EChartsOption>(
     () => ({
       tooltip: {
-        trigger: 'axis',
-        axisPointer: {
-          type: 'shadow',
-        },
+        trigger: 'item',
       },
       grid: {
-        left: 40,
+        left: 48,
         right: 16,
         top: 20,
-        bottom: 32,
+        bottom: xAxisLabelRotation > 0 ? 54 : 36,
       },
       xAxis: {
         type: 'category',
-        data: [...MONTH_LABELS],
+        data: monthlyBuckets.map((bucket) => bucket.label),
+        boundaryGap: false,
+        axisTick: {
+          alignWithLabel: true,
+        },
+        splitLine: {
+          show: true,
+          interval: monthTickStep - 1,
+          lineStyle: {
+            opacity: 0.35,
+          },
+        },
+        axisLabel: {
+          interval: 0,
+          rotate: xAxisLabelRotation,
+          hideOverlap: false,
+          formatter: (value: string, index: number) => {
+            if (index % monthTickStep === 0) {
+              return value;
+            }
+
+            return '';
+          },
+        },
       },
       yAxis: {
         type: 'value',
@@ -140,16 +240,23 @@ export function MonthChart() {
       series: [
         {
           name: 'Records',
-          type: 'bar',
+          type: 'line',
           data: monthlySeriesData,
-          barMaxWidth: 28,
-          itemStyle: {
-            borderRadius: [6, 6, 0, 0],
+          showSymbol: false,
+          lineStyle: {
+            width: 2,
           },
+        },
+        {
+          name: 'Records',
+          type: 'scatter',
+          data: monthlySeriesData,
+          symbolSize: 9,
+          z: 3,
         },
       ],
     }),
-    [monthlySeriesData],
+    [monthTickStep, monthlyBuckets, monthlySeriesData, xAxisLabelRotation],
   );
   const chartEvents = useMemo(
     () => ({
@@ -157,8 +264,8 @@ export function MonthChart() {
         if (selectedCount > 0) {
           return;
         }
-        const monthPointIds = getMonthPointIds(params, monthlyBuckets.pointIdsByMonth);
-        if (!monthPointIds) {
+        const monthPointIds = getMonthPointIds(params, monthlyBuckets);
+        if (!monthPointIds || monthPointIds.length === 0) {
           return;
         }
         setHoveredIds(monthPointIds);
@@ -170,14 +277,14 @@ export function MonthChart() {
         setHoveredIds([]);
       },
       click: (params: SeriesEvent) => {
-        const monthPointIds = getMonthPointIds(params, monthlyBuckets.pointIdsByMonth);
-        if (!monthPointIds) {
+        const monthPointIds = getMonthPointIds(params, monthlyBuckets);
+        if (!monthPointIds || monthPointIds.length === 0) {
           return;
         }
         replaceSelection(monthPointIds);
       },
     }),
-    [monthlyBuckets.pointIdsByMonth, replaceSelection, selectedCount, setHoveredIds],
+    [monthlyBuckets, replaceSelection, selectedCount, setHoveredIds],
   );
 
   useEffect(() => {
@@ -197,7 +304,14 @@ export function MonthChart() {
       aria-label="Records by Month chart"
       className="rounded-[var(--radius-round-four)] border border-[var(--color-outline-variant)] bg-[var(--color-surface-container-high)] p-4"
     >
-      <h3 className="text-sm font-semibold text-[var(--color-on-surface)]">Records by Month</h3>
+      <h3 className="text-sm font-semibold text-[var(--color-on-surface)]">
+        <span className="block">{chartTitle.baseTitle}</span>
+        {chartTitle.rangeReadout ? (
+          <span className="block text-xs font-normal text-[var(--color-on-surface-variant)]">
+            {chartTitle.rangeReadout}
+          </span>
+        ) : null}
+      </h3>
       {hasMonthlyData ? (
         <ReactECharts
           option={chartOption}
