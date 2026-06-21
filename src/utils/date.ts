@@ -61,8 +61,23 @@ export function parsePointYear(dateValue: string): number | null {
   return Number.isFinite(year) ? year : null;
 }
 
+export function parsePointMonthKey(dateValue: string): number | null {
+  const parsedYearMonth = parseYearMonth(dateValue);
+  if (parsedYearMonth) {
+    return toYearMonthKey(parsedYearMonth);
+  }
+
+  const year = parsePointYear(dateValue);
+  return year === null ? null : toYearMonthKey({ year, monthIndex: 0 });
+}
+
 export function toYearMonthKey(yearMonth: YearMonth): number {
   return yearMonth.year * 12 + yearMonth.monthIndex;
+}
+
+export function fromYearMonthKey(key: number): YearMonth {
+  const year = Math.floor(key / 12);
+  return { year, monthIndex: key - year * 12 };
 }
 
 export function formatYearMonthLabel(yearMonth: YearMonth): string {
