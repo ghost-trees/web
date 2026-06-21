@@ -5,7 +5,12 @@ import { useFilterStore } from '../../../state/filter-store';
 import type { MapPoint } from '../../../state/data-store';
 import { useMapSelectionStore } from '../../../state/selection-store';
 import { rgbaFromTuple } from '../../../utils/color';
-import { MONTH_LABELS, fromYearMonthKey, parseYearMonth, toYearMonthKey } from '../../../utils/date';
+import {
+  MONTH_LABELS,
+  fromYearMonthKey,
+  parseYearMonth,
+  toYearMonthKey,
+} from '../../../utils/date';
 import { POINT_FILL_COLOR_SELECTED } from '../../map/constants';
 import { ECHARTS_THEME_NAME } from '../echarts-theme';
 
@@ -111,7 +116,14 @@ export function MonthChart() {
     }
 
     return buildMonthlyBuckets(visiblePoints, rangeStartMonthKey, maxMonthKey);
-  }, [hasAvailableMonths, maxMonthKey, minAvailableMonthKey, minMonthKey, timeFilterMode, visiblePoints]);
+  }, [
+    hasAvailableMonths,
+    maxMonthKey,
+    minAvailableMonthKey,
+    minMonthKey,
+    timeFilterMode,
+    visiblePoints,
+  ]);
   const chartTitle = useMemo(() => {
     const baseTitle = 'Records by Month';
     if (!hasAvailableMonths) {

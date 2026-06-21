@@ -37,11 +37,14 @@ export type FilterStoreState = {
   setSourcePoints: (points: MapPoint[]) => void;
   setMinMonthKey: (monthKey: number) => void;
   setMaxMonthKey: (monthKey: number) => void;
+  setMonthRange: (minMonthKey: number, maxMonthKey: number) => void;
   setTimeFilterMode: (mode: TimeFilterMode) => void;
   setTreeTypeEnabled: (treeType: string, enabled: boolean) => void;
   setAllTreeTypesEnabled: (enabled: boolean) => void;
+  setEnabledTreeTypes: (treeTypes: string[]) => void;
   setZipCodeEnabled: (zipCode: string, enabled: boolean) => void;
   setAllZipCodesEnabled: (enabled: boolean) => void;
+  setEnabledZipCodes: (zipCodes: string[]) => void;
 };
 
 function clampToBounds(value: number, minValue: number, maxValue: number): number {
@@ -427,6 +430,35 @@ export const useFilterStore = create<FilterStoreState>((set, get) => ({
       timelineMonths: derivedState.timelineMonths,
     });
   },
+  setMonthRange: (minMonthKey, maxMonthKey) => {
+    const state = get();
+    if (!state.hasAvailableMonths) {
+      return;
+    }
+
+    const nextRange = normalizeRange({
+      proposedMinMonthKey: minMonthKey,
+      proposedMaxMonthKey: maxMonthKey,
+      minAvailableMonthKey: state.minAvailableMonthKey,
+      maxAvailableMonthKey: state.maxAvailableMonthKey,
+    });
+
+    const derivedState = deriveFilteredSlicesFromState({
+      allPoints: state.allPoints,
+      minMonthKey: nextRange.minMonthKey,
+      maxMonthKey: nextRange.maxMonthKey,
+      timeFilterMode: state.timeFilterMode,
+      enabledTreeTypes: state.enabledTreeTypes,
+      enabledZipCodes: state.enabledZipCodes,
+    });
+    set({
+      minMonthKey: nextRange.minMonthKey,
+      maxMonthKey: nextRange.maxMonthKey,
+      visiblePoints: derivedState.visiblePoints,
+      timelinePoints: derivedState.timelinePoints,
+      timelineMonths: derivedState.timelineMonths,
+    });
+  },
   setTimeFilterMode: (mode) => {
     const state = get();
     if (state.timeFilterMode === mode) {
@@ -504,6 +536,27 @@ export const useFilterStore = create<FilterStoreState>((set, get) => ({
       timelineMonths: derivedState.timelineMonths,
     });
   },
+  setEnabledTreeTypes: (treeTypes) => {
+    const state = get();
+    const requestedTreeTypes = new Set(treeTypes);
+    const nextEnabledTreeTypes = state.availableTreeTypes.filter((treeType) =>
+      requestedTreeTypes.has(treeType),
+    );
+    const derivedState = deriveFilteredSlicesFromState({
+      allPoints: state.allPoints,
+      minMonthKey: state.minMonthKey,
+      maxMonthKey: state.maxMonthKey,
+      timeFilterMode: state.timeFilterMode,
+      enabledTreeTypes: nextEnabledTreeTypes,
+      enabledZipCodes: state.enabledZipCodes,
+    });
+    set({
+      enabledTreeTypes: nextEnabledTreeTypes,
+      visiblePoints: derivedState.visiblePoints,
+      timelinePoints: derivedState.timelinePoints,
+      timelineMonths: derivedState.timelineMonths,
+    });
+  },
   setZipCodeEnabled: (zipCode, enabled) => {
     const state = get();
     const enabledZipCodeSet = new Set(state.enabledZipCodes);
@@ -534,6 +587,27 @@ export const useFilterStore = create<FilterStoreState>((set, get) => ({
   setAllZipCodesEnabled: (enabled) => {
     const state = get();
     const nextEnabledZipCodes = enabled ? state.availableZipCodes : [];
+    const derivedState = deriveFilteredSlicesFromState({
+      allPoints: state.allPoints,
+      minMonthKey: state.minMonthKey,
+      maxMonthKey: state.maxMonthKey,
+      timeFilterMode: state.timeFilterMode,
+      enabledTreeTypes: state.enabledTreeTypes,
+      enabledZipCodes: nextEnabledZipCodes,
+    });
+    set({
+      enabledZipCodes: nextEnabledZipCodes,
+      visiblePoints: derivedState.visiblePoints,
+      timelinePoints: derivedState.timelinePoints,
+      timelineMonths: derivedState.timelineMonths,
+    });
+  },
+  setEnabledZipCodes: (zipCodes) => {
+    const state = get();
+    const requestedZipCodes = new Set(zipCodes);
+    const nextEnabledZipCodes = state.availableZipCodes.filter((zipCode) =>
+      requestedZipCodes.has(zipCode),
+    );
     const derivedState = deriveFilteredSlicesFromState({
       allPoints: state.allPoints,
       minMonthKey: state.minMonthKey,

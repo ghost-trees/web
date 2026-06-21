@@ -2,6 +2,7 @@ import { useEffect } from 'react';
 import { useDataStore } from '../../state/data-store';
 import { useFilterStore } from '../../state/filter-store';
 import { useUiStore } from '../../state/ui-store';
+import { hasInitialUrlState } from '../../state/url-state';
 import { CloseButton } from '../common/close-button';
 
 const fullMonthFormatter = new Intl.DateTimeFormat('en-US', {
@@ -47,6 +48,9 @@ export function TimelineOverlay() {
     }
 
     markTimelineAutoStarted();
+    if (hasInitialUrlState()) {
+      return;
+    }
     if (!hasTimelineData) {
       return;
     }

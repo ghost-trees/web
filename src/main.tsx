@@ -10,6 +10,7 @@ import { FiltersPane } from './components/filters/pane';
 import { ChartsPane } from './components/charts/pane';
 import { SettingsPane } from './components/settings/settings-pane';
 import { registerEchartsTheme } from './components/charts/echarts-theme';
+import { applyUrlToStores, startUrlSync } from './state/url-state';
 
 registerEchartsTheme();
 
@@ -18,6 +19,9 @@ const rootElement = document.getElementById('root');
 if (!rootElement) {
   throw new Error('Root element with id "root" was not found.');
 }
+
+applyUrlToStores();
+startUrlSync();
 
 createRoot(rootElement).render(
   <Shell
