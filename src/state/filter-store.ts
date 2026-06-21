@@ -553,6 +553,18 @@ export const useFilterStore = create<FilterStoreState>((set, get) => ({
 
 export const selectVisiblePointCount = (state: FilterStoreState) => state.visiblePoints.length;
 export const selectTotalPointCount = (state: FilterStoreState) => state.allPoints.length;
+export const selectHasActiveFilters = (state: FilterStoreState) => {
+  const hasTreeTypeFilter = state.enabledTreeTypes.length < state.availableTreeTypes.length;
+  const hasZipCodeFilter = state.enabledZipCodes.length < state.availableZipCodes.length;
+  const hasTimeFilter = state.hasAvailableMonths
+    ? state.timeFilterMode === 'through'
+      ? state.maxMonthKey < state.maxAvailableMonthKey
+      : state.minMonthKey > state.minAvailableMonthKey ||
+        state.maxMonthKey < state.maxAvailableMonthKey
+    : false;
+
+  return hasTreeTypeFilter || hasZipCodeFilter || hasTimeFilter;
+};
 
 useFilterStore.getState().setSourcePoints(useDataStore.getState().points);
 useDataStore.subscribe((state, previousState) => {
