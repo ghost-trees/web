@@ -5,6 +5,7 @@ import { MonthBarChart } from './charts/month-bar';
 import { TreeChart } from './charts/tree';
 import { TreePieChart } from './charts/tree-pie';
 import { ZipChart } from './charts/zip';
+import { FeeDistributionChart } from './charts/fee-distribution';
 
 type ChartViewportProps = {
   chartId: ChartId;
@@ -17,6 +18,7 @@ export function ChartViewport({ chartId }: ChartViewportProps) {
     'records-by-tree-type': <TreeChart />,
     'records-by-tree-type-pie': <TreePieChart />,
     'records-by-zip': <ZipChart />,
+    'fee-distribution': <FeeDistributionChart />,
   };
 
   return <div className="mt-4 min-h-0">{chartContentById[chartId]}</div>;

@@ -16,6 +16,7 @@ const CHART_IDS: ChartId[] = [
   'records-by-tree-type',
   'records-by-tree-type-pie',
   'records-by-zip',
+  'fee-distribution',
 ];
 
 type ParsedFilterState = {

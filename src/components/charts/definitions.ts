@@ -3,7 +3,8 @@ export type ChartId =
   | 'records-by-month-bar'
   | 'records-by-tree-type'
   | 'records-by-tree-type-pie'
-  | 'records-by-zip';
+  | 'records-by-zip'
+  | 'fee-distribution';
 
 export type ChartDefinition = {
   id: ChartId;
@@ -16,4 +17,5 @@ export const CHART_DEFINITIONS: ChartDefinition[] = [
   // { id: 'records-by-tree-type-pie', label: 'Records by Tree Type (Pie)' },
   { id: 'records-by-tree-type', label: 'Records by Tree Type' },
   { id: 'records-by-zip', label: 'Records by Zip Code' },
+  { id: 'fee-distribution', label: 'Fee Distribution' },
 ];
