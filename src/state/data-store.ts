@@ -1,6 +1,7 @@
 import { create } from 'zustand';
 import { asset } from '../utils/asset';
 import { extractZipCode } from '../utils/string';
+import { normalizeAddressForDisplay } from '../shims/address-normalization';
 
 // Internal sentinel for missing/empty tree type values from source data.
 export const UNKNOWN_TREE_TYPE = '__unknown__';
@@ -35,7 +36,9 @@ export type MapPoint = {
   coordinates: [number, number];
   date: string;
   recordType: string;
+  // Normalized display address (see TEMP SHIM below); `addressRaw` holds the source value.
   address: string;
+  addressRaw: string;
   zipCode: string;
   treeTypes: string[];
   feeTotal: number;
@@ -75,8 +78,13 @@ function toMapPoints(data: DataGeoJson): MapPoint[] {
       const id = feature.properties?.record_number?.trim();
       const paid = toSafeNumber(feature.properties?.paid);
       const outstanding = toSafeNumber(feature.properties?.outstanding);
-      const address = feature.properties?.address?.trim() || 'Unknown';
-      const zipCode = extractZipCode(address) ?? UNKNOWN_ZIP_CODE;
+      const addressRaw = feature.properties?.address?.trim() || 'Unknown';
+      // TEMP SHIM (data-ingestion): abbreviate verbose address tokens for display
+      // (e.g. `Southwest` -> `SW`, `Street` -> `St`). Remove once upstream GeoJSON
+      // abbreviations are standardized. See docs/data-normalization.md.
+      const address = normalizeAddressForDisplay(addressRaw);
+      // ZIP extraction intentionally uses the raw source string to avoid regressions.
+      const zipCode = extractZipCode(addressRaw) ?? UNKNOWN_ZIP_CODE;
       const normalizedTreeTypes = Array.isArray(feature.properties?.tree_types)
         ? feature.properties.tree_types
             .filter((treeType): treeType is string => typeof treeType === 'string')
@@ -92,6 +100,7 @@ function toMapPoints(data: DataGeoJson): MapPoint[] {
         date: feature.properties?.date?.trim() || 'Unknown',
         recordType: feature.properties?.record_type?.trim() || 'Unknown',
         address,
+        addressRaw,
         zipCode,
         treeTypes,
         feeTotal: paid + outstanding,

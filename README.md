@@ -12,3 +12,5 @@ Please see [`CONTRIBUTING.md`](CONTRIBUTING.md) for guidelines on contributing t
 ## Documentation
 
 Documentation live in the [`docs/`](/docs/) directory.
+
+- [`docs/data-normalization.md`](docs/data-normalization.md) - temporary address normalization shim (pending upstream data cleanup).
