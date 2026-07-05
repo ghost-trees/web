@@ -13,11 +13,17 @@ type MapTooltipProps = {
   recordType: string;
   treeTypes: string[];
   address: string;
+  feeTotal: number;
   x: number;
   y: number;
 };
 
 const UNKNOWN_VALUE = UNKNOWN_DISPLAY_VALUE;
+const feeFormatter = new Intl.NumberFormat('en-US', {
+  style: 'currency',
+  currency: 'USD',
+  maximumFractionDigits: 0,
+});
 
 function parseAddressDetails(address: string) {
   const normalizedAddress = address.trim();
@@ -38,11 +44,13 @@ export function MapTooltip({
   recordType,
   treeTypes,
   address,
+  feeTotal,
   x,
   y,
 }: MapTooltipProps) {
   const { streetLine, zipCode } = parseAddressDetails(address);
   const treeTypeLabel = formatTreeTypeList(treeTypes);
+  const feeLabel = feeFormatter.format(feeTotal);
 
   return (
     <div
@@ -75,6 +83,12 @@ export function MapTooltip({
             <div className="flex items-center justify-between">
               <span className="text-xs text-on-surface-variant">Record Type</span>
               <span className="text-right text-xs font-semibold text-on-surface">{recordType}</span>
+            </div>
+            <div className="flex items-center justify-between">
+              <span className="text-xs text-on-surface-variant">Fee</span>
+              <span className="text-right text-xs font-semibold text-on-surface tabular-nums">
+                {feeLabel}
+              </span>
             </div>
             <div className="flex items-start justify-between gap-3">
               <span className="text-xs text-on-surface-variant">Tree Type</span>

@@ -195,6 +195,7 @@ export function MapView() {
             recordType={selectedPoint.recordType}
             treeTypes={selectedPoint.treeTypes}
             address={selectedPoint.address}
+            feeTotal={selectedPoint.feeTotal}
             x={projectedTooltip.x}
             y={projectedTooltip.y}
           />
