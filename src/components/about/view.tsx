@@ -1,5 +1,6 @@
 import { CloseButton } from '../common/close-button';
 import { useUiStore } from '../../state/ui-store';
+import { asset } from '../../utils/asset';
 
 export function AboutView() {
   const showMapPane = useUiStore((state) => state.showMapPane);
@@ -7,34 +8,58 @@ export function AboutView() {
   return (
     <section
       aria-label="About View"
-      className="relative flex min-h-0 w-full flex-1 overflow-y-auto bg-[var(--color-surface-container-low)] p-8"
+      className="relative h-full min-h-0 w-full overflow-y-auto bg-[var(--color-surface-container-low)]"
     >
       <CloseButton
         ariaLabel="Close about"
         onClick={showMapPane}
         size="compact"
-        className="absolute right-6 top-6"
+        className="absolute right-6 top-6 z-10"
       />
-      <div className="w-full max-w-4xl">
-        <h2 className="text-xl font-semibold text-[var(--color-on-surface)]">About</h2>
-        <div className="mt-4 space-y-4 text-sm leading-6 text-[var(--color-on-surface-variant)]">
-          <p>
-            Loss is a persistent theme across many socially engaged research and design domains. The
-            loss of housing. The loss of water. The loss of trees. The loss of life. Much of that
-            loss is documented through data. Through an ongoing research-through-design project, we
-            ask, How can we express loss in ways that alter our perspectives, expanding both our
-            affective engagements and design repertoires? In this pictorial, we explore aesthetic
-            strategies of representing loss that leverage spookiness. Informed by prior work on
-            spookiness and related themes, we present five projects, each expressing loss through
-            different media and visual formats. From reflection on these works, we derive a set of
-            themes on representing loss, which can inform and inspire other designers looking to
-            engage and express loss in more poetic ways.
+      <div className="mx-auto flex w-full max-w-2xl flex-col px-8 pt-8 pb-32 md:pt-12 md:pb-40">
+        <header>
+          <p className="text-[11px] uppercase tracking-[var(--tracking-label-meta)] text-[var(--color-on-surface-variant)]">
+            About
           </p>
-          <p>
-            Ghost Trees ATL is a collection of interactive maps and generated photos that depict the
-            changing population of deceased trees of Atlanta&apos;s beloved canopy.
+          <h2 className="mt-2 text-2xl font-semibold tracking-[var(--tracking-display-tight)] text-[var(--color-on-surface)] md:text-3xl">
+            Expressing loss through spookiness
+          </h2>
+          <p className="mt-6 text-base leading-7 text-[var(--color-on-surface)]">
+            Ghost Trees ATL depicts the changing population of deceased trees of Atlanta's beloved
+            canopy.
           </p>
+        </header>
+
+        <div className="my-6 flex justify-center" aria-hidden="true">
+          <img src={asset('logo.svg')} alt="" className="h-15 w-15 opacity-75" />
         </div>
+
+        <article className="text-base leading-7 text-[var(--color-on-surface)]">
+          <p>
+            Loss is a persistent theme across many socially engaged research and design domains.
+          </p>
+          <ul className="my-6 space-y-1">
+            <li>The loss of housing.</li>
+            <li>The loss of water.</li>
+            <li>The loss of trees.</li>
+            <li>The loss of life.</li>
+          </ul>
+          <p>
+            Much of that loss is documented through data. Through an ongoing research-through-design
+            project, we ask:
+          </p>
+          <blockquote className="mt-4 border-l-2 border-[var(--color-primary)] pl-4">
+            How can we express loss in ways that alter our perspectives, expanding both our
+            affective engagements and design repertoires?
+          </blockquote>
+          <p className="mt-4">
+            We explore aesthetic strategies of representing loss that leverage spookiness. Informed
+            by prior work on spookiness and related themes, we present five projects, each
+            expressing loss through different media and visual formats. From reflection on these
+            works, we derive a set of themes on representing loss, which can inform and inspire
+            other designers looking to engage and express loss in more poetic ways.
+          </p>
+        </article>
       </div>
     </section>
   );

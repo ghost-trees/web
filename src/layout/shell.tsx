@@ -79,7 +79,7 @@ export function Shell({
           {galleryContent}
         </div>
         <div
-          className={`absolute inset-0 min-h-0 min-w-0 ${
+          className={`absolute inset-0 min-h-0 min-w-0 overflow-hidden ${
             mainView === 'about' ? 'flex' : 'pointer-events-none hidden'
           }`}
           aria-hidden={mainView !== 'about'}
