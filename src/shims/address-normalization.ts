@@ -12,8 +12,9 @@
  *
  * Intended scope limits:
  * This only rewrites a fixed, known set of directional and street-suffix tokens
- * on word boundaries. It deliberately does NOT geocode, reorder, or otherwise
- * semantically rewrite addresses.
+ * on word boundaries, including coercing already-abbreviated tokens (e.g. `DR`)
+ * to their canonical casing (`Dr`). It deliberately does NOT geocode, reorder,
+ * or otherwise semantically rewrite addresses.
  *
  * Removal condition:
  * Delete this shim (and its usage in `src/state/data-store.ts`) once the
@@ -46,10 +47,20 @@ const ADDRESS_TOKEN_ABBREVIATIONS: Readonly<Record<string, string>> = {
   parkway: 'Pkwy',
 };
 
-const TOKEN_PATTERN = new RegExp(
-  `\\b(${Object.keys(ADDRESS_TOKEN_ABBREVIATIONS).join('|')})\\b`,
-  'gi',
-);
+/**
+ * Full lookup used at replace time: the spelled-out map above, plus canonical
+ * self-mappings for each abbreviation value so pre-abbreviated source tokens
+ * (e.g. `DR`, `st`) are coerced to their canonical casing (`Dr`, `St`). The
+ * lower-cased abbreviation keys do not collide with any spelled-out key.
+ */
+const ADDRESS_TOKEN_LOOKUP: Readonly<Record<string, string>> = {
+  ...ADDRESS_TOKEN_ABBREVIATIONS,
+  ...Object.fromEntries(
+    Object.values(ADDRESS_TOKEN_ABBREVIATIONS).map((abbrev) => [abbrev.toLowerCase(), abbrev]),
+  ),
+};
+
+const TOKEN_PATTERN = new RegExp(`\\b(${Object.keys(ADDRESS_TOKEN_LOOKUP).join('|')})\\b`, 'gi');
 
 /**
  * Normalizes a raw source address into a shorter display form by abbreviating a
@@ -69,7 +80,7 @@ export function normalizeAddressForDisplay(rawAddress: string): string {
   }
 
   return trimmed
-    .replace(TOKEN_PATTERN, (token) => ADDRESS_TOKEN_ABBREVIATIONS[token.toLowerCase()])
+    .replace(TOKEN_PATTERN, (token) => ADDRESS_TOKEN_LOOKUP[token.toLowerCase()])
     .replace(/\s+,/g, ',')
     .replace(/\s{2,}/g, ' ')
     .trim();

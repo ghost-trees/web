@@ -17,6 +17,12 @@ describe('normalizeAddressForDisplay', () => {
     expect(normalizeAddressForDisplay('1111 Main St SE')).toBe('1111 Main St SE');
   });
 
+  it('coerces already-abbreviated tokens to canonical casing', () => {
+    expect(normalizeAddressForDisplay('1111 Boulevard DR SE')).toBe('1111 Blvd Dr SE');
+    expect(normalizeAddressForDisplay('975 Linam AVE SE')).toBe('975 Linam Ave SE');
+    expect(normalizeAddressForDisplay('3108 Stonegate dr sw')).toBe('3108 Stonegate Dr SW');
+  });
+
   it('returns empty string for empty or whitespace-only input', () => {
     expect(normalizeAddressForDisplay('')).toBe('');
     expect(normalizeAddressForDisplay('   ')).toBe('');

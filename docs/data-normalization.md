@@ -30,7 +30,10 @@ The repository uses two distinct kinds of shims. Keep them mentally separate:
 
 ## Current Token Mapping
 
-Matching is case-insensitive and applied on whole-word boundaries.
+Matching is case-insensitive and applied on whole-word boundaries. Both the
+spelled-out source form and any pre-abbreviated form are normalized to the
+canonical abbreviation casing (for example, `Drive`, `DR`, and `dr` all become
+`Dr`; `SE` and `se` become `SE`).
 
 | Source token | Abbreviation |
 | ------------ | ------------ |
@@ -59,7 +62,8 @@ Matching is case-insensitive and applied on whole-word boundaries.
   word used as a suffix. For example, a street literally named `Boulevard` will
   be abbreviated to `Blvd`.
 - Only the fixed token set above is normalized. Already-abbreviated tokens
-  (`DR`, `SE`, etc.) are left untouched.
+  (`DR`, `se`, etc.) have their casing coerced to the canonical form (`Dr`,
+  `SE`) but are otherwise left as-is.
 - No geocoding, reordering, or semantic rewriting is performed.
 
 ## Removal Checklist

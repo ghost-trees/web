@@ -19,7 +19,7 @@ export type GalleryRecord = {
 
 // Hardcoded curated selection of record numbers (sourced from public/data.geojson).
 const FEATURED_RECORD_IDS: string[] = [
-  'BA-202506365',
+  'BA-202506279',
   'BA-202506364',
   'BA-202506357',
   'BA-202506355',
