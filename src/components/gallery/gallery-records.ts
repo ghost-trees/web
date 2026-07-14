@@ -19,16 +19,16 @@ export type GalleryRecord = {
 
 // Hardcoded curated selection of record numbers (sourced from public/data.geojson).
 const FEATURED_RECORD_IDS: string[] = [
-  'BA-202506279',
-  'BA-202506364',
-  'BA-202506357',
-  'BA-202506355',
-  'BA-202506344',
-  'BA-202506329',
-  'BA-202506310',
-  'BA-202506307',
-  'BA-202506303',
-  'BA-202506300',
+  'BA-202302575',
+  'BA-202405401',
+  'BA-202405292',
+  'BA-202304455',
+  'BA-202306150',
+  'BA-202500386',
+  'BA-202402117',
+  'BA-202304747',
+  'BA-202406194',
+  'BA-202406336',
 ];
 
 export const GALLERY_RECORDS: GalleryRecord[] = FEATURED_RECORD_IDS.map((recordId) => ({
