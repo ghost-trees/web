@@ -45,6 +45,7 @@ export type FilterStoreState = {
   setZipCodeEnabled: (zipCode: string, enabled: boolean) => void;
   setAllZipCodesEnabled: (enabled: boolean) => void;
   setEnabledZipCodes: (zipCodes: string[]) => void;
+  resetFilters: () => void;
 };
 
 function clampToBounds(value: number, minValue: number, maxValue: number): number {
@@ -617,6 +618,30 @@ export const useFilterStore = create<FilterStoreState>((set, get) => ({
       enabledZipCodes: nextEnabledZipCodes,
     });
     set({
+      enabledZipCodes: nextEnabledZipCodes,
+      visiblePoints: derivedState.visiblePoints,
+      timelinePoints: derivedState.timelinePoints,
+      timelineMonths: derivedState.timelineMonths,
+    });
+  },
+  resetFilters: () => {
+    const state = get();
+    const nextMinMonthKey = state.minAvailableMonthKey;
+    const nextMaxMonthKey = state.maxAvailableMonthKey;
+    const nextEnabledTreeTypes = state.availableTreeTypes;
+    const nextEnabledZipCodes = state.availableZipCodes;
+    const derivedState = deriveFilteredSlicesFromState({
+      allPoints: state.allPoints,
+      minMonthKey: nextMinMonthKey,
+      maxMonthKey: nextMaxMonthKey,
+      timeFilterMode: state.timeFilterMode,
+      enabledTreeTypes: nextEnabledTreeTypes,
+      enabledZipCodes: nextEnabledZipCodes,
+    });
+    set({
+      minMonthKey: nextMinMonthKey,
+      maxMonthKey: nextMaxMonthKey,
+      enabledTreeTypes: nextEnabledTreeTypes,
       enabledZipCodes: nextEnabledZipCodes,
       visiblePoints: derivedState.visiblePoints,
       timelinePoints: derivedState.timelinePoints,

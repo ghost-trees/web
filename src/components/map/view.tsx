@@ -43,6 +43,8 @@ export function MapView() {
   const addSelection = useMapSelectionStore((state) => state.addSelection);
   const toggleSelection = useMapSelectionStore((state) => state.toggleSelection);
   const setHovered = useMapSelectionStore((state) => state.setHovered);
+  const focusRequest = useMapSelectionStore((state) => state.focusRequest);
+  const clearFocusRequest = useMapSelectionStore((state) => state.clearFocusRequest);
   const timelineMonthKey = deriveTimelineMonthKey(timelineMonths, timelineMonthIndex);
   const pointsForLayer = useMemo(() => {
     return selectPointsForLayer({
@@ -144,6 +146,19 @@ export function MapView() {
       mapRef.current?.resize();
     });
   }, [mainView]);
+
+  useEffect(() => {
+    if (!focusRequest || !mapRef.current) {
+      return;
+    }
+
+    mapRef.current.easeTo({
+      center: focusRequest.coordinates,
+      zoom: 15,
+      duration: 600,
+    });
+    clearFocusRequest();
+  }, [focusRequest, clearFocusRequest]);
 
   const selectedPointId =
     visibleSelectedIds.size === 1 ? visibleSelectedIds.values().next().value : null;

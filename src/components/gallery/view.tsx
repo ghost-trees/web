@@ -1,6 +1,8 @@
 import { useEffect, useMemo, useState } from 'react';
 import { CloseButton } from '../common/close-button';
 import { useUiStore } from '../../state/ui-store';
+import { useMapSelectionStore } from '../../state/selection-store';
+import { useFilterStore } from '../../state/filter-store';
 import type { MapPoint } from '../../state/data-store';
 import { useDataStore } from '../../state/data-store';
 import { formatTreeTypeList, UNKNOWN_DISPLAY_VALUE } from '../../utils/tree-type';
@@ -53,6 +55,10 @@ function getPointDisplayData(point: MapPoint | null) {
 
 export function GalleryView() {
   const showMapPane = useUiStore((state) => state.showMapPane);
+  const exitTimeline = useUiStore((state) => state.exitTimeline);
+  const replaceSelection = useMapSelectionStore((state) => state.replaceSelection);
+  const requestFocus = useMapSelectionStore((state) => state.requestFocus);
+  const resetFilters = useFilterStore((state) => state.resetFilters);
   const pointsById = useDataStore((state) => state.pointsById);
   const loadPoints = useDataStore((state) => state.loadPoints);
 
@@ -70,6 +76,14 @@ export function GalleryView() {
   );
   const selectedPoint = selectedRecord ? (pointsById.get(selectedRecord.recordId) ?? null) : null;
   const selectedPointDisplay = useMemo(() => getPointDisplayData(selectedPoint), [selectedPoint]);
+
+  const handleShowOnMap = (point: MapPoint) => {
+    exitTimeline();
+    resetFilters();
+    replaceSelection([point.id]);
+    requestFocus(point.coordinates);
+    showMapPane();
+  };
 
   return (
     <section
@@ -104,23 +118,43 @@ export function GalleryView() {
 
                 return (
                   <li key={record.recordId}>
-                    <button
-                      type="button"
-                      aria-current={isActive ? 'true' : undefined}
-                      onClick={() => setSelectedRecordId(record.recordId)}
-                      className={`w-full rounded-round-four px-4 py-3 text-left transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary ${
+                    <div
+                      className={`flex items-center gap-1 rounded-round-four transition-colors ${
                         isActive
-                          ? 'bg-surface-container-highest text-on-surface'
-                          : 'text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface'
+                          ? 'bg-surface-container-highest'
+                          : 'hover:bg-surface-container-high'
                       }`}
                     >
-                      <span className="block truncate text-sm font-semibold text-on-surface">
-                        {streetLine}
-                      </span>
-                      <span className="mt-0.5 block truncate text-xs text-on-surface-variant">
-                        {(point?.date ?? UNKNOWN_VALUE) + ' · ' + feeLabel}
-                      </span>
-                    </button>
+                      <button
+                        type="button"
+                        aria-current={isActive ? 'true' : undefined}
+                        onClick={() => setSelectedRecordId(record.recordId)}
+                        className={`min-w-0 flex-1 rounded-round-four px-4 py-3 text-left transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary ${
+                          isActive
+                            ? 'text-on-surface'
+                            : 'text-on-surface-variant hover:text-on-surface'
+                        }`}
+                      >
+                        <span className="block truncate text-sm font-semibold text-on-surface">
+                          {streetLine}
+                        </span>
+                        <span className="mt-0.5 block truncate text-xs text-on-surface-variant">
+                          {(point?.date ?? UNKNOWN_VALUE) + ' · ' + feeLabel}
+                        </span>
+                      </button>
+                      <button
+                        type="button"
+                        aria-label="Show on map"
+                        title="Show on map"
+                        disabled={!point}
+                        onClick={() => point && handleShowOnMap(point)}
+                        className="mr-1 inline-flex shrink-0 items-center justify-center rounded-full p-2 text-on-surface-variant transition-colors hover:bg-surface-container-high hover:text-on-surface focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary disabled:cursor-not-allowed disabled:opacity-40"
+                      >
+                        <span className="material-symbols-outlined text-lg" aria-hidden="true">
+                          map
+                        </span>
+                      </button>
+                    </div>
                   </li>
                 );
               })}

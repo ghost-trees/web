@@ -1,15 +1,23 @@
 import { create } from 'zustand';
 
+export type MapFocusRequest = {
+  coordinates: [number, number];
+  nonce: number;
+};
+
 type MapSelectionState = {
   selectedIds: Set<string>;
   hoveredId: string | null;
   hoveredIds: Set<string>;
+  focusRequest: MapFocusRequest | null;
   replaceSelection: (ids: Iterable<string>) => void;
   addSelection: (ids: Iterable<string>) => void;
   toggleSelection: (id: string) => void;
   clearSelection: () => void;
   setHovered: (id: string | null) => void;
   setHoveredIds: (ids: Iterable<string>) => void;
+  requestFocus: (coordinates: [number, number]) => void;
+  clearFocusRequest: () => void;
 };
 
 function toSet(ids: Iterable<string>): Set<string> {
@@ -20,6 +28,7 @@ export const useMapSelectionStore = create<MapSelectionState>((set) => ({
   selectedIds: new Set<string>(),
   hoveredId: null,
   hoveredIds: new Set<string>(),
+  focusRequest: null,
   replaceSelection: (ids) => {
     set({ selectedIds: toSet(ids) });
   },
@@ -53,5 +62,11 @@ export const useMapSelectionStore = create<MapSelectionState>((set) => ({
   },
   setHoveredIds: (ids) => {
     set({ hoveredIds: toSet(ids) });
+  },
+  requestFocus: (coordinates) => {
+    set({ focusRequest: { coordinates, nonce: Date.now() } });
+  },
+  clearFocusRequest: () => {
+    set({ focusRequest: null });
   },
 }));
