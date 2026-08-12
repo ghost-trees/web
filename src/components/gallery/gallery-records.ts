@@ -30,8 +30,8 @@ export const GALLERY_RECORDS: GalleryRecord[] = [
   {
     recordId: 'BA-202302575',
     location: [-84.3581303, 33.6774319],
-    before: { panoId: '' },
-    after: { panoId: '' },
+    before: { panoId: 'njOU8au3LEaE6G6p5pnC9g', heading: 238.28, pitch: -1.24, fov: 75 },
+    after: { panoId: 'WmVF_-XLVvHcoiuVNjgKpg', heading: 238.28, pitch: -1.24, fov: 75 },
   },
   {
     recordId: 'BA-202405401',
