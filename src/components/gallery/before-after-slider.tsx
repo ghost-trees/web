@@ -152,31 +152,31 @@ export function BeforeAfterSlider({
         isDragging ? 'cursor-grabbing' : 'cursor-ew-resize'
       }`}
     >
-      {/* Base layer: before image (full width). */}
+      {/* Base layer: before image (full width). The label lives inside this layer
+          so it is covered (hidden) whenever the after layer clips over it. */}
       <div className="absolute inset-0">
         <SliderImage
           src={beforeImage}
           fallbackLabel={beforeLabel}
           alt={`${alt} (${beforeLabel})`}
         />
+        <span className="pointer-events-none absolute left-3 top-3 rounded-round-four bg-surface-container-highest/85 px-2 py-1 text-[10px] font-bold uppercase tracking-label-meta text-on-surface">
+          {beforeLabel}
+        </span>
       </div>
 
-      {/* Top layer: after image, clipped from the left edge to the divider. */}
+      {/* Top layer: after image, clipped from the left edge to the divider. The
+          label lives inside this layer so it is clipped away with the after image. */}
       <div
         className="absolute inset-0"
         style={{ clipPath: `inset(0 0 0 ${position}%)` }}
         aria-hidden="true"
       >
         <SliderImage src={afterImage} fallbackLabel={afterLabel} alt={`${alt} (${afterLabel})`} />
+        <span className="pointer-events-none absolute right-3 top-3 rounded-round-four bg-surface-container-highest/85 px-2 py-1 text-[10px] font-bold uppercase tracking-label-meta text-on-surface">
+          {afterLabel}
+        </span>
       </div>
-
-      {/* Corner labels. */}
-      <span className="pointer-events-none absolute left-3 top-3 rounded-round-four bg-surface-container-highest/85 px-2 py-1 text-[10px] font-bold uppercase tracking-label-meta text-on-surface">
-        {beforeLabel}
-      </span>
-      <span className="pointer-events-none absolute right-3 top-3 rounded-round-four bg-surface-container-highest/85 px-2 py-1 text-[10px] font-bold uppercase tracking-label-meta text-on-surface">
-        {afterLabel}
-      </span>
 
       {/* Divider line + draggable handle. */}
       <div
