@@ -1,3 +1,14 @@
+/**
+ * @file view.tsx
+ * @description
+ * Gallery view: a before/after Street View comparison for curated records.
+ *
+ * Imagery is served live from the Google Street View Static API. Google's Street
+ * View Static API policy REQUIRES a visible Google attribution wherever this
+ * imagery is displayed. The "© Google" mark rendered beneath the slider satisfies
+ * that requirement and MUST NOT be removed while Street View imagery is shown.
+ */
+
 import { useEffect, useMemo, useState } from 'react';
 import { CloseButton } from '../common/close-button';
 import { useUiStore } from '../../state/ui-store';
@@ -9,6 +20,9 @@ import { formatTreeTypeList, UNKNOWN_DISPLAY_VALUE } from '../../utils/tree-type
 import { extractStreetLine, extractZipCode } from '../../utils/string';
 import { GALLERY_RECORDS } from './gallery-records';
 import { BeforeAfterSlider } from './before-after-slider';
+import { buildStreetViewUrl } from './street-view';
+
+const STREET_VIEW_API_KEY = import.meta.env.VITE_GOOGLE_STREET_VIEW_API_KEY;
 
 const UNKNOWN_VALUE = UNKNOWN_DISPLAY_VALUE;
 const feeFormatter = new Intl.NumberFormat('en-US', {
@@ -76,6 +90,16 @@ export function GalleryView() {
   );
   const selectedPoint = selectedRecord ? (pointsById.get(selectedRecord.recordId) ?? null) : null;
   const selectedPointDisplay = useMemo(() => getPointDisplayData(selectedPoint), [selectedPoint]);
+
+  const streetViewUrls = useMemo(() => {
+    if (!selectedRecord) {
+      return { before: '', after: '' };
+    }
+    return {
+      before: buildStreetViewUrl({ ...selectedRecord.before, apiKey: STREET_VIEW_API_KEY }) ?? '',
+      after: buildStreetViewUrl({ ...selectedRecord.after, apiKey: STREET_VIEW_API_KEY }) ?? '',
+    };
+  }, [selectedRecord]);
 
   const handleShowOnMap = (point: MapPoint) => {
     exitTimeline();
@@ -165,10 +189,16 @@ export function GalleryView() {
             {selectedRecord ? (
               <figure className="flex flex-col gap-4">
                 <BeforeAfterSlider
-                  beforeImage={selectedRecord.beforeImage}
-                  afterImage={selectedRecord.afterImage}
+                  beforeImage={streetViewUrls.before}
+                  afterImage={streetViewUrls.after}
                   alt={`Record ${selectedPointDisplay.pointId}`}
                 />
+                {/*
+                  Required Google attribution for Street View Static imagery.
+                  Google's policy mandates a visible attribution wherever this
+                  imagery is shown; do not remove while Street View is displayed.
+                */}
+                <p className="-mt-2 text-right text-[10px] text-on-surface-variant">© Google</p>
                 <figcaption className="overflow-hidden rounded-round-four bg-surface-container-highest shadow-ambient">
                   <div className="space-y-3 p-4">
                     <div className="flex items-start justify-between">

@@ -19,6 +19,16 @@
    npm install
    ```
 
+3. Configure environment variables:
+
+   Copy the template and fill in local values. `.env.local` is gitignored, so keys stay out of version control.
+
+   ```bash
+   cp .env.example .env.local
+   ```
+
+   `VITE_GOOGLE_STREET_VIEW_API_KEY` powers the Gallery's before/after Street View imagery.
+
 ## Development
 
 To start local development server:

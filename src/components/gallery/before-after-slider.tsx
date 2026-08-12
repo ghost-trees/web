@@ -34,7 +34,9 @@ type SliderImageProps = {
 function SliderImage({ src, fallbackLabel, alt }: SliderImageProps) {
   const [hasError, setHasError] = useState(false);
 
-  if (hasError) {
+  // Treat a missing src (e.g. no API key or an un-curated panorama ID) the same
+  // as a load error so the fallback label renders instead of a broken image.
+  if (hasError || !src) {
     return (
       <div
         className="flex h-full w-full items-center justify-center bg-surface-container-highest"

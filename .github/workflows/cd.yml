@@ -38,6 +38,7 @@ jobs:
         run: npm run build
         env:
           VITE_BASE_PATH: /web/
+          VITE_GOOGLE_STREET_VIEW_API_KEY: ${{ secrets.VITE_GOOGLE_STREET_VIEW_API_KEY }}
 
       - name: SPA fallback for deep links
         run: cp dist/index.html dist/404.html
