@@ -35,6 +35,16 @@ Background warmup removes the first-open delay in the common case, but a short d
 
 This is a reordering of work, not a deletion of it. A user who eventually visits every surface downloads a similar total amount of code as before, just spread across the session and prioritized by what they actually look at first. One accepted cost of warmup is that lingering on the map may download Charts, Gallery, and About even if the user never opens them; the constrained-connection skip keeps that from harming the people it would hurt most.
 
+## The Remaining Chunk-Size Warning
+
+After the split, Vite still prints its "chunk larger than 500 kB" warning. This is expected, and it now means something different: it flags a few individually large vendor libraries rather than the single combined mega-bundle it used to describe.
+
+The map engine (`maplibre-gl`) is the dominant offender. It exceeds the threshold on its own, and because it powers the landing view it is on the critical path and cannot be removed or meaningfully subdivided. The deck.gl overlay is the other large first-load vendor. The charting library is also large, but it is deliberately kept out of the manual vendor split so it stays in its own lazy Charts chunk.
+
+That Charts chunk is not on the first-load path. Once the map's point data has loaded, it is typically warmed in the background alongside Gallery and About; if warmup was skipped (for example on a constrained connection), it simply loads when Charts is first opened. Either way its size never delays the interactive map.
+
+This is the expected, healthy end state, not a regression. The chunk-size threshold is deliberately left at its default so genuinely new bloat still trips it, consistent with treating the warning as a symptom rather than something to silence. To make this obvious to anyone reading a CI log or terminal, the production build prints a short synopsis immediately after the warning explaining that it is intentional.
+
 ## Keeping This Durable
 
 The durable rule: **new heavy UI should be introduced as its own deferred surface, not as another eager import on the startup path.** When adding a feature that pulls in a sizable dependency, treat "when is this actually needed?" as a first-class design question, and default to loading it on demand. When you add such a surface, also add it to the background warmup list alongside the other deferred surfaces so the prefetch stays in lockstep with the code split.
