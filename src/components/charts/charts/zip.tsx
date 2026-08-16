@@ -1,13 +1,12 @@
 import { useEffect, useMemo } from 'react';
 import type { EChartsOption } from 'echarts';
-import ReactECharts from 'echarts-for-react';
+import { ThemedEChart } from '../themed-echart';
 import { UNKNOWN_ZIP_CODE } from '../../../state/data-store';
 import { useFilterStore } from '../../../state/filter-store';
 import { useMapSelectionStore } from '../../../state/selection-store';
 import { rgbaFromTuple } from '../../../utils/color';
 import { UNKNOWN_DISPLAY_VALUE } from '../../../utils/tree-type';
 import { POINT_FILL_COLOR_SELECTED } from '../../map/constants';
-import { ECHARTS_THEME_NAME } from '../echarts-theme';
 
 type ZipBucket = {
   zipCode: string;
@@ -187,10 +186,9 @@ export function ZipChart() {
     >
       <h3 className="text-sm font-semibold text-[var(--color-on-surface)]">Records by Zip Code</h3>
       {hasZipData ? (
-        <ReactECharts
+        <ThemedEChart
           option={chartOption}
           onEvents={chartEvents}
-          theme={ECHARTS_THEME_NAME}
           style={{ height: chartHeight, width: '100%' }}
           notMerge
           lazyUpdate

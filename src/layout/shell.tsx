@@ -1,6 +1,14 @@
-import type { ReactNode } from 'react';
+import { Suspense, type ReactNode } from 'react';
 import { useUiStore } from '../state/ui-store';
 import { TimelineOverlay } from '../components/timeline/overlay';
+
+function LoadingFallback({ label }: { label: string }) {
+  return (
+    <div className="flex h-full min-h-0 w-full items-center justify-center p-6">
+      <span className="text-xs text-[var(--color-on-surface-variant)]">{label}</span>
+    </div>
+  );
+}
 
 type ShellProps = {
   sidebar: ReactNode;
@@ -57,7 +65,9 @@ export function Shell({
               isAuxiliaryPaneOpen ? 'opacity-100' : 'pointer-events-none opacity-0'
             }`}
           >
-            {auxiliaryPane}
+            <Suspense fallback={<LoadingFallback label="Loading charts..." />}>
+              {auxiliaryPane}
+            </Suspense>
           </div>
         </section>
       ) : null}
@@ -76,7 +86,11 @@ export function Shell({
           }`}
           aria-hidden={mainView !== 'gallery'}
         >
-          {galleryContent}
+          {mainView === 'gallery' ? (
+            <Suspense fallback={<LoadingFallback label="Loading gallery..." />}>
+              {galleryContent}
+            </Suspense>
+          ) : null}
         </div>
         <div
           className={`absolute inset-0 min-h-0 min-w-0 overflow-hidden ${
@@ -84,7 +98,9 @@ export function Shell({
           }`}
           aria-hidden={mainView !== 'about'}
         >
-          {aboutContent}
+          {mainView === 'about' ? (
+            <Suspense fallback={<LoadingFallback label="Loading..." />}>{aboutContent}</Suspense>
+          ) : null}
         </div>
       </main>
       <TimelineOverlay />

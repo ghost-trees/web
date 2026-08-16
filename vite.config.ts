@@ -37,6 +37,19 @@ export default defineConfig({
     outDir: 'dist',
     // Keep source maps opt-in for production; enable with VITE_SOURCEMAP=true.
     sourcemap: enableSourceMaps,
+    rollupOptions: {
+      output: {
+        // Split heavy, cache-stable vendors out of the app chunk so first-load JS is
+        // several parallel files instead of one megabyte-plus bundle, and app edits do
+        // not bust the map-library cache. ECharts is intentionally omitted here so it
+        // stays in its own lazy Charts chunk. See docs/frontend-loading.md.
+        manualChunks: {
+          maplibre: ['maplibre-gl'],
+          deck: ['@deck.gl/core', '@deck.gl/layers', '@deck.gl/mapbox'],
+          react: ['react', 'react-dom'],
+        },
+      },
+    },
   },
 
   test: {

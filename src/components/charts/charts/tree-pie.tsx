@@ -1,12 +1,11 @@
 import { useEffect, useMemo } from 'react';
 import type { EChartsOption } from 'echarts';
-import ReactECharts from 'echarts-for-react';
+import { ThemedEChart } from '../themed-echart';
 import { useFilterStore } from '../../../state/filter-store';
 import { useMapSelectionStore } from '../../../state/selection-store';
 import { rgbaFromTuple } from '../../../utils/color';
 import { formatTreeTypeLabel } from '../../../utils/tree-type';
 import { POINT_FILL_COLOR_SELECTED } from '../../map/constants';
-import { ECHARTS_THEME_NAME } from '../echarts-theme';
 
 type TreeTypeBucket = {
   treeType: string;
@@ -178,10 +177,9 @@ export function TreePieChart() {
         Records by Tree Type (Pie)
       </h3>
       {hasTreeTypeData ? (
-        <ReactECharts
+        <ThemedEChart
           option={chartOption}
           onEvents={chartEvents}
-          theme={ECHARTS_THEME_NAME}
           style={{ height: 320, width: '100%' }}
           notMerge
           lazyUpdate

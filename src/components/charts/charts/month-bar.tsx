@@ -1,13 +1,12 @@
 import { useEffect, useMemo } from 'react';
 import type { EChartsOption } from 'echarts';
-import ReactECharts from 'echarts-for-react';
+import { ThemedEChart } from '../themed-echart';
 import { useFilterStore } from '../../../state/filter-store';
 import type { MapPoint } from '../../../state/data-store';
 import { useMapSelectionStore } from '../../../state/selection-store';
 import { rgbaFromTuple } from '../../../utils/color';
 import { MONTH_LABELS, parseYearMonth } from '../../../utils/date';
 import { POINT_FILL_COLOR_SELECTED } from '../../map/constants';
-import { ECHARTS_THEME_NAME } from '../echarts-theme';
 
 function parseMonthIndex(dateValue: string): number | null {
   const yearMonth = parseYearMonth(dateValue);
@@ -199,10 +198,9 @@ export function MonthBarChart() {
     >
       <h3 className="text-sm font-semibold text-[var(--color-on-surface)]">Records by Month</h3>
       {hasMonthlyData ? (
-        <ReactECharts
+        <ThemedEChart
           option={chartOption}
           onEvents={chartEvents}
-          theme={ECHARTS_THEME_NAME}
           style={{ height: 280, width: '100%' }}
           notMerge
           lazyUpdate

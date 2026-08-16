@@ -1,4 +1,4 @@
-import * as echarts from 'echarts';
+import * as echarts from 'echarts/core';
 
 export const ECHARTS_THEME_NAME = 'ghosttrees-dark';
 

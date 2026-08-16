@@ -14,3 +14,4 @@ Please see [`CONTRIBUTING.md`](CONTRIBUTING.md) for guidelines on contributing t
 Documentation live in the [`docs/`](/docs/) directory.
 
 - [`docs/data-normalization.md`](docs/data-normalization.md) - temporary address normalization shim (pending upstream data cleanup).
+- [`docs/frontend-loading.md`](docs/frontend-loading.md) - frontend loading and code-splitting strategy.
