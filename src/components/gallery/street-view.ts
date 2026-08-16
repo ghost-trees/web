@@ -2,7 +2,7 @@
  * @file street-view.ts
  * @description
  * Builds Google Street View Static API image URLs for the Gallery's before/after
- * slider. Colocated with the gallery feature because only the gallery consumes it.
+ * slider.
  *
  * Each URL targets a specific panorama via its `pano` ID (curated in
  * `gallery-records.ts`) so before/after captures resolve to distinct imagery.
@@ -19,6 +19,8 @@ export type StreetViewShot = {
   heading?: number;
   pitch?: number;
   fov?: number;
+  /** Google Street View capture month (YYYY-MM). Curation note only; unused by the Static API. */
+  date?: string;
 };
 
 type BuildStreetViewUrlOptions = StreetViewShot & {

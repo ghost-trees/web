@@ -8,10 +8,15 @@
  * store panorama IDs (`panoId`) so the before/after captures resolve to distinct,
  * intentional imagery rather than "whatever Google currently shows nearest".
  *
- * Panorama IDs can be deleted when Google refreshes coverage. The `location`
- * ([lng, lat], matching the source GeoJSON) is retained so a dead panorama can be
- * re-resolved to the nearest current panorama later. Populate `panoId` values with
- * real IDs; until then they are left empty and the slider shows its fallback label.
+ * Google can retire panorama IDs when it refreshes Street View coverage. We
+ * still store `location` ([lng, lat], matching the source GeoJSON) so a retired
+ * ID can later be replaced with a nearby current panorama.
+ *
+ * Leave `panoId` empty until a real ID is curated. The slider then shows its
+ * fallback label instead of requesting an image.
+ *
+ * Each shot also accepts an optional `date` (capture month, `YYYY-MM`) recorded for
+ * human-readable curation notes only; it is not sent to the Street View Static API.
  */
 
 import type { StreetViewShot } from './street-view';
@@ -42,8 +47,20 @@ export const GALLERY_RECORDS: GalleryRecord[] = [
   {
     recordId: 'BA-202405292',
     location: [-84.49286209, 33.75249711],
-    before: { panoId: '' },
-    after: { panoId: '' },
+    before: {
+      panoId: 'n9YbDJ99QXaotaO96BxHuw',
+      heading: 187.62,
+      pitch: -3.92,
+      fov: 75,
+      date: '2019-09',
+    },
+    after: {
+      panoId: 'G0_Ea-9VP5V9g4wz7MQFvg',
+      heading: 187.62,
+      pitch: -3.92,
+      fov: 75,
+      date: '2025-02',
+    },
   },
   {
     recordId: 'BA-202304455',
