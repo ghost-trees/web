@@ -18,4 +18,23 @@
    * - No-line rule: prefer tonal surface changes over hard borders.
    * - Anti-divider rule: use spacing (`my-list-item-gap`) and hover tonal shifts.
    */
+
+  :root {
+    /*
+     * Height of the small-screen Maps tool strip, including the home-indicator inset. The
+     * bottom sheet rests on top of the strip, so both need the same number.
+     */
+    --maps-tool-strip-height: calc(3.75rem + env(safe-area-inset-bottom));
+  }
+
+  /*
+   * Below `md` that tool strip runs along the bottom edge of the map. Lift MapLibre's own
+   * bottom-corner controls (the scale bar and attribution) clear of it so they stay readable.
+   */
+  @media (width < 48rem) {
+    .maplibregl-ctrl-bottom-right,
+    .maplibregl-ctrl-bottom-left {
+      bottom: var(--maps-tool-strip-height);
+    }
+  }
 }

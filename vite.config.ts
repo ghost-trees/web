@@ -30,12 +30,11 @@ function chunkSizeNotePlugin(): Plugin {
         [
           '',
           'Note: the 500 kB chunk-size warning above is expected after intentional code-splitting.',
-          'It reflects individually large vendor chunks (maplibre-gl is the dominant first-load',
-          'one, plus deck.gl, and the lazy ECharts Charts chunk), not one combined bundle.',
-          'ECharts is off the first-load path (warmed after the map is healthy, or loaded on demand',
-          "if warmup was skipped); maplibre-gl / deck.gl are the map's critical path and cannot be",
-          'split further. chunkSizeWarningLimit is intentionally left untouched. See',
-          'docs/frontend-loading.md.',
+          'It reflects individually large vendor chunks, not one combined bundle. deck.gl is the',
+          'dominant first-load one because the Home playback map is the landing view; maplibre-gl',
+          'and the ECharts Charts chunk are deferred until Maps / Charts are opened (warmed in the',
+          'background once Home data is healthy, or loaded on demand if warmup was skipped).',
+          'chunkSizeWarningLimit is intentionally left untouched. See docs/frontend-loading.md.',
           '',
         ].join('\n'),
       );
@@ -69,10 +68,12 @@ export default defineConfig({
         // Split heavy, cache-stable vendors out of the app chunk so first-load JS is
         // several parallel files instead of one megabyte-plus bundle, and app edits do
         // not bust the map-library cache. ECharts is intentionally omitted here so it
-        // stays in its own lazy Charts chunk. See docs/frontend-loading.md.
+        // stays in its own lazy Charts chunk. maplibre-gl and the deck.gl MapboxOverlay
+        // are likewise omitted: they are only reachable through the lazy Maps chunk, and
+        // naming them here would pull them back onto the landing path.
+        // See docs/frontend-loading.md.
         manualChunks: {
-          maplibre: ['maplibre-gl'],
-          deck: ['@deck.gl/core', '@deck.gl/layers', '@deck.gl/mapbox'],
+          deck: ['@deck.gl/core', '@deck.gl/layers', '@deck.gl/geo-layers'],
           react: ['react', 'react-dom'],
         },
       },

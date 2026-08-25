@@ -9,8 +9,6 @@ type SyncPointLayerArgs = {
   selectedIds: Set<string>;
   hoveredIds: Set<string>;
   scalePointsByFee: boolean;
-  appMode: 'explore' | 'timeline';
-  timelineMonthKey: number | null;
 };
 
 export function syncPointLayer({
@@ -19,16 +17,9 @@ export function syncPointLayer({
   selectedIds,
   hoveredIds,
   scalePointsByFee,
-  appMode,
-  timelineMonthKey,
 }: SyncPointLayerArgs): void {
   overlay.setProps({
-    layers: [
-      createPointLayer(points, selectedIds, hoveredIds, scalePointsByFee, {
-        enabled: appMode === 'timeline',
-        currentMonthKey: timelineMonthKey,
-      }),
-    ],
+    layers: [createPointLayer(points, selectedIds, hoveredIds, scalePointsByFee)],
   });
 }
 
@@ -38,8 +29,6 @@ type UsePointLayerSyncArgs = {
   selectedIds: Set<string>;
   hoveredIds: Set<string>;
   scalePointsByFee: boolean;
-  appMode: 'explore' | 'timeline';
-  timelineMonthKey: number | null;
 };
 
 export function usePointLayerSync({
@@ -48,8 +37,6 @@ export function usePointLayerSync({
   selectedIds,
   hoveredIds,
   scalePointsByFee,
-  appMode,
-  timelineMonthKey,
 }: UsePointLayerSyncArgs) {
   const pointsRef = useRef<MapPoint[]>([]);
   const selectedIdsRef = useRef(selectedIds);
@@ -73,11 +60,9 @@ export function usePointLayerSync({
         selectedIds: selectedIdSet ?? selectedIdsRef.current,
         hoveredIds: hoveredIdSet ?? hoveredIdsRef.current,
         scalePointsByFee,
-        appMode,
-        timelineMonthKey,
       });
     },
-    [appMode, overlayRef, timelineMonthKey, scalePointsByFee],
+    [overlayRef, scalePointsByFee],
   );
 
   useEffect(() => {

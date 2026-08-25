@@ -6,6 +6,10 @@
 
 export const DEFAULT_STADIA_STYLE_URL =
   'https://tiles.stadiamaps.com/styles/alidade_smooth_dark.json';
+// Raster twin of the vector style above, for the Home playback map. Deck.gl renders that map
+// without MapLibre, so it needs tile images rather than a style document.
+export const DEFAULT_STADIA_RASTER_TILE_URL =
+  'https://tiles.stadiamaps.com/tiles/alidade_smooth_dark/{z}/{x}/{y}@2x.png';
 export const POINT_LAYER_ID = 'tree-points-layer';
 export const ATLANTA_BOUNDARY_SOURCE_ID = 'atlanta-boundary-source';
 export const ATLANTA_BOUNDARY_LAYER_ID = 'atlanta-boundary-layer';
@@ -20,3 +24,5 @@ export const POINT_LINE_WIDTH_SELECTED = 2;
 export const INITIAL_CENTER: [number, number] = [-84.388, 33.8];
 export const INITIAL_ZOOM = 10;
 export const ATLANTA_BOUNDARY_LINE_WIDTH = 2;
+// Matches --color-primary, used where a deck.gl layer cannot read a CSS custom property.
+export const ATLANTA_BOUNDARY_LINE_COLOR: [number, number, number, number] = [164, 211, 147, 230];

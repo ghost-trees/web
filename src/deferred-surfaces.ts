@@ -1,26 +1,27 @@
 import { lazy } from 'react';
 
-// Hybrid loading for non-map surfaces.
+// Hybrid loading for non-landing surfaces.
 //
-// The map is the landing view, so Charts (ECharts), Gallery, and About are split into their
-// own async chunks and loaded lazily. That keeps ECharts and its theme setup off the
+// Home is the landing view and renders a lightweight deck.gl canvas, so Maps (MapLibre +
+// the deck.gl MapboxOverlay), Charts (ECharts), and Gallery are split into their own async
+// chunks and loaded lazily. That keeps the map engine and the charting library off the
 // first-load critical path. To avoid a visible Suspense wait the first time a user opens one
-// of these surfaces, we ALSO warm the same chunks in the background once the map path is
-// healthy (see scheduleDeferredSurfacePrefetch, invoked from main.tsx after map points load).
+// of these surfaces, we ALSO warm the same chunks in the background once Home's point data
+// has loaded (see scheduleDeferredSurfacePrefetch, invoked from main.tsx).
 //
 // The lazy wrappers and the prefetch below intentionally reference the exact same dynamic
 // import specifiers. Rollup dedupes by resolved module id, so both share one chunk and the
 // browser never downloads a surface twice. See docs/frontend-loading.md.
+export const MapsView = lazy(() =>
+  import('./components/maps/view').then((module) => ({ default: module.MapsView })),
+);
+
 export const ChartsPane = lazy(() =>
   import('./components/charts/pane').then((module) => ({ default: module.ChartsPane })),
 );
 
 export const GalleryView = lazy(() =>
   import('./components/gallery/view').then((module) => ({ default: module.GalleryView })),
-);
-
-export const AboutView = lazy(() =>
-  import('./components/about/view').then((module) => ({ default: module.AboutView })),
 );
 
 // Minimal shape of the (optional, non-standard) Network Information API. Typed locally so we
@@ -64,9 +65,9 @@ function shouldSkipIdlePrefetch(): boolean {
  * dynamic imports of an already-loaded module resolve from cache without re-fetching.
  */
 export function prefetchDeferredSurfaces(): void {
+  void import('./components/maps/view');
   void import('./components/charts/pane');
   void import('./components/gallery/view');
-  void import('./components/about/view');
 }
 
 /**

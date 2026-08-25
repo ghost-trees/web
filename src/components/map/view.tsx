@@ -5,6 +5,7 @@
  * and composes map UI elements.
  */
 
+import 'maplibre-gl/dist/maplibre-gl.css';
 import { MapboxOverlay } from '@deck.gl/mapbox';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import maplibregl from 'maplibre-gl';
@@ -12,7 +13,7 @@ import { useMapSelectionStore } from '../../state/selection-store';
 import { useDataStore } from '../../state/data-store';
 import { useFilterStore } from '../../state/filter-store';
 import { useUiStore } from '../../state/ui-store';
-import { deriveTimelineMonthKey, filterIdsByVisibility, selectPointsForLayer } from './timeline';
+import { filterIdsByVisibility } from './timeline';
 import { INITIAL_CENTER, INITIAL_ZOOM } from './constants';
 import { MapControls } from './controls';
 import { MapSelectionCounter } from './selection-counter';
@@ -30,11 +31,7 @@ export function MapView() {
   const pointsById = useDataStore((state) => state.pointsById);
   const loadPoints = useDataStore((state) => state.loadPoints);
   const filteredPoints = useFilterStore((state) => state.visiblePoints);
-  const timelinePoints = useFilterStore((state) => state.timelinePoints);
-  const timelineMonths = useFilterStore((state) => state.timelineMonths);
-  const appMode = useUiStore((state) => state.appMode);
   const mainView = useUiStore((state) => state.mainView);
-  const timelineMonthIndex = useUiStore((state) => state.timelineMonthIndex);
   const scalePointsByFee = useUiStore((state) => state.scalePointsByFee);
   const showAtlantaBoundary = useUiStore((state) => state.showAtlantaBoundary);
   const selectedIds = useMapSelectionStore((state) => state.selectedIds);
@@ -45,15 +42,7 @@ export function MapView() {
   const setHovered = useMapSelectionStore((state) => state.setHovered);
   const focusRequest = useMapSelectionStore((state) => state.focusRequest);
   const clearFocusRequest = useMapSelectionStore((state) => state.clearFocusRequest);
-  const timelineMonthKey = deriveTimelineMonthKey(timelineMonths, timelineMonthIndex);
-  const pointsForLayer = useMemo(() => {
-    return selectPointsForLayer({
-      appMode,
-      filteredPoints,
-      timelinePoints,
-      timelineMonthKey,
-    });
-  }, [appMode, filteredPoints, timelineMonthKey, timelinePoints]);
+  const pointsForLayer = filteredPoints;
   const attachMapInteractions = useMapInteractions({
     replaceSelection,
     addSelection,
@@ -78,8 +67,6 @@ export function MapView() {
     selectedIds: visibleSelectedIds,
     hoveredIds: visibleHoveredIds,
     scalePointsByFee,
-    appMode,
-    timelineMonthKey,
   });
   const handleMapViewChange = useCallback(() => {
     setMapViewVersion((version) => version + 1);
@@ -137,7 +124,7 @@ export function MapView() {
   }, [selectedIds, visiblePointIds, replaceSelection]);
 
   useEffect(() => {
-    if (mainView !== 'map' || !mapRef.current) {
+    if (mainView !== 'maps' || !mapRef.current) {
       return;
     }
 
@@ -189,21 +176,17 @@ export function MapView() {
     >
       <div className="relative h-full w-full">
         <div ref={mapContainerRef} className="h-full w-full" />
-        {appMode !== 'timeline' ? (
-          <>
-            <div className="pointer-events-none absolute left-6 top-6 z-30">
-              <MapSelectionCounter />
-            </div>
-            <div className="pointer-events-none absolute right-6 top-6 z-30">
-              <MapControls
-                onZoomIn={handleZoomIn}
-                onZoomOut={handleZoomOut}
-                onResetView={handleResetView}
-              />
-            </div>
-          </>
-        ) : null}
-        {appMode !== 'timeline' && selectedPoint && projectedTooltip ? (
+        <div className="pointer-events-none absolute left-4 top-4 z-30 sm:left-6 sm:top-6">
+          <MapSelectionCounter />
+        </div>
+        <div className="pointer-events-none absolute right-4 top-4 z-30 sm:right-6 sm:top-6">
+          <MapControls
+            onZoomIn={handleZoomIn}
+            onZoomOut={handleZoomOut}
+            onResetView={handleResetView}
+          />
+        </div>
+        {selectedPoint && projectedTooltip ? (
           <MapTooltip
             pointId={selectedPoint.id}
             date={selectedPoint.date}
