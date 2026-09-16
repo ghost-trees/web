@@ -9,7 +9,6 @@
  */
 
 import { defineConfig } from 'vitest/config';
-import type { Plugin } from 'vite';
 import react from '@vitejs/plugin-react-swc';
 import tailwindcss from '@tailwindcss/vite';
 import path from 'node:path';
@@ -17,36 +16,11 @@ import path from 'node:path';
 const basePath = process.env.VITE_BASE_PATH ?? '/';
 const enableSourceMaps = process.env.VITE_SOURCEMAP === 'true';
 
-// Build-only note printed right after Vite's chunk-size warning so a reader who sees it in a
-// terminal or CI log knows the warning is intentional, not a regression. `closeBundle` runs
-// after the bundle is written (after the warning), and `apply: 'build'` keeps it out of dev.
-// See docs/frontend-loading.md.
-function chunkSizeNotePlugin(): Plugin {
-  return {
-    name: 'ghosttrees:chunk-size-note',
-    apply: 'build',
-    closeBundle() {
-      console.log(
-        [
-          '',
-          'Note: the 500 kB chunk-size warning above is expected after intentional code-splitting.',
-          'It reflects individually large vendor chunks, not one combined bundle. deck.gl is the',
-          'dominant first-load one because the Home playback map is the landing view; maplibre-gl',
-          'and the ECharts Charts chunk are deferred until Maps / Charts are opened (warmed in the',
-          'background once Home data is healthy, or loaded on demand if warmup was skipped).',
-          'chunkSizeWarningLimit is intentionally left untouched. See docs/frontend-loading.md.',
-          '',
-        ].join('\n'),
-      );
-    },
-  };
-}
-
 // https://vitejs.dev/config/
 export default defineConfig({
   base: basePath,
 
-  plugins: [react(), tailwindcss(), chunkSizeNotePlugin()],
+  plugins: [react(), tailwindcss()],
 
   resolve: {
     alias: {
