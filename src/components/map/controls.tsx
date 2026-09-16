@@ -40,17 +40,19 @@ export function MapControls({ onZoomIn, onZoomOut, onResetView }: MapControlsPro
           </span>
         </button>
       </div>
-      <button
-        type="button"
-        aria-label="Reset map view"
-        title="Reset map view"
-        onClick={onResetView}
-        className={`${mapControlButtonClass} bg-[var(--color-surface-container-high)] shadow-ambient backdrop-blur-[var(--blur-glass)]`}
-      >
-        <span className="material-symbols-outlined text-[20px] leading-none" aria-hidden="true">
-          home
-        </span>
-      </button>
+      <div className="pointer-events-auto rounded-[var(--radius-round-four)] bg-[var(--color-surface-container-high)] p-1 shadow-ambient backdrop-blur-[var(--blur-glass)]">
+        <button
+          type="button"
+          aria-label="Reset map view"
+          title="Reset map view"
+          onClick={onResetView}
+          className={mapControlButtonClass}
+        >
+          <span className="material-symbols-outlined text-[20px] leading-none" aria-hidden="true">
+            home
+          </span>
+        </button>
+      </div>
     </div>
   );
 }
