@@ -9,7 +9,6 @@
  */
 
 import { defineConfig } from 'vitest/config';
-import type { Plugin } from 'vite';
 import react from '@vitejs/plugin-react-swc';
 import tailwindcss from '@tailwindcss/vite';
 import path from 'node:path';
@@ -17,37 +16,11 @@ import path from 'node:path';
 const basePath = process.env.VITE_BASE_PATH ?? '/';
 const enableSourceMaps = process.env.VITE_SOURCEMAP === 'true';
 
-// Build-only note printed right after Vite's chunk-size warning so a reader who sees it in a
-// terminal or CI log knows the warning is intentional, not a regression. `closeBundle` runs
-// after the bundle is written (after the warning), and `apply: 'build'` keeps it out of dev.
-// See docs/frontend-loading.md.
-function chunkSizeNotePlugin(): Plugin {
-  return {
-    name: 'ghosttrees:chunk-size-note',
-    apply: 'build',
-    closeBundle() {
-      console.log(
-        [
-          '',
-          'Note: the 500 kB chunk-size warning above is expected after intentional code-splitting.',
-          'It reflects individually large vendor chunks (maplibre-gl is the dominant first-load',
-          'one, plus deck.gl, and the lazy ECharts Charts chunk), not one combined bundle.',
-          'ECharts is off the first-load path (warmed after the map is healthy, or loaded on demand',
-          "if warmup was skipped); maplibre-gl / deck.gl are the map's critical path and cannot be",
-          'split further. chunkSizeWarningLimit is intentionally left untouched. See',
-          'docs/frontend-loading.md.',
-          '',
-        ].join('\n'),
-      );
-    },
-  };
-}
-
 // https://vitejs.dev/config/
 export default defineConfig({
   base: basePath,
 
-  plugins: [react(), tailwindcss(), chunkSizeNotePlugin()],
+  plugins: [react(), tailwindcss()],
 
   resolve: {
     alias: {
@@ -69,10 +42,12 @@ export default defineConfig({
         // Split heavy, cache-stable vendors out of the app chunk so first-load JS is
         // several parallel files instead of one megabyte-plus bundle, and app edits do
         // not bust the map-library cache. ECharts is intentionally omitted here so it
-        // stays in its own lazy Charts chunk. See docs/frontend-loading.md.
+        // stays in its own lazy Charts chunk. maplibre-gl and the deck.gl MapboxOverlay
+        // are likewise omitted: they are only reachable through the lazy Maps chunk, and
+        // naming them here would pull them back onto the landing path.
+        // See docs/frontend-loading.md.
         manualChunks: {
-          maplibre: ['maplibre-gl'],
-          deck: ['@deck.gl/core', '@deck.gl/layers', '@deck.gl/mapbox'],
+          deck: ['@deck.gl/core', '@deck.gl/layers', '@deck.gl/geo-layers'],
           react: ['react', 'react-dom'],
         },
       },

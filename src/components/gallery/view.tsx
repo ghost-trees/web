@@ -10,7 +10,6 @@
  */
 
 import { useEffect, useMemo, useState } from 'react';
-import { CloseButton } from '../common/close-button';
 import { useUiStore } from '../../state/ui-store';
 import { useMapSelectionStore } from '../../state/selection-store';
 import { useFilterStore } from '../../state/filter-store';
@@ -68,8 +67,7 @@ function getPointDisplayData(point: MapPoint | null) {
 }
 
 export function GalleryView() {
-  const showMapPane = useUiStore((state) => state.showMapPane);
-  const exitTimeline = useUiStore((state) => state.exitTimeline);
+  const showMaps = useUiStore((state) => state.showMaps);
   const replaceSelection = useMapSelectionStore((state) => state.replaceSelection);
   const requestFocus = useMapSelectionStore((state) => state.requestFocus);
   const resetFilters = useFilterStore((state) => state.resetFilters);
@@ -102,11 +100,10 @@ export function GalleryView() {
   }, [selectedRecord]);
 
   const handleShowOnMap = (point: MapPoint) => {
-    exitTimeline();
     resetFilters();
     replaceSelection([point.id]);
     requestFocus(point.coordinates);
-    showMapPane();
+    showMaps();
   };
 
   return (
@@ -114,14 +111,7 @@ export function GalleryView() {
       aria-label="Gallery View"
       className="relative h-full min-h-0 w-full overflow-y-auto bg-[var(--color-surface-container-low)]"
     >
-      <CloseButton
-        ariaLabel="Close gallery"
-        onClick={showMapPane}
-        size="compact"
-        className="absolute right-6 top-6 z-10"
-      />
-
-      <div className="mx-auto flex w-full max-w-5xl flex-col px-8 pt-8 pb-16 md:pt-12">
+      <div className="mx-auto flex w-full max-w-5xl flex-col px-6 pt-8 pb-16 sm:px-8 md:pt-12">
         <header>
           <p className="text-[11px] uppercase tracking-label-meta text-on-surface-variant">
             Gallery

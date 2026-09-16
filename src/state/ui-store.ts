@@ -1,16 +1,18 @@
 import { create } from 'zustand';
 import type { ChartId } from '../components/charts/definitions';
 
-export type UiPane = 'map' | 'filters' | 'charts' | 'settings';
-export type MainView = 'map' | 'gallery' | 'about';
-export type AppMode = 'explore' | 'timeline';
+export type MapsSubTab = 'filters' | 'charts' | 'settings';
+export type MainView = 'home' | 'maps' | 'gallery' | 'about';
 
 type UiStoreState = {
-  appMode: AppMode;
   mainView: MainView;
-  mainViewBeforeTimeline: MainView;
-  activePane: UiPane;
-  paneBeforeTimeline: UiPane;
+  // Views that have been opened at least once. Maps and Gallery stay mounted afterwards so a
+  // MapLibre session and scroll positions survive navigation.
+  visitedViews: Set<MainView>;
+  mapsSubTab: MapsSubTab;
+  // Only meaningful below the `md` breakpoint, where the Maps panel is a bottom sheet over the
+  // map. From `md` up the panel is a persistent column and this flag is ignored.
+  mapsPanelOpen: boolean;
   selectedChart: ChartId;
   scalePointsByFee: boolean;
   showAtlantaBoundary: boolean;
@@ -18,53 +20,42 @@ type UiStoreState = {
   timelineMonthIndex: number;
   timelineStepMs: number;
   hasTimelineAutoStarted: boolean;
-  enterTimeline: () => void;
-  exitTimeline: () => void;
   setTimelinePlaying: (next: boolean) => void;
   toggleTimelinePlaying: () => void;
   setTimelineMonthIndex: (monthIndex: number) => void;
   setTimelineStepMs: (stepMs: number) => void;
   markTimelineAutoStarted: () => void;
   setMainView: (view: MainView) => void;
-  showGalleryView: () => void;
-  showAboutView: () => void;
-  setActivePane: (pane: UiPane) => void;
+  showHome: () => void;
+  showMaps: () => void;
+  showGallery: () => void;
+  showAbout: () => void;
+  setMapsSubTab: (tab: MapsSubTab) => void;
+  setMapsPanelOpen: (open: boolean) => void;
   setSelectedChart: (chartId: ChartId) => void;
   setScalePointsByFee: (next: boolean) => void;
   setShowAtlantaBoundary: (next: boolean) => void;
-  togglePane: (pane: Exclude<UiPane, 'map'>) => void;
-  showMapPane: () => void;
 };
 
+function withVisitedView(visitedViews: Set<MainView>, view: MainView): Set<MainView> {
+  if (visitedViews.has(view)) {
+    return visitedViews;
+  }
+  return new Set(visitedViews).add(view);
+}
+
 export const useUiStore = create<UiStoreState>((set) => ({
-  appMode: 'explore',
-  mainView: 'map',
-  mainViewBeforeTimeline: 'map',
-  activePane: 'map',
-  paneBeforeTimeline: 'map',
+  mainView: 'home',
+  visitedViews: new Set<MainView>(['home']),
+  mapsSubTab: 'filters',
+  mapsPanelOpen: false,
   selectedChart: 'records-by-month',
   scalePointsByFee: false,
   showAtlantaBoundary: true,
-  isTimelinePlaying: true,
+  isTimelinePlaying: false,
   timelineMonthIndex: 0,
   timelineStepMs: 1000,
   hasTimelineAutoStarted: false,
-  enterTimeline: () =>
-    set((state) => ({
-      appMode: 'timeline',
-      mainViewBeforeTimeline: state.mainView,
-      paneBeforeTimeline: state.activePane,
-      mainView: 'map',
-      activePane: 'map',
-      isTimelinePlaying: true,
-    })),
-  exitTimeline: () =>
-    set((state) => ({
-      appMode: 'explore',
-      mainView: state.mainViewBeforeTimeline,
-      activePane: state.paneBeforeTimeline,
-      isTimelinePlaying: false,
-    })),
   setTimelinePlaying: (next) => set({ isTimelinePlaying: next }),
   toggleTimelinePlaying: () =>
     set((state) => ({
@@ -74,32 +65,37 @@ export const useUiStore = create<UiStoreState>((set) => ({
   setTimelineStepMs: (stepMs) => set({ timelineStepMs: Math.max(300, stepMs) }),
   markTimelineAutoStarted: () => set({ hasTimelineAutoStarted: true }),
   setMainView: (view) =>
-    set({
+    set((state) => ({
       mainView: view,
-      activePane: 'map',
-    }),
-  showGalleryView: () =>
-    set({
+      visitedViews: withVisitedView(state.visitedViews, view),
+      // Playback only runs on Home, so leaving it must not keep a timer alive.
+      isTimelinePlaying: view === 'home' ? state.isTimelinePlaying : false,
+    })),
+  showHome: () =>
+    set((state) => ({
+      mainView: 'home',
+      visitedViews: withVisitedView(state.visitedViews, 'home'),
+    })),
+  showMaps: () =>
+    set((state) => ({
+      mainView: 'maps',
+      visitedViews: withVisitedView(state.visitedViews, 'maps'),
+      isTimelinePlaying: false,
+    })),
+  showGallery: () =>
+    set((state) => ({
       mainView: 'gallery',
-      activePane: 'map',
-    }),
-  showAboutView: () =>
+      visitedViews: withVisitedView(state.visitedViews, 'gallery'),
+      isTimelinePlaying: false,
+    })),
+  showAbout: () =>
     set({
       mainView: 'about',
-      activePane: 'map',
+      isTimelinePlaying: false,
     }),
-  setActivePane: (pane) => set({ activePane: pane }),
+  setMapsSubTab: (tab) => set({ mapsSubTab: tab }),
+  setMapsPanelOpen: (open) => set({ mapsPanelOpen: open }),
   setSelectedChart: (chartId) => set({ selectedChart: chartId }),
   setScalePointsByFee: (next) => set({ scalePointsByFee: next }),
   setShowAtlantaBoundary: (next) => set({ showAtlantaBoundary: next }),
-  togglePane: (pane) =>
-    set((state) => ({
-      mainView: 'map',
-      activePane: state.mainView !== 'map' ? pane : state.activePane === pane ? 'map' : pane,
-    })),
-  showMapPane: () =>
-    set({
-      mainView: 'map',
-      activePane: 'map',
-    }),
 }));

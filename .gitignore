@@ -26,6 +26,9 @@ pnpm-debug.log*
 .turbo/
 node_modules/.tmp/
 
+# Cursor
+.cursor/
+
 # OS files
 .DS_Store
 Thumbs.db

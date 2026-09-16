@@ -1,14 +1,13 @@
 import type { ChartId } from '../components/charts/definitions';
 import { fromYearMonthKey, toYearMonthKey } from '../utils/date';
-import type { AppMode, MainView, UiPane } from './ui-store';
+import type { MainView, MapsSubTab } from './ui-store';
 import { useDataStore } from './data-store';
 import type { TimeFilterMode } from './filter-store';
 import { useFilterStore } from './filter-store';
 import { useUiStore } from './ui-store';
 
-const MAIN_VIEWS: MainView[] = ['map', 'gallery', 'about'];
-const UI_PANES: UiPane[] = ['map', 'filters', 'charts', 'settings'];
-const APP_MODES: AppMode[] = ['explore', 'timeline'];
+const MAIN_VIEWS: MainView[] = ['home', 'maps', 'gallery', 'about'];
+const MAPS_SUB_TABS: MapsSubTab[] = ['filters', 'charts', 'settings'];
 const TIME_FILTER_MODES: TimeFilterMode[] = ['range', 'through'];
 const CHART_IDS: ChartId[] = [
   'records-by-month',
@@ -32,9 +31,9 @@ type ParsedUrlState = {
     Pick<
       ReturnType<typeof useUiStore.getState>,
       | 'mainView'
-      | 'activePane'
+      | 'mapsSubTab'
+      | 'mapsPanelOpen'
       | 'selectedChart'
-      | 'appMode'
       | 'scalePointsByFee'
       | 'showAtlantaBoundary'
     >
@@ -130,19 +129,17 @@ export function readStateFromUrl(): ParsedUrlState {
   const ui: ParsedUrlState['ui'] = {};
   const filters: ParsedFilterState = {};
 
-  const modeParam = searchParams.get('mode');
-  if (isOneOf(modeParam, APP_MODES)) {
-    ui.appMode = modeParam;
-  }
-
   const viewParam = searchParams.get('view');
   if (isOneOf(viewParam, MAIN_VIEWS)) {
     ui.mainView = viewParam;
   }
 
   const paneParam = searchParams.get('pane');
-  if (isOneOf(paneParam, UI_PANES)) {
-    ui.activePane = paneParam;
+  if (isOneOf(paneParam, MAPS_SUB_TABS)) {
+    ui.mapsSubTab = paneParam;
+    // A shared link that names a sub-tab should arrive with it visible, including on the
+    // small-screen layout where the panel is a bottom sheet.
+    ui.mapsPanelOpen = true;
   }
 
   const chartParam = searchParams.get('chart');
@@ -201,8 +198,13 @@ export function applyUrlToStores(): void {
   initialUrlHasState = hasRecognizedState(parsedState);
 
   withHydrationGuard(() => {
-    if (Object.keys(parsedState.ui).length > 0) {
-      useUiStore.setState(parsedState.ui);
+    const { mainView, ...restOfUiState } = parsedState.ui;
+    if (Object.keys(restOfUiState).length > 0) {
+      useUiStore.setState(restOfUiState);
+    }
+    // Routed through the action so the landing view counts as visited and stays mounted.
+    if (mainView) {
+      useUiStore.getState().setMainView(mainView);
     }
   });
 
@@ -239,17 +241,14 @@ export function serializeStoresToUrl(): void {
   const filterState = useFilterStore.getState();
   const searchParams = new URLSearchParams();
 
-  if (uiState.mainView !== 'map') {
+  if (uiState.mainView !== 'home') {
     searchParams.set('view', uiState.mainView);
   }
-  if (uiState.mainView === 'map' && uiState.activePane !== 'map') {
-    searchParams.set('pane', uiState.activePane);
+  if (uiState.mainView === 'maps' && uiState.mapsSubTab !== 'filters') {
+    searchParams.set('pane', uiState.mapsSubTab);
   }
   if (uiState.selectedChart !== 'records-by-month') {
     searchParams.set('chart', uiState.selectedChart);
-  }
-  if (uiState.appMode !== 'explore') {
-    searchParams.set('mode', uiState.appMode);
   }
 
   if (uiState.scalePointsByFee) {
