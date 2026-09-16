@@ -3,7 +3,12 @@ import { createRoot } from 'react-dom/client';
 import { Shell } from './layout/shell';
 import { HomeView } from './components/home/view';
 import { TopNav } from './components/nav/top-nav';
-import { AboutView, GalleryView, MapsView, scheduleDeferredSurfacePrefetch } from './deferred-surfaces';
+import {
+  AboutView,
+  GalleryView,
+  MapsView,
+  scheduleDeferredSurfacePrefetch,
+} from './deferred-surfaces';
 import { useDataStore } from './state/data-store';
 import { applyUrlToStores, startUrlSync } from './state/url-state';
 
