@@ -3,7 +3,7 @@ import { createRoot } from 'react-dom/client';
 import { Shell } from './layout/shell';
 import { HomeView } from './components/home/view';
 import { TopNav } from './components/nav/top-nav';
-import { GalleryView, MapsView, scheduleDeferredSurfacePrefetch } from './deferred-surfaces';
+import { AboutView, GalleryView, MapsView, scheduleDeferredSurfacePrefetch } from './deferred-surfaces';
 import { useDataStore } from './state/data-store';
 import { applyUrlToStores, startUrlSync } from './state/url-state';
 
@@ -36,5 +36,6 @@ createRoot(rootElement).render(
     homeContent={<HomeView />}
     mapsContent={<MapsView />}
     galleryContent={<GalleryView />}
+    aboutContent={<AboutView />}
   />,
 );

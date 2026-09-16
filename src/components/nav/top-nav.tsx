@@ -7,6 +7,7 @@ export function TopNav() {
   const showHome = useUiStore((state) => state.showHome);
   const showMaps = useUiStore((state) => state.showMaps);
   const showGallery = useUiStore((state) => state.showGallery);
+  const showAbout = useUiStore((state) => state.showAbout);
 
   return (
     <header className="z-50 shrink-0 bg-[var(--color-surface-container-high)] pt-[env(safe-area-inset-top)]">
@@ -42,6 +43,14 @@ export function TopNav() {
                 icon="photo_library"
                 isActive={mainView === 'gallery'}
                 onClick={showGallery}
+              />
+            </li>
+            <li>
+              <TopNavButton
+                label="About"
+                icon="info"
+                isActive={mainView === 'about'}
+                onClick={showAbout}
               />
             </li>
           </ul>

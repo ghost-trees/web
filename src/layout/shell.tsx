@@ -14,13 +14,20 @@ type ShellProps = {
   homeContent: ReactNode;
   mapsContent?: ReactNode;
   galleryContent?: ReactNode;
+  aboutContent?: ReactNode;
 };
 
-export function Shell({ topNav, homeContent, mapsContent, galleryContent }: ShellProps) {
+export function Shell({
+  topNav,
+  homeContent,
+  mapsContent,
+  galleryContent,
+  aboutContent,
+}: ShellProps) {
   const mainView = useUiStore((state) => state.mainView);
   // Maps and Gallery are kept in the DOM once opened so the MapLibre session and scroll
-  // positions survive navigation. Home is not: its deck.gl canvas is cheap to recreate, and
-  // unmounting it guarantees only one map is holding a GL context at a time.
+  // positions survive navigation. Home and About are not: Home's deck.gl canvas is cheap to
+  // recreate, and unmounting it guarantees only one map is holding a GL context at a time.
   const visitedViews = useUiStore((state) => state.visitedViews);
 
   return (
@@ -50,6 +57,11 @@ export function Shell({ topNav, homeContent, mapsContent, galleryContent }: Shel
             </Suspense>
           ) : null}
         </div>
+        {mainView === 'about' ? (
+          <div className="absolute inset-0 flex">
+            <Suspense fallback={<LoadingFallback label="Loading..." />}>{aboutContent}</Suspense>
+          </div>
+        ) : null}
       </main>
     </div>
   );

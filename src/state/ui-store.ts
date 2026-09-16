@@ -2,7 +2,7 @@ import { create } from 'zustand';
 import type { ChartId } from '../components/charts/definitions';
 
 export type MapsSubTab = 'filters' | 'charts' | 'settings';
-export type MainView = 'home' | 'maps' | 'gallery';
+export type MainView = 'home' | 'maps' | 'gallery' | 'about';
 
 type UiStoreState = {
   mainView: MainView;
@@ -29,6 +29,7 @@ type UiStoreState = {
   showHome: () => void;
   showMaps: () => void;
   showGallery: () => void;
+  showAbout: () => void;
   setMapsSubTab: (tab: MapsSubTab) => void;
   setMapsPanelOpen: (open: boolean) => void;
   setSelectedChart: (chartId: ChartId) => void;
@@ -87,6 +88,11 @@ export const useUiStore = create<UiStoreState>((set) => ({
       visitedViews: withVisitedView(state.visitedViews, 'gallery'),
       isTimelinePlaying: false,
     })),
+  showAbout: () =>
+    set({
+      mainView: 'about',
+      isTimelinePlaying: false,
+    }),
   setMapsSubTab: (tab) => set({ mapsSubTab: tab }),
   setMapsPanelOpen: (open) => set({ mapsPanelOpen: open }),
   setSelectedChart: (chartId) => set({ selectedChart: chartId }),

@@ -3,8 +3,8 @@ import { lazy } from 'react';
 // Hybrid loading for non-landing surfaces.
 //
 // Home is the landing view and renders a lightweight deck.gl canvas, so Maps (MapLibre +
-// the deck.gl MapboxOverlay), Charts (ECharts), and Gallery are split into their own async
-// chunks and loaded lazily. That keeps the map engine and the charting library off the
+// the deck.gl MapboxOverlay), Charts (ECharts), Gallery, and About are split into their own
+// async chunks and loaded lazily. That keeps the map engine and the charting library off the
 // first-load critical path. To avoid a visible Suspense wait the first time a user opens one
 // of these surfaces, we ALSO warm the same chunks in the background once Home's point data
 // has loaded (see scheduleDeferredSurfacePrefetch, invoked from main.tsx).
@@ -22,6 +22,10 @@ export const ChartsPane = lazy(() =>
 
 export const GalleryView = lazy(() =>
   import('./components/gallery/view').then((module) => ({ default: module.GalleryView })),
+);
+
+export const AboutView = lazy(() =>
+  import('./components/about/view').then((module) => ({ default: module.AboutView })),
 );
 
 // Minimal shape of the (optional, non-standard) Network Information API. Typed locally so we
@@ -68,6 +72,7 @@ export function prefetchDeferredSurfaces(): void {
   void import('./components/maps/view');
   void import('./components/charts/pane');
   void import('./components/gallery/view');
+  void import('./components/about/view');
 }
 
 /**

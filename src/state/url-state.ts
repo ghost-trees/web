@@ -6,7 +6,7 @@ import type { TimeFilterMode } from './filter-store';
 import { useFilterStore } from './filter-store';
 import { useUiStore } from './ui-store';
 
-const MAIN_VIEWS: MainView[] = ['home', 'maps', 'gallery'];
+const MAIN_VIEWS: MainView[] = ['home', 'maps', 'gallery', 'about'];
 const MAPS_SUB_TABS: MapsSubTab[] = ['filters', 'charts', 'settings'];
 const TIME_FILTER_MODES: TimeFilterMode[] = ['range', 'through'];
 const CHART_IDS: ChartId[] = [

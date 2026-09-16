@@ -1,13 +1,11 @@
 /**
  * @file view.tsx
  * @description
- * Landing surface: the timeline plays across a fixed map of Atlanta, and the project write-up
- * scrolls underneath it on the same page.
+ * Landing surface: the timeline plays across a fixed map of Atlanta.
  */
 
 import { TimelineControls } from '../timeline/controls';
 import { useTimelinePlayback } from '../timeline/use-timeline-playback';
-import { AboutContent } from '../about/content';
 import { HomePlaybackMap } from './playback-map';
 
 export function HomeView() {
@@ -26,7 +24,6 @@ export function HomeView() {
           <TimelineControls />
         </div>
       </div>
-      <AboutContent />
     </section>
   );
 }
