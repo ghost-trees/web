@@ -28,9 +28,8 @@
      * Allows using "@/..." imports instead of long relative paths like "../../src/".
      * Must be kept in sync with the alias in vite.config.ts.
      */
-    "baseUrl": ".",
     "paths": {
-      "@/*": ["src/*"]
+      "@/*": ["./src/*"]
     }
   },
   "include": ["src"]
