@@ -24,24 +24,32 @@ import {
 import { createPointLayer } from '../map/point-layer';
 import { deriveTimelineMonthKey, selectPointsForLayer } from '../map/timeline';
 import { asset } from '../../utils/asset';
+import { boundsOfFeatureCollection, viewStateForBounds } from '../../utils/geo-bounds';
 
 const EMPTY_ID_SET: Set<string> = new Set();
 const BASEMAP_TILE_URL =
   import.meta.env.VITE_STADIA_RASTER_TILE_URL ?? DEFAULT_STADIA_RASTER_TILE_URL;
-const HOME_VIEW_STATE = {
+// Used until the city limits arrive and the camera can be fitted to them.
+const FALLBACK_VIEW_STATE = {
   longitude: INITIAL_CENTER[0],
   latitude: INITIAL_CENTER[1],
   zoom: INITIAL_ZOOM,
   pitch: 0,
   bearing: 0,
 };
+// Just enough to keep the boundary stroke off the canvas edge. The playback controls float over
+// the map rather than reserving space, so the city fills nearly the whole panel.
+const BOUNDARY_FIT_PADDING = 12;
 
 type BoundaryGeoJson = FeatureCollection<Geometry, GeoJsonProperties>;
+type CanvasSize = { width: number; height: number };
 
 export function HomePlaybackMap() {
+  const containerRef = useRef<HTMLDivElement | null>(null);
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const deckRef = useRef<Deck | null>(null);
   const [boundary, setBoundary] = useState<BoundaryGeoJson | null>(null);
+  const [canvasSize, setCanvasSize] = useState<CanvasSize | null>(null);
   const timelinePoints = useFilterStore((state) => state.timelinePoints);
   const timelineMonths = useFilterStore((state) => state.timelineMonths);
   const timelineMonthIndex = useUiStore((state) => state.timelineMonthIndex);
@@ -78,6 +86,49 @@ export function HomePlaybackMap() {
       isActive = false;
     };
   }, []);
+
+  // The map is a tall column beside the headline on desktop and a short block on mobile, so the
+  // fitted camera has to be recomputed whenever the canvas changes shape.
+  useEffect(() => {
+    const container = containerRef.current;
+    if (!container) {
+      return;
+    }
+
+    const observer = new ResizeObserver((entries) => {
+      const entry = entries[0];
+      if (!entry) {
+        return;
+      }
+      const { width, height } = entry.contentRect;
+      setCanvasSize((current) =>
+        current && Math.abs(current.width - width) < 1 && Math.abs(current.height - height) < 1
+          ? current
+          : { width, height },
+      );
+    });
+    observer.observe(container);
+
+    return () => {
+      observer.disconnect();
+    };
+  }, []);
+
+  const viewState = useMemo(() => {
+    const bounds = boundary ? boundsOfFeatureCollection(boundary) : null;
+    if (!bounds || !canvasSize) {
+      return FALLBACK_VIEW_STATE;
+    }
+
+    const fitted = viewStateForBounds({
+      bounds,
+      width: canvasSize.width,
+      height: canvasSize.height,
+      padding: BOUNDARY_FIT_PADDING,
+    });
+
+    return fitted ? { ...fitted, pitch: 0, bearing: 0 } : FALLBACK_VIEW_STATE;
+  }, [boundary, canvasSize]);
 
   const pointsForLayer = useMemo(
     () =>
@@ -140,9 +191,11 @@ export function HomePlaybackMap() {
       return;
     }
 
+    // The camera is controlled rather than initial: it is refitted to the city limits once the
+    // boundary loads and again whenever the canvas is resized.
     const deck = new Deck({
       canvas,
-      initialViewState: HOME_VIEW_STATE,
+      viewState: FALLBACK_VIEW_STATE,
       controller: false,
       layers: [],
       getCursor: () => 'default',
@@ -159,8 +212,12 @@ export function HomePlaybackMap() {
     deckRef.current?.setProps({ layers });
   }, [layers]);
 
+  useEffect(() => {
+    deckRef.current?.setProps({ viewState });
+  }, [viewState]);
+
   return (
-    <div className="absolute inset-0 bg-[var(--color-surface-container-lowest)]">
+    <div ref={containerRef} className="absolute inset-0 bg-[var(--color-surface-container-lowest)]">
       <canvas ref={canvasRef} className="h-full w-full" aria-hidden="true" />
     </div>
   );

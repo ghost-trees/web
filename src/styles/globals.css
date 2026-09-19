@@ -12,6 +12,112 @@
   -webkit-font-smoothing: antialiased;
 }
 
+/*
+ * Scrubber running along the bottom edge of the Home playback map. It stays a thin bar until
+ * pointer or keyboard focus, then thickens and reveals its thumb. Range inputs are only
+ * styleable through vendor pseudo-elements, so this cannot be expressed as utility classes.
+ * `--timeline-progress` is set inline by the component; Chromium has no `::-moz-range-progress`
+ * equivalent, so the filled portion there is painted as a track gradient.
+ */
+.timeline-scrubber {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 100%;
+  height: 1rem;
+  margin: 0;
+  background: transparent;
+  cursor: pointer;
+}
+
+.timeline-scrubber:disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+.timeline-scrubber:focus-visible {
+  outline: none;
+}
+
+.timeline-scrubber::-webkit-slider-runnable-track {
+  height: 3px;
+  border-radius: 999px;
+  background: linear-gradient(
+    to right,
+    var(--color-primary) var(--timeline-progress, 0%),
+    color-mix(in oklab, var(--color-on-surface) 30%, transparent) var(--timeline-progress, 0%)
+  );
+  transition: height 150ms ease;
+}
+
+.timeline-scrubber::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 12px;
+  height: 12px;
+  /* Centers the thumb on the 3px track: (3 - 12) / 2. */
+  margin-top: -4.5px;
+  border: none;
+  border-radius: 999px;
+  background: var(--color-primary);
+  opacity: 0;
+  transition: opacity 150ms ease;
+}
+
+.timeline-scrubber:hover::-webkit-slider-runnable-track,
+.timeline-scrubber:focus-visible::-webkit-slider-runnable-track {
+  height: 5px;
+}
+
+.timeline-scrubber:hover::-webkit-slider-thumb,
+.timeline-scrubber:focus-visible::-webkit-slider-thumb {
+  margin-top: -3.5px;
+  opacity: 1;
+}
+
+.timeline-scrubber:focus-visible::-webkit-slider-thumb {
+  box-shadow: 0 0 0 3px color-mix(in oklab, var(--color-primary) 35%, transparent);
+}
+
+.timeline-scrubber::-moz-range-track {
+  height: 3px;
+  border-radius: 999px;
+  background: color-mix(in oklab, var(--color-on-surface) 30%, transparent);
+  transition: height 150ms ease;
+}
+
+.timeline-scrubber::-moz-range-progress {
+  height: 3px;
+  border-radius: 999px;
+  background: var(--color-primary);
+  transition: height 150ms ease;
+}
+
+.timeline-scrubber::-moz-range-thumb {
+  width: 12px;
+  height: 12px;
+  border: none;
+  border-radius: 999px;
+  background: var(--color-primary);
+  opacity: 0;
+  transition: opacity 150ms ease;
+}
+
+.timeline-scrubber:hover::-moz-range-track,
+.timeline-scrubber:focus-visible::-moz-range-track,
+.timeline-scrubber:hover::-moz-range-progress,
+.timeline-scrubber:focus-visible::-moz-range-progress {
+  height: 5px;
+}
+
+.timeline-scrubber:hover::-moz-range-thumb,
+.timeline-scrubber:focus-visible::-moz-range-thumb {
+  opacity: 1;
+}
+
+.timeline-scrubber:focus-visible::-moz-range-thumb {
+  box-shadow: 0 0 0 3px color-mix(in oklab, var(--color-primary) 35%, transparent);
+}
+
 @layer base {
   /*
    * Design guidance:

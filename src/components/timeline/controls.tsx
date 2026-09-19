@@ -1,10 +1,12 @@
 /**
  * @file controls.tsx
  * @description
- * Play/pause and month scrubbing for the Home playback map. Rendered inline beneath the map
- * rather than as an overlay, so it never covers the visualization it drives.
+ * Playback controls overlaid on the Home map. The month readout and play button sit in the top
+ * left corner; the scrubber runs along the bottom edge of the map like a video progress bar.
+ * Rendered as absolutely positioned children, so the host element must be `relative`.
  */
 
+import type { CSSProperties } from 'react';
 import { useFilterStore } from '../../state/filter-store';
 import { useUiStore } from '../../state/ui-store';
 
@@ -31,6 +33,7 @@ export function TimelineControls() {
   const activeMonthLabel = activeMonth
     ? fullMonthFormatter.format(new Date(activeMonth.year, activeMonth.monthIndex, 1))
     : 'No dated records available';
+  const progressPercent = maxMonthIndex > 0 ? (clampedProgressIndex / maxMonthIndex) * 100 : 0;
 
   const handleTimelineControlClick = () => {
     if (isAtTimelineEnd) {
@@ -53,22 +56,26 @@ export function TimelineControls() {
       : 'play_arrow';
 
   return (
-    <div className="flex items-center gap-3 sm:gap-4">
-      <button
-        type="button"
-        onClick={handleTimelineControlClick}
-        disabled={!hasTimelineData}
-        className="inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-[var(--radius-round-four)] bg-[var(--color-surface-container-high)] text-[var(--color-on-surface)] transition hover:bg-[var(--color-surface-container-highest)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-primary)] disabled:cursor-not-allowed disabled:opacity-50"
-        aria-label={timelineControlAriaLabel}
-      >
-        <span className="material-symbols-outlined text-[24px] leading-none" aria-hidden="true">
-          {timelineControlIcon}
-        </span>
-      </button>
-      <div className="min-w-0 flex-1">
-        <p className="text-sm font-semibold text-[var(--color-on-surface)] tabular-nums">
+    <>
+      <div className="absolute left-3 top-3 flex max-w-[calc(100%-1.5rem)] items-center gap-2 rounded-[var(--radius-round-four)] bg-[var(--color-surface-container-high)] p-1 pr-3 shadow-ambient backdrop-blur-[var(--blur-glass)]">
+        <button
+          type="button"
+          onClick={handleTimelineControlClick}
+          disabled={!hasTimelineData}
+          className="flex h-9 w-9 shrink-0 items-center justify-center rounded-[var(--radius-round-four)] text-[var(--color-on-surface)] transition-colors hover:bg-[var(--color-surface-container-highest)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-primary)] disabled:cursor-not-allowed disabled:opacity-50"
+          aria-label={timelineControlAriaLabel}
+        >
+          <span className="material-symbols-outlined text-[20px] leading-none" aria-hidden="true">
+            {timelineControlIcon}
+          </span>
+        </button>
+        <p className="truncate text-sm font-semibold text-[var(--color-on-surface)] tabular-nums">
           {activeMonthLabel}
         </p>
+      </div>
+
+      {/* Scrim keeps the scrubber legible over lighter parts of the basemap. */}
+      <div className="pointer-events-none absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/50 to-transparent px-3 pb-2 pt-10">
         <input
           type="range"
           min={0}
@@ -80,10 +87,11 @@ export function TimelineControls() {
             setTimelinePlaying(false);
             setTimelineMonthIndex(Number(event.target.value));
           }}
-          className="mt-2 h-6 w-full accent-[var(--color-primary)] disabled:opacity-50"
+          style={{ '--timeline-progress': `${progressPercent}%` } as CSSProperties}
+          className="timeline-scrubber pointer-events-auto"
           aria-label="Timeline month slider"
         />
       </div>
-    </div>
+    </>
   );
 }
