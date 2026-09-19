@@ -9,7 +9,7 @@ export function SettingsPane() {
 
   return (
     <section aria-label="Settings" className="flex h-full min-h-0 flex-col">
-      <PaneHeader title="Map Settings" description={<>App preferences and map options.</>} />
+      <PaneHeader title="Settings" />
       <div className="pb-5">
         <label className="flex cursor-pointer items-start gap-3 rounded-[var(--radius-round-four)] border border-[var(--color-outline-variant)] bg-[var(--color-surface-container-high)] p-4">
           <input

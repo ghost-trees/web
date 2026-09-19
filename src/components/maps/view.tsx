@@ -1,7 +1,7 @@
 /**
  * @file view.tsx
  * @description
- * Explore surface: the interactive map plus one of the Filters / Charts / Map Settings panels.
+ * Explore surface: the interactive map plus one of the Filters / Charts / Settings panels.
  *
  * The panel is a single element in both layouts. From `md` up it is a persistent left column;
  * below `md` the same element becomes a bottom sheet over a full-bleed map, so the panes are
@@ -19,7 +19,7 @@ import { SettingsPane } from '../settings/settings-pane';
 const SUB_TABS: { id: MapsSubTab; label: string; shortLabel: string; icon: string }[] = [
   { id: 'filters', label: 'Filters', shortLabel: 'Filters', icon: 'filter_alt' },
   { id: 'charts', label: 'Charts', shortLabel: 'Charts', icon: 'bar_chart' },
-  { id: 'settings', label: 'Map Settings', shortLabel: 'Settings', icon: 'settings' },
+  { id: 'settings', label: 'Settings', shortLabel: 'Settings', icon: 'settings' },
 ];
 
 const SUB_TAB_BUTTON_BASE =
@@ -89,12 +89,18 @@ export function MapsView() {
                   type="button"
                   aria-pressed={isActive}
                   onClick={() => selectSubTab(tab.id)}
-                  className={`rounded-[var(--radius-round-four)] px-3 py-2 text-xs font-medium ${SUB_TAB_BUTTON_BASE} ${
+                  className={`inline-flex items-center gap-1.5 rounded-[var(--radius-round-four)] px-3 py-2 text-xs font-medium ${SUB_TAB_BUTTON_BASE} ${
                     isActive
                       ? SUB_TAB_ACTIVE
                       : 'text-[var(--color-nav-fg)] hover:bg-[var(--color-nav-hover-bg)] hover:text-[var(--color-nav-hover-fg)]'
                   }`}
                 >
+                  <span
+                    className="material-symbols-outlined text-[16px] leading-none"
+                    aria-hidden="true"
+                  >
+                    {tab.icon}
+                  </span>
                   {tab.label}
                 </button>
               );
