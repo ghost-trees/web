@@ -25,8 +25,8 @@ export function HomeView() {
     >
       <div className="mx-auto flex min-h-full w-full max-w-6xl flex-col justify-center gap-8 px-6 py-8 sm:px-8 md:flex-row md:items-center md:gap-12 md:py-12">
         <header className="w-full shrink-0 md:w-[42%]">
-          <h2 className="mt-3 text-4xl font-semibold leading-[1.05] tracking-[var(--tracking-display-tight)] text-[var(--color-on-surface)] md:text-6xl">
-            Visualizing Tree <span className="text-[var(--color-primary)]">Loss</span>
+          <h2 className="mt-3 text-4xl font-semibold leading-[1.05] tracking-[var(--tracking-display-tight)] text-[var(--color-primary)] md:text-6xl">
+            Visualizing Loss
           </h2>
           <p className="mt-5 max-w-prose text-2xl leading-7 text-[var(--color-on-surface-variant)] md:text-4xl">
             Atlanta is often described as the city in a forest. This map traces documented instances
