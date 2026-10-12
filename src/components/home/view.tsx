@@ -29,9 +29,10 @@ export function HomeView() {
             Visualizing Loss
           </h2>
           <p className="mt-5 max-w-prose text-2xl leading-7 text-[var(--color-on-surface-variant)] md:text-4xl">
-            Atlanta is often described as the city in a forest. This map traces documented instances
-            of illegal tree removal. Each point marks a tree that once occupied a specific place and
-            no longer does.
+            Atlanta is often described as the city in the forest. Its tree canopy is one of the
+            defining characteristics of the city. Every year, trees are cut down without permission.
+            When these cases are discovered, they become part of the public record. We call them
+            Ghost Trees.
           </p>
         </header>
 
