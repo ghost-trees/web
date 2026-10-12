@@ -64,12 +64,38 @@ export function boundsOfFeatureCollection(
   return bounds.every(Number.isFinite) ? bounds : null;
 }
 
+export type ViewportPadding =
+  | number
+  | {
+      top?: number;
+      right?: number;
+      bottom?: number;
+      left?: number;
+    };
+
 type ViewStateForBoundsOptions = {
   bounds: BoundingBox;
   width: number;
   height: number;
-  padding: number;
+  padding: ViewportPadding;
 };
+
+function clampFitPadding(padding: ViewportPadding, width: number, height: number): ViewportPadding {
+  // fitBounds rejects padding that leaves no room for the content itself.
+  if (typeof padding === 'number') {
+    const maxPadding = Math.max(0, Math.floor(Math.min(width, height) / 2) - 1);
+    return Math.min(padding, maxPadding);
+  }
+
+  const maxHorizontal = Math.max(0, Math.floor(width / 2) - 1);
+  const maxVertical = Math.max(0, Math.floor(height / 2) - 1);
+  return {
+    top: Math.min(padding.top ?? 0, maxVertical),
+    right: Math.min(padding.right ?? 0, maxHorizontal),
+    bottom: Math.min(padding.bottom ?? 0, maxVertical),
+    left: Math.min(padding.left ?? 0, maxHorizontal),
+  };
+}
 
 /**
  * Camera that frames `bounds` inside a `width` x `height` viewport. Returns null when the
@@ -80,15 +106,13 @@ export function viewStateForBounds({ bounds, width, height, padding }: ViewState
     return null;
   }
 
-  // fitBounds rejects padding that leaves no room for the content itself.
-  const maxPadding = Math.max(0, Math.floor(Math.min(width, height) / 2) - 1);
   const [west, south, east, north] = bounds;
   const { longitude, latitude, zoom } = new WebMercatorViewport({ width, height }).fitBounds(
     [
       [west, south],
       [east, north],
     ],
-    { padding: Math.min(padding, maxPadding) },
+    { padding: clampFitPadding(padding, width, height) },
   );
 
   return { longitude, latitude, zoom };

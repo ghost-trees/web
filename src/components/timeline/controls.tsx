@@ -10,9 +10,8 @@ import type { CSSProperties } from 'react';
 import { useFilterStore } from '../../state/filter-store';
 import { useUiStore } from '../../state/ui-store';
 
-const fullMonthFormatter = new Intl.DateTimeFormat('en-US', {
+const monthNameFormatter = new Intl.DateTimeFormat('en-US', {
   month: 'long',
-  year: 'numeric',
 });
 
 export function TimelineControls() {
@@ -30,9 +29,10 @@ export function TimelineControls() {
   const isAtTimelineEnd =
     hasTimelineData && !isTimelinePlaying && clampedProgressIndex >= maxMonthIndex;
   const activeMonth = hasTimelineData ? timelineMonths[Math.floor(clampedProgressIndex)] : null;
-  const activeMonthLabel = activeMonth
-    ? fullMonthFormatter.format(new Date(activeMonth.year, activeMonth.monthIndex, 1))
-    : 'No dated records available';
+  const activeMonthName = activeMonth
+    ? monthNameFormatter.format(new Date(activeMonth.year, activeMonth.monthIndex, 1))
+    : null;
+  const activeYear = activeMonth ? String(activeMonth.year) : null;
   const progressPercent = maxMonthIndex > 0 ? (clampedProgressIndex / maxMonthIndex) * 100 : 0;
 
   const handleTimelineControlClick = () => {
@@ -69,13 +69,32 @@ export function TimelineControls() {
             {timelineControlIcon}
           </span>
         </button>
-        <p className="truncate text-sm font-semibold text-[var(--color-on-surface)] tabular-nums">
-          {activeMonthLabel}
-        </p>
+        {activeMonthName && activeYear ? (
+          <div
+            className="grid shrink-0 leading-tight text-[var(--color-on-surface)]"
+            aria-label={`${activeMonthName} ${activeYear}`}
+          >
+            {/* Invisible longest month locks column width so shorter names don't shrink the box. */}
+            <span
+              className="invisible col-start-1 row-start-1 text-base font-semibold"
+              aria-hidden="true"
+            >
+              September
+            </span>
+            <span className="col-start-1 row-start-1 text-base font-semibold">{activeMonthName}</span>
+            <span className="col-start-1 row-start-2 text-sm font-semibold tabular-nums text-[var(--color-on-surface-variant)]">
+              {activeYear}
+            </span>
+          </div>
+        ) : (
+          <p className="shrink-0 text-sm font-semibold leading-tight text-[var(--color-on-surface)]">
+            No dated records available
+          </p>
+        )}
       </div>
 
       {/* Scrim keeps the scrubber legible over lighter parts of the basemap. */}
-      <div className="pointer-events-none absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/50 to-transparent px-3 pb-2 pt-10">
+      <div className="pointer-events-none absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/50 to-transparent px-3 pb-0.5 pt-10">
         <input
           type="range"
           min={0}

@@ -9,14 +9,12 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { Deck } from '@deck.gl/core';
 import { TileLayer } from '@deck.gl/geo-layers';
-import { BitmapLayer, GeoJsonLayer, type BitmapLayerProps } from '@deck.gl/layers';
+import { BitmapLayer, type BitmapLayerProps } from '@deck.gl/layers';
 import type { FeatureCollection, GeoJsonProperties, Geometry } from 'geojson';
 import { useDataStore } from '../../state/data-store';
 import { useFilterStore } from '../../state/filter-store';
 import { useUiStore } from '../../state/ui-store';
 import {
-  ATLANTA_BOUNDARY_LINE_COLOR,
-  ATLANTA_BOUNDARY_LINE_WIDTH,
   DEFAULT_STADIA_RASTER_TILE_URL,
   INITIAL_CENTER,
   INITIAL_ZOOM,
@@ -37,9 +35,14 @@ const FALLBACK_VIEW_STATE = {
   pitch: 0,
   bearing: 0,
 };
-// Just enough to keep the boundary stroke off the canvas edge. The playback controls float over
-// the map rather than reserving space, so the city fills nearly the whole panel.
-const BOUNDARY_FIT_PADDING = 12;
+// Extra bottom padding clears the scrubber overlay; a touch more edge padding zooms out slightly
+// and shifts the city up so southern points aren't clipped by the controls.
+const BOUNDARY_FIT_PADDING = {
+  top: 20,
+  right: 24,
+  bottom: 56,
+  left: 24,
+};
 
 type BoundaryGeoJson = FeatureCollection<Geometry, GeoJsonProperties>;
 type CanvasSize = { width: number; height: number };
@@ -54,7 +57,6 @@ export function HomePlaybackMap() {
   const timelineMonths = useFilterStore((state) => state.timelineMonths);
   const timelineMonthIndex = useUiStore((state) => state.timelineMonthIndex);
   const scalePointsByFee = useUiStore((state) => state.scalePointsByFee);
-  const showAtlantaBoundary = useUiStore((state) => state.showAtlantaBoundary);
   const loadPoints = useDataStore((state) => state.loadPoints);
   const timelineMonthKey = deriveTimelineMonthKey(timelineMonths, timelineMonthIndex);
 
@@ -158,19 +160,7 @@ export function HomePlaybackMap() {
       },
     });
 
-    const boundaryLayer =
-      boundary && showAtlantaBoundary
-        ? new GeoJsonLayer({
-            id: 'home-atlanta-boundary',
-            data: boundary,
-            stroked: true,
-            filled: false,
-            getLineColor: ATLANTA_BOUNDARY_LINE_COLOR,
-            getLineWidth: ATLANTA_BOUNDARY_LINE_WIDTH,
-            lineWidthUnits: 'pixels',
-          })
-        : null;
-
+    // Landing playback keeps the city outline off so the animation stays focused on points.
     const pointLayer = createPointLayer(
       pointsForLayer,
       EMPTY_ID_SET,
@@ -182,8 +172,8 @@ export function HomePlaybackMap() {
       },
     );
 
-    return [basemapLayer, boundaryLayer, pointLayer].filter((layer) => layer !== null);
-  }, [boundary, pointsForLayer, scalePointsByFee, showAtlantaBoundary, timelineMonthKey]);
+    return [basemapLayer, pointLayer];
+  }, [pointsForLayer, scalePointsByFee, timelineMonthKey]);
 
   useEffect(() => {
     const canvas = canvasRef.current;
