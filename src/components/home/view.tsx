@@ -28,7 +28,7 @@ export function HomeView() {
           <h2 className="mt-3 text-4xl font-semibold leading-[1.05] tracking-[var(--tracking-display-tight)] text-[var(--color-on-surface)] md:text-6xl">
             Visualizing Tree <span className="text-[var(--color-primary)]">Loss</span>
           </h2>
-          <p className="mt-5 max-w-prose text-base leading-7 text-[var(--color-on-surface-variant)]">
+          <p className="mt-5 max-w-prose text-2xl leading-7 text-[var(--color-on-surface-variant)] md:text-4xl">
             Atlanta is often described as the city in a forest. This map traces documented instances
             of illegal tree removal. Each point marks a tree that once occupied a specific place and
             no longer does.
