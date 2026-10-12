@@ -47,7 +47,7 @@ export function HomeView() {
           <li>
             <DestinationCard
               label="Maps"
-              title="Where trees stood"
+              title="Where Trees Stood"
               description="Filter the records and inspect individual points on the interactive map."
               icon="map"
               actionLabel="Explore the map"
@@ -57,7 +57,7 @@ export function HomeView() {
           <li>
             <DestinationCard
               label="Gallery"
-              title="Before &amp; after loss"
+              title="Before &amp; After Loss"
               description="Street View comparisons of the same addresses, years apart."
               icon="photo_library"
               actionLabel="See before and after"
@@ -67,7 +67,7 @@ export function HomeView() {
           <li>
             <DestinationCard
               label="About"
-              title="The story"
+              title="The Story"
               description="Why these records exist, and what makes a removed tree a ghost tree."
               icon="info"
               actionLabel="Read about Ghost Trees"
