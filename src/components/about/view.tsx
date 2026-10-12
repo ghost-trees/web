@@ -24,7 +24,7 @@ export function AboutView() {
           </div>
         </header>
 
-        <article className="mt-6 space-y-4 text-base leading-7 text-[var(--color-on-surface)]">
+        <article className="mt-6 space-y-4 text-lg leading-7 text-[var(--color-on-surface)]">
           <p>
             Atlanta is often described as the city in a forest. Its tree canopy is one of the
             defining features of the city, shaping neighborhoods as much as roads or buildings. The
