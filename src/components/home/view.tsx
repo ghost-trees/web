@@ -28,7 +28,7 @@ export function HomeView() {
           <h2 className="mt-3 text-4xl font-semibold leading-[1.05] tracking-[var(--tracking-display-tight)] text-[var(--color-primary)] md:text-6xl">
             Visualizing Loss
           </h2>
-          <p className="mt-5 max-w-prose text-2xl leading-7 text-[var(--color-on-surface-variant)] md:text-4xl">
+          <p className="mt-5 max-w-prose text-justify text-2xl leading-[1.25] hyphens-auto text-[var(--color-on-surface-variant)] md:text-4xl md:leading-[1.2]">
             Atlanta is often described as the city in the forest. Its tree canopy is one of the
             defining characteristics of the city. Every year, trees are cut down without permission.
             When these cases are discovered, they become part of the public record. We call them
