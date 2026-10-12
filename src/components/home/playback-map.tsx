@@ -14,11 +14,7 @@ import type { FeatureCollection, GeoJsonProperties, Geometry } from 'geojson';
 import { useDataStore } from '../../state/data-store';
 import { useFilterStore } from '../../state/filter-store';
 import { useUiStore } from '../../state/ui-store';
-import {
-  DEFAULT_STADIA_RASTER_TILE_URL,
-  INITIAL_CENTER,
-  INITIAL_ZOOM,
-} from '../map/constants';
+import { DEFAULT_STADIA_RASTER_TILE_URL, INITIAL_CENTER, INITIAL_ZOOM } from '../map/constants';
 import { createPointLayer } from '../map/point-layer';
 import { deriveTimelineMonthKey, selectPointsForLayer } from '../map/timeline';
 import { asset } from '../../utils/asset';

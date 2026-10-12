@@ -81,7 +81,9 @@ export function TimelineControls() {
             >
               September
             </span>
-            <span className="col-start-1 row-start-1 text-base font-semibold">{activeMonthName}</span>
+            <span className="col-start-1 row-start-1 text-base font-semibold">
+              {activeMonthName}
+            </span>
             <span className="col-start-1 row-start-2 text-sm font-semibold tabular-nums text-[var(--color-on-surface-variant)]">
               {activeYear}
             </span>

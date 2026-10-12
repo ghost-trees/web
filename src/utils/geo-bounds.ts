@@ -80,7 +80,20 @@ type ViewStateForBoundsOptions = {
   padding: ViewportPadding;
 };
 
-function clampFitPadding(padding: ViewportPadding, width: number, height: number): ViewportPadding {
+type FitBoundsPadding =
+  | number
+  | {
+      top: number;
+      right: number;
+      bottom: number;
+      left: number;
+    };
+
+function clampFitPadding(
+  padding: ViewportPadding,
+  width: number,
+  height: number,
+): FitBoundsPadding {
   // fitBounds rejects padding that leaves no room for the content itself.
   if (typeof padding === 'number') {
     const maxPadding = Math.max(0, Math.floor(Math.min(width, height) / 2) - 1);
