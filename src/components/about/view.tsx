@@ -55,7 +55,7 @@ export function AboutView() {
           <p>We call them Ghost Trees.</p>
           <p>
             The name is less about loss than presence. A ghost is evidence that something remains,
-            even after it has disappeared. These points are traces of absent trees—small records of
+            even after it has disappeared. These points are traces of absent trees: small records of
             decisions that continue to shape the city long after the stumps are gone.
           </p>
           <p>
