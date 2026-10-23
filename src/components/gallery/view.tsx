@@ -179,6 +179,7 @@ export function GalleryView() {
             {selectedRecord ? (
               <figure className="flex flex-col gap-4">
                 <BeforeAfterSlider
+                  key={selectedRecord.recordId}
                   beforeImage={streetViewUrls.before}
                   afterImage={streetViewUrls.after}
                   alt={`Record ${selectedPointDisplay.pointId}`}

@@ -4,9 +4,13 @@
  * Draggable before/after image comparison slider. The "after" image is clipped
  * and revealed by dragging a vertical divider left/right. Supports mouse, touch
  * (via pointer events), and keyboard (arrow keys) interaction.
+ *
+ * Image sources are isolated per pair: changing URLs immediately hides the previous
+ * bitmaps, ignores late load/error events from the last pair, and reveals the new
+ * before/after shots together so two records cannot mix on screen.
  */
 
-import { useCallback, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 
 type BeforeAfterSliderProps = {
   beforeImage: string;
@@ -20,23 +24,90 @@ const MIN_POSITION = 0;
 const MAX_POSITION = 100;
 const KEYBOARD_STEP = 2;
 const KEYBOARD_STEP_LARGE = 10;
+const DEFAULT_POSITION = 50;
+
+type ImageStatus = 'loading' | 'loaded' | 'error';
 
 function clampPosition(value: number): number {
   return Math.min(MAX_POSITION, Math.max(MIN_POSITION, value));
+}
+
+function initialStatus(src: string): ImageStatus {
+  return src ? 'loading' : 'error';
+}
+
+type SliderLabelProps = {
+  align: 'left' | 'right';
+  children: string;
+};
+
+function SliderLabel({ align, children }: SliderLabelProps) {
+  return (
+    <span
+      className={`pointer-events-none absolute top-3 rounded-round-four bg-surface-container-highest/85 px-2 py-1 text-[10px] font-bold uppercase tracking-label-meta text-on-surface ${
+        align === 'left' ? 'left-3' : 'right-3'
+      }`}
+    >
+      {children}
+    </span>
+  );
 }
 
 type SliderImageProps = {
   src: string;
   fallbackLabel: string;
   alt: string;
+  revealed: boolean;
+  onStatusChange: (status: ImageStatus) => void;
 };
 
-function SliderImage({ src, fallbackLabel, alt }: SliderImageProps) {
-  const [hasError, setHasError] = useState(false);
+function SliderImage({ src, fallbackLabel, alt, revealed, onStatusChange }: SliderImageProps) {
+  const imageRef = useRef<HTMLImageElement>(null);
+  const [trackedSrc, setTrackedSrc] = useState(src);
+  const [status, setStatus] = useState<ImageStatus>(() => initialStatus(src));
+
+  if (trackedSrc !== src) {
+    setTrackedSrc(src);
+    setStatus(initialStatus(src));
+  }
+
+  useEffect(() => {
+    const image = imageRef.current;
+    if (!image || !src) {
+      return;
+    }
+
+    let active = true;
+    const settle = (next: ImageStatus) => {
+      if (!active) {
+        return;
+      }
+      setStatus(next);
+      onStatusChange(next);
+    };
+    const handleLoad = () => settle('loaded');
+    const handleError = () => settle('error');
+
+    image.addEventListener('load', handleLoad);
+    image.addEventListener('error', handleError);
+    if (image.complete) {
+      settle(image.naturalWidth > 0 ? 'loaded' : 'error');
+    }
+
+    return () => {
+      active = false;
+      image.removeEventListener('load', handleLoad);
+      image.removeEventListener('error', handleError);
+    };
+  }, [onStatusChange, src]);
 
   // Treat a missing src (e.g. no API key or an un-curated panorama ID) the same
   // as a load error so the fallback label renders instead of a broken image.
-  if (hasError || !src) {
+  if (!src || status === 'error') {
+    if (!revealed) {
+      return null;
+    }
+
     return (
       <div
         className="flex h-full w-full items-center justify-center bg-surface-container-highest"
@@ -51,11 +122,14 @@ function SliderImage({ src, fallbackLabel, alt }: SliderImageProps) {
 
   return (
     <img
+      ref={imageRef}
+      key={src}
       src={src}
       alt={alt}
       draggable={false}
-      onError={() => setHasError(true)}
-      className="pointer-events-none h-full w-full select-none object-cover"
+      className={`pointer-events-none h-full w-full select-none object-cover ${
+        revealed ? 'opacity-100' : 'opacity-0'
+      }`}
     />
   );
 }
@@ -68,8 +142,22 @@ export function BeforeAfterSlider({
   alt = 'Comparison image',
 }: BeforeAfterSliderProps) {
   const containerRef = useRef<HTMLDivElement>(null);
-  const [position, setPosition] = useState(50);
+  const pairKey = `${beforeImage}::${afterImage}`;
+  const [trackedPairKey, setTrackedPairKey] = useState(pairKey);
+  const [beforeStatus, setBeforeStatus] = useState<ImageStatus>(() => initialStatus(beforeImage));
+  const [afterStatus, setAfterStatus] = useState<ImageStatus>(() => initialStatus(afterImage));
+  const [position, setPosition] = useState(DEFAULT_POSITION);
   const [isDragging, setIsDragging] = useState(false);
+
+  if (trackedPairKey !== pairKey) {
+    setTrackedPairKey(pairKey);
+    setBeforeStatus(initialStatus(beforeImage));
+    setAfterStatus(initialStatus(afterImage));
+    setPosition(DEFAULT_POSITION);
+    setIsDragging(false);
+  }
+
+  const pairReady = beforeStatus !== 'loading' && afterStatus !== 'loading';
 
   const updateFromClientX = useCallback((clientX: number) => {
     const container = containerRef.current;
@@ -86,11 +174,14 @@ export function BeforeAfterSlider({
 
   const handlePointerDown = useCallback(
     (event: React.PointerEvent<HTMLDivElement>) => {
+      if (!pairReady) {
+        return;
+      }
       event.currentTarget.setPointerCapture(event.pointerId);
       setIsDragging(true);
       updateFromClientX(event.clientX);
     },
-    [updateFromClientX],
+    [pairReady, updateFromClientX],
   );
 
   const handlePointerMove = useCallback(
@@ -148,57 +239,73 @@ export function BeforeAfterSlider({
       onPointerMove={handlePointerMove}
       onPointerUp={stopDragging}
       onPointerCancel={stopDragging}
+      aria-busy={!pairReady}
       className={`relative aspect-[4/3] w-full touch-none select-none overflow-hidden rounded-round-four bg-surface-container-highest ${
-        isDragging ? 'cursor-grabbing' : 'cursor-ew-resize'
+        isDragging ? 'cursor-grabbing' : pairReady ? 'cursor-ew-resize' : 'cursor-wait'
       }`}
     >
-      {/* Base layer: before image (full width). The label lives inside this layer
-          so it is covered (hidden) whenever the after layer clips over it. */}
-      <div className="absolute inset-0">
-        <SliderImage
-          src={beforeImage}
-          fallbackLabel={beforeLabel}
-          alt={`${alt} (${beforeLabel})`}
-        />
-        <span className="pointer-events-none absolute left-3 top-3 rounded-round-four bg-surface-container-highest/85 px-2 py-1 text-[10px] font-bold uppercase tracking-label-meta text-on-surface">
-          {beforeLabel}
-        </span>
-      </div>
+      <div className={pairReady ? undefined : 'invisible'}>
+        {/* Base layer: before image (full width). The label lives inside this layer
+            so it is covered (hidden) whenever the after layer clips over it. */}
+        <div className="absolute inset-0">
+          <SliderImage
+            src={beforeImage}
+            fallbackLabel={beforeLabel}
+            alt={`${alt} (${beforeLabel})`}
+            revealed={pairReady}
+            onStatusChange={setBeforeStatus}
+          />
+          <SliderLabel align="left">{beforeLabel}</SliderLabel>
+        </div>
 
-      {/* Top layer: after image, clipped from the left edge to the divider. The
-          label lives inside this layer so it is clipped away with the after image. */}
-      <div
-        className="absolute inset-0"
-        style={{ clipPath: `inset(0 0 0 ${position}%)` }}
-        aria-hidden="true"
-      >
-        <SliderImage src={afterImage} fallbackLabel={afterLabel} alt={`${alt} (${afterLabel})`} />
-        <span className="pointer-events-none absolute right-3 top-3 rounded-round-four bg-surface-container-highest/85 px-2 py-1 text-[10px] font-bold uppercase tracking-label-meta text-on-surface">
-          {afterLabel}
-        </span>
-      </div>
-
-      {/* Divider line + draggable handle. */}
-      <div
-        className="pointer-events-none absolute inset-y-0 z-10 w-0.5 -translate-x-1/2 bg-surface"
-        style={{ left: `${position}%` }}
-      >
-        <button
-          type="button"
-          role="slider"
-          aria-label="Reveal before and after images"
-          aria-valuemin={MIN_POSITION}
-          aria-valuemax={MAX_POSITION}
-          aria-valuenow={Math.round(position)}
-          aria-orientation="horizontal"
-          onKeyDown={handleKeyDown}
-          className="pointer-events-auto absolute top-1/2 left-1/2 flex h-10 w-10 -translate-x-1/2 -translate-y-1/2 cursor-ew-resize items-center justify-center rounded-full bg-surface text-on-surface shadow-ambient focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
+        {/* Top layer: after image, clipped from the left edge to the divider. The
+            label lives inside this layer so it is clipped away with the after image. */}
+        <div
+          className="absolute inset-0"
+          style={{ clipPath: `inset(0 0 0 ${position}%)` }}
+          aria-hidden="true"
         >
-          <span className="material-symbols-outlined text-lg leading-none" aria-hidden="true">
-            code
-          </span>
-        </button>
+          <SliderImage
+            src={afterImage}
+            fallbackLabel={afterLabel}
+            alt={`${alt} (${afterLabel})`}
+            revealed={pairReady}
+            onStatusChange={setAfterStatus}
+          />
+          <SliderLabel align="right">{afterLabel}</SliderLabel>
+        </div>
+
+        {/* Divider line + draggable handle. */}
+        <div
+          className="pointer-events-none absolute inset-y-0 z-10 w-0.5 -translate-x-1/2 bg-surface"
+          style={{ left: `${position}%` }}
+        >
+          <button
+            type="button"
+            role="slider"
+            aria-label="Reveal before and after images"
+            aria-valuemin={MIN_POSITION}
+            aria-valuemax={MAX_POSITION}
+            aria-valuenow={Math.round(position)}
+            aria-orientation="horizontal"
+            tabIndex={pairReady ? 0 : -1}
+            onKeyDown={handleKeyDown}
+            className="pointer-events-auto absolute top-1/2 left-1/2 flex h-10 w-10 -translate-x-1/2 -translate-y-1/2 cursor-ew-resize items-center justify-center rounded-full bg-surface text-on-surface shadow-ambient focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
+          >
+            <span className="material-symbols-outlined text-lg leading-none" aria-hidden="true">
+              code
+            </span>
+          </button>
+        </div>
       </div>
+
+      {!pairReady ? (
+        <div className="absolute inset-0 z-20 bg-surface-container-highest" aria-hidden="true">
+          <SliderLabel align="left">{beforeLabel}</SliderLabel>
+          <SliderLabel align="right">{afterLabel}</SliderLabel>
+        </div>
+      ) : null}
+      {!pairReady ? <span className="sr-only">Loading comparison images</span> : null}
     </div>
   );
 }
