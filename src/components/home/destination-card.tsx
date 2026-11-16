@@ -34,7 +34,7 @@ export function DestinationCard({
       >
         {icon}
       </span>
-      <span className="text-[10px] font-bold uppercase tracking-label-meta text-primary">
+      <span className="text-[11px] font-bold uppercase tracking-label-meta text-primary">
         {label}
       </span>
       <span className="mt-1 text-lg font-semibold tracking-[var(--tracking-display-tight)] text-on-surface">
