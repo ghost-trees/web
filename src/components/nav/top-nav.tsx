@@ -14,7 +14,7 @@ export function TopNav() {
       <div className="flex items-center gap-2 px-3 py-2 sm:gap-4 sm:px-5">
         <div className="flex min-w-0 items-center gap-2">
           <img src={asset('logo.svg')} alt="" aria-hidden="true" className="h-6 w-6 shrink-0" />
-          <h1 className="truncate text-base font-semibold tracking-[var(--tracking-display-tight)] text-[var(--color-primary)] sm:text-lg">
+          <h1 className="truncate text-base font-semibold tracking-[var(--tracking-display-tight)] text-[var(--color-nav-fg)] sm:text-lg">
             Ghost Trees
           </h1>
         </div>
