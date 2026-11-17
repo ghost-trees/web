@@ -1,5 +1,6 @@
 import { create } from 'zustand';
 import type { ChartId } from '../components/charts/definitions';
+import { clampSizeMultiplier, SIZE_MULTIPLIER_DEFAULT } from '../components/map/point-radius';
 
 export type MapsSubTab = 'filters' | 'charts' | 'settings';
 export type MainView = 'home' | 'maps' | 'gallery' | 'about';
@@ -15,6 +16,7 @@ type UiStoreState = {
   mapsPanelOpen: boolean;
   selectedChart: ChartId;
   scalePointsByFee: boolean;
+  pointSizeMultiplier: number;
   showAtlantaBoundary: boolean;
   isTimelinePlaying: boolean;
   timelineMonthIndex: number;
@@ -34,6 +36,7 @@ type UiStoreState = {
   setMapsPanelOpen: (open: boolean) => void;
   setSelectedChart: (chartId: ChartId) => void;
   setScalePointsByFee: (next: boolean) => void;
+  setPointSizeMultiplier: (next: number) => void;
   setShowAtlantaBoundary: (next: boolean) => void;
 };
 
@@ -51,6 +54,7 @@ export const useUiStore = create<UiStoreState>((set) => ({
   mapsPanelOpen: false,
   selectedChart: 'records-by-month',
   scalePointsByFee: false,
+  pointSizeMultiplier: SIZE_MULTIPLIER_DEFAULT,
   showAtlantaBoundary: true,
   isTimelinePlaying: false,
   timelineMonthIndex: 0,
@@ -97,5 +101,6 @@ export const useUiStore = create<UiStoreState>((set) => ({
   setMapsPanelOpen: (open) => set({ mapsPanelOpen: open }),
   setSelectedChart: (chartId) => set({ selectedChart: chartId }),
   setScalePointsByFee: (next) => set({ scalePointsByFee: next }),
+  setPointSizeMultiplier: (next) => set({ pointSizeMultiplier: clampSizeMultiplier(next) }),
   setShowAtlantaBoundary: (next) => set({ showAtlantaBoundary: next }),
 }));

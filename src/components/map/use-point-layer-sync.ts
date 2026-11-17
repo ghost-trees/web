@@ -9,6 +9,7 @@ type SyncPointLayerArgs = {
   selectedIds: Set<string>;
   hoveredIds: Set<string>;
   scalePointsByFee: boolean;
+  sizeMultiplier: number;
 };
 
 export function syncPointLayer({
@@ -17,9 +18,10 @@ export function syncPointLayer({
   selectedIds,
   hoveredIds,
   scalePointsByFee,
+  sizeMultiplier,
 }: SyncPointLayerArgs): void {
   overlay.setProps({
-    layers: [createPointLayer(points, selectedIds, hoveredIds, scalePointsByFee)],
+    layers: [createPointLayer(points, selectedIds, hoveredIds, scalePointsByFee, sizeMultiplier)],
   });
 }
 
@@ -29,6 +31,7 @@ type UsePointLayerSyncArgs = {
   selectedIds: Set<string>;
   hoveredIds: Set<string>;
   scalePointsByFee: boolean;
+  sizeMultiplier: number;
 };
 
 export function usePointLayerSync({
@@ -37,6 +40,7 @@ export function usePointLayerSync({
   selectedIds,
   hoveredIds,
   scalePointsByFee,
+  sizeMultiplier,
 }: UsePointLayerSyncArgs) {
   const pointsRef = useRef<MapPoint[]>([]);
   const selectedIdsRef = useRef(selectedIds);
@@ -60,9 +64,10 @@ export function usePointLayerSync({
         selectedIds: selectedIdSet ?? selectedIdsRef.current,
         hoveredIds: hoveredIdSet ?? hoveredIdsRef.current,
         scalePointsByFee,
+        sizeMultiplier,
       });
     },
-    [overlayRef, scalePointsByFee],
+    [overlayRef, scalePointsByFee, sizeMultiplier],
   );
 
   useEffect(() => {

@@ -33,6 +33,7 @@ export function MapView() {
   const filteredPoints = useFilterStore((state) => state.visiblePoints);
   const mainView = useUiStore((state) => state.mainView);
   const scalePointsByFee = useUiStore((state) => state.scalePointsByFee);
+  const pointSizeMultiplier = useUiStore((state) => state.pointSizeMultiplier);
   const showAtlantaBoundary = useUiStore((state) => state.showAtlantaBoundary);
   const selectedIds = useMapSelectionStore((state) => state.selectedIds);
   const hoveredIds = useMapSelectionStore((state) => state.hoveredIds);
@@ -67,6 +68,7 @@ export function MapView() {
     selectedIds: visibleSelectedIds,
     hoveredIds: visibleHoveredIds,
     scalePointsByFee,
+    sizeMultiplier: pointSizeMultiplier,
   });
   const handleMapViewChange = useCallback(() => {
     setMapViewVersion((version) => version + 1);

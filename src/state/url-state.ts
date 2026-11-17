@@ -1,4 +1,9 @@
 import type { ChartId } from '../components/charts/definitions';
+import {
+  formatSizeMultiplier,
+  SIZE_MULTIPLIER_DEFAULT,
+  sizeMultiplierFromSearchParams,
+} from '../components/map/point-radius';
 import { fromYearMonthKey, toYearMonthKey } from '../utils/date';
 import type { MainView, MapsSubTab } from './ui-store';
 import { useDataStore } from './data-store';
@@ -35,6 +40,7 @@ type ParsedUrlState = {
       | 'mapsPanelOpen'
       | 'selectedChart'
       | 'scalePointsByFee'
+      | 'pointSizeMultiplier'
       | 'showAtlantaBoundary'
     >
   >;
@@ -154,6 +160,11 @@ export function readStateFromUrl(): ParsedUrlState {
     ui.scalePointsByFee = false;
   }
 
+  const sizeMultiplier = sizeMultiplierFromSearchParams(searchParams);
+  if (typeof sizeMultiplier === 'number') {
+    ui.pointSizeMultiplier = sizeMultiplier;
+  }
+
   const boundaryParam = searchParams.get('boundary');
   if (boundaryParam === '0') {
     ui.showAtlantaBoundary = false;
@@ -253,6 +264,9 @@ export function serializeStoresToUrl(): void {
 
   if (uiState.scalePointsByFee) {
     searchParams.set('scaleFee', '1');
+  }
+  if (uiState.pointSizeMultiplier !== SIZE_MULTIPLIER_DEFAULT) {
+    searchParams.set('size', formatSizeMultiplier(uiState.pointSizeMultiplier));
   }
   if (!uiState.showAtlantaBoundary) {
     searchParams.set('boundary', '0');

@@ -53,6 +53,7 @@ export function HomePlaybackMap() {
   const timelineMonths = useFilterStore((state) => state.timelineMonths);
   const timelineMonthIndex = useUiStore((state) => state.timelineMonthIndex);
   const scalePointsByFee = useUiStore((state) => state.scalePointsByFee);
+  const pointSizeMultiplier = useUiStore((state) => state.pointSizeMultiplier);
   const loadPoints = useDataStore((state) => state.loadPoints);
   const timelineMonthKey = deriveTimelineMonthKey(timelineMonths, timelineMonthIndex);
 
@@ -162,6 +163,7 @@ export function HomePlaybackMap() {
       EMPTY_ID_SET,
       EMPTY_ID_SET,
       scalePointsByFee,
+      pointSizeMultiplier,
       {
         enabled: true,
         currentMonthKey: timelineMonthKey,
@@ -169,7 +171,7 @@ export function HomePlaybackMap() {
     );
 
     return [basemapLayer, pointLayer];
-  }, [pointsForLayer, scalePointsByFee, timelineMonthKey]);
+  }, [pointsForLayer, pointSizeMultiplier, scalePointsByFee, timelineMonthKey]);
 
   useEffect(() => {
     const canvas = canvasRef.current;

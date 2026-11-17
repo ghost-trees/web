@@ -17,6 +17,7 @@ import {
   POINT_LINE_WIDTH_SELECTED,
   POINT_RADIUS_DEFAULT,
 } from './constants';
+import { feeModeRadiusMax, maximumValidFee, pointRadius } from './point-radius';
 
 const TIMELINE_FADE_MONTH_WINDOW = 8;
 const TIMELINE_MIN_FILL_ALPHA = 18;
@@ -72,29 +73,31 @@ export function createPointLayer(
   selectedIds: Set<string>,
   hoveredIds: Set<string>,
   scalePointsByFee: boolean,
+  sizeMultiplier: number,
   timelineOptions?: TimelineLayerOptions,
 ) {
   const isTimelineMode = timelineOptions?.enabled ?? false;
   const timelineMonthKey = timelineOptions?.currentMonthKey ?? null;
   const isHoverFocusEnabled = selectedIds.size === 0;
-  const feeMax = scalePointsByFee
-    ? points.reduce((maxFeeTotal, point) => Math.max(maxFeeTotal, point.feeTotal), 0)
-    : 0;
-  const getScaledRadius = (point: MapPoint) => {
-    if (!scalePointsByFee || feeMax <= 0) {
-      return POINT_RADIUS_DEFAULT;
-    }
-    const feeRatio = Math.min(Math.max(point.feeTotal / feeMax, 0), 1);
-    return 3 + feeRatio * (18 - 3);
-  };
+  const maxFee = scalePointsByFee ? maximumValidFee(points.map((point) => point.feeTotal)) : 0;
+  const radiusMaxPixels = scalePointsByFee
+    ? feeModeRadiusMax(sizeMultiplier)
+    : POINT_RADIUS_DEFAULT;
+  const getScaledRadius = (point: MapPoint) =>
+    pointRadius({
+      scaleByFee: scalePointsByFee,
+      fee: point.feeTotal,
+      maxFee,
+      sizeMultiplier,
+    });
 
   return new ScatterplotLayer<MapPoint>({
     id: POINT_LAYER_ID,
     data: points,
     pickable: true,
     radiusUnits: 'pixels',
-    radiusMinPixels: 3,
-    radiusMaxPixels: 18,
+    radiusMinPixels: POINT_RADIUS_DEFAULT,
+    radiusMaxPixels,
     getPosition: (point) => point.coordinates,
     getRadius: getScaledRadius,
     getFillColor: (point) => {
@@ -140,7 +143,7 @@ export function createPointLayer(
     },
     lineWidthUnits: 'pixels',
     updateTriggers: {
-      getRadius: [scalePointsByFee, feeMax],
+      getRadius: [scalePointsByFee, sizeMultiplier, maxFee],
       getFillColor: [selectedIds, hoveredIds, isTimelineMode, timelineMonthKey],
       getLineColor: [selectedIds, hoveredIds, isTimelineMode, timelineMonthKey],
       getLineWidth: [selectedIds, hoveredIds],

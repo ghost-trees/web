@@ -79,7 +79,7 @@ export function MapsView() {
           mapsPanelOpen ? 'flex' : 'hidden'
         } md:flex`}
       >
-        <div className="flex items-center gap-2 px-3 pt-3 md:px-4">
+        <div className="flex items-center gap-2 border-b border-[var(--color-outline-variant)] px-3 py-3 md:px-4">
           <div role="group" aria-label="Map panels" className="hidden gap-1 md:flex">
             {SUB_TABS.map((tab) => {
               const isActive = tab.id === mapsSubTab;
