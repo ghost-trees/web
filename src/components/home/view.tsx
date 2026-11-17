@@ -36,7 +36,8 @@ export function HomeView() {
           </p>
         </header>
 
-        <div className="relative h-[56dvh] min-h-[340px] w-full min-w-0 overflow-hidden rounded-[var(--radius-round-four)] bg-[var(--color-surface-container-lowest)] shadow-ambient md:h-[76dvh] md:flex-1">
+        {/* Width and height share one ratio, so browser zoom scales the box instead of stretching it. */}
+        <div className="relative aspect-[8/7] w-full min-w-0 overflow-hidden rounded-[var(--radius-round-four)] bg-[var(--color-surface-container-lowest)] shadow-ambient md:flex-1">
           <HomePlaybackMap />
           <TimelineControls />
         </div>
