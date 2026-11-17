@@ -16,6 +16,7 @@ import { useFilterStore } from '../../state/filter-store';
 import { useUiStore } from '../../state/ui-store';
 import { DEFAULT_STADIA_RASTER_TILE_URL, INITIAL_CENTER, INITIAL_ZOOM } from '../map/constants';
 import { createPointLayer } from '../map/point-layer';
+import { SIZE_MULTIPLIER_DEFAULT } from '../map/point-radius';
 import { deriveTimelineMonthKey, selectPointsForLayer } from '../map/timeline';
 import { asset } from '../../utils/asset';
 import { boundsOfFeatureCollection, viewStateForBounds } from '../../utils/geo-bounds';
@@ -52,8 +53,6 @@ export function HomePlaybackMap() {
   const timelinePoints = useFilterStore((state) => state.timelinePoints);
   const timelineMonths = useFilterStore((state) => state.timelineMonths);
   const timelineMonthIndex = useUiStore((state) => state.timelineMonthIndex);
-  const scalePointsByFee = useUiStore((state) => state.scalePointsByFee);
-  const pointSizeMultiplier = useUiStore((state) => state.pointSizeMultiplier);
   const loadPoints = useDataStore((state) => state.loadPoints);
   const timelineMonthKey = deriveTimelineMonthKey(timelineMonths, timelineMonthIndex);
 
@@ -158,12 +157,14 @@ export function HomePlaybackMap() {
     });
 
     // Landing playback keeps the city outline off so the animation stays focused on points.
+    // Playback stays on the uniform default. Fee scaling and the size multiplier are explore-map
+    // settings and must not resize this animation.
     const pointLayer = createPointLayer(
       pointsForLayer,
       EMPTY_ID_SET,
       EMPTY_ID_SET,
-      scalePointsByFee,
-      pointSizeMultiplier,
+      false,
+      SIZE_MULTIPLIER_DEFAULT,
       {
         enabled: true,
         currentMonthKey: timelineMonthKey,
@@ -171,7 +172,7 @@ export function HomePlaybackMap() {
     );
 
     return [basemapLayer, pointLayer];
-  }, [pointsForLayer, pointSizeMultiplier, scalePointsByFee, timelineMonthKey]);
+  }, [pointsForLayer, timelineMonthKey]);
 
   useEffect(() => {
     const canvas = canvasRef.current;
